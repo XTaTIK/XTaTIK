@@ -2,6 +2,8 @@
 
 use Mojolicious::Lite;
 plugin 'Config';
+plugin 'FormChecker';
+plugin 'mail';
 
 require 'lib/data.html';
 push @{ app->renderer->classes }, 'Fake';
@@ -13,26 +15,30 @@ helper xtext => sub {
 
 get '/' => 'index';
 
-get $_ for qw(/products /about  /contact);
+get $_ for qw(/products /about );
+
+get '/contact' => sub {
+    my $c = shift;
+};
 
 post '/contact' => sub {
     my $c = shift;
 
-    # Check CSRF token
-    my $val= $c->validation;
-    return $c->render(text => 'Bad CSRF token!', status => 403)
-        if $val->csrf_protect->has_error('csrf_token');
-
-    $val->required('name')->size(1, 200);
-    $val->required('email')->size(1, 200);
-    $val->required('province')->in(
-        qw/AB BC MB NB NF NT NS NU ON PE QC SK YT/
+    $c->form_checker(
+        rules => {
+            name => { max => 2, },
+            email => { max => 200, },
+        },
     );
 
-    $c->render(text => "Low orbit ion cannon pointed at ")
-        unless $val->has_error;
+    return $c->render( template => 'contact' )
+        unless $c->form_checker_ok;
 
-        say for $val->error;
+    # Check CSRF token
+    return $c->render(text => 'Bad CSRF token!', status => 403)
+        if $c->validation->csrf_protect->has_error('csrf_token');
+
+
 
     return $c->render( template => 'contact' );
 };

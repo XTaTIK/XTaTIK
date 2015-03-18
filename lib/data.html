@@ -18,35 +18,44 @@ __DATA__
 % layout 'default';
 % title 'Contact';
 
-%= form_for contact => (method => 'POST') => begin
-    %= csrf_field
-    <ul>
-        <li><label for="name">*Name:</label><%= text_field 'name' %></li>
-        <li><label for="email">*Email:</label><%= text_field 'email'%></li>
-        <li><label for="province">*Province:</label
-            ><%= select_field province => [
-                [ '--please select--' => 'none' ],
-                [ 'Alberta' => 'AB' ],
-                [ 'British Columbia' => 'BC'],
-                [ 'Manitoba' => 'MB'],
-                [ 'New Brunswick' => 'NB'],
-                [ 'New Foundland' => 'NF'],
-                [ 'Northwest Terriories' => 'NT'],
-                [ 'Nova Scotia' => 'NS'],
-                [ 'Nunavut' => 'NU'],
-                [ 'Ontario' => 'ON'],
-                [ 'Prince Edward Island' => 'PE'],
-                [ 'Quebec' => 'QC'],
-                [ 'Saskatchewan' => 'SK'],
-                [ 'Yukon' => 'YT'],
-            ]
-        %></li>
-        <li><label for="Message" class="textarea_label">*Message:</label
-            ><%= text_area 'message', cols => 40, rows => 5 %>
-        </li>
-    </ul>
-    %= submit_button 'Send'
-% end
+% if ( form_checker_ok() ) {
+
+    <p class="message success">Check was alright!</p>
+
+% } else {
+    %= form_for contact => (method => 'POST') => begin
+        %= csrf_field
+        <%== form_checker_error_wrapped %>
+
+        <ul>
+            <li><label for="name">*Name:</label><%= text_field 'name' %></li>
+            <li><label for="email">*Email:</label><%= text_field 'email'%></li>
+            <li><label for="province">*Province:</label
+                ><%= select_field province => [
+                    [ '--please select--' => 'none' ],
+                    [ 'Alberta' => 'AB' ],
+                    [ 'British Columbia' => 'BC'],
+                    [ 'Manitoba' => 'MB'],
+                    [ 'New Brunswick' => 'NB'],
+                    [ 'New Foundland' => 'NF'],
+                    [ 'Northwest Terriories' => 'NT'],
+                    [ 'Nova Scotia' => 'NS'],
+                    [ 'Nunavut' => 'NU'],
+                    [ 'Ontario' => 'ON'],
+                    [ 'Prince Edward Island' => 'PE'],
+                    [ 'Quebec' => 'QC'],
+                    [ 'Saskatchewan' => 'SK'],
+                    [ 'Yukon' => 'YT'],
+                ]
+            %></li>
+            <li><label for="Message" class="textarea_label">*Message:</label
+                ><%= text_area 'message', cols => 40, rows => 5 %>
+            </li>
+        </ul>
+        %= submit_button 'Send'
+    % end
+% }
+
 
 @@ layouts/default.html.ep
 <!DOCTYPE html>
