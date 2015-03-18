@@ -20,11 +20,12 @@ __DATA__
 
 % if ( form_checker_ok() ) {
 
-    <p class="message success">Check was alright!</p>
+    <p class="message success">Your message was successfully sent.</p>
 
 % } else {
     %= form_for contact => (method => 'POST') => begin
         %= csrf_field
+
         <%== form_checker_error_wrapped %>
 
         <ul>
@@ -55,6 +56,31 @@ __DATA__
         %= submit_button 'Send'
     % end
 % }
+
+@@ quicknote.html.ep
+% layout 'email';
+% title 'Quicknote Message';
+
+<ul>
+    <li><strong>Sent on:</strong> <%= scalar(localtime) %></li>
+    <li><strong>Host:</strong> <%= stash 'visitor_ip' %></li>
+    <li><strong>Name:</strong><%= param 'name' %></li>
+    <li><strong>Email:</strong><%= param 'email' %></li>
+    <li><strong>Province:</strong><%= param 'province' %></li>
+    <li><strong>Message:</strong><%= param 'message' %></li>
+</ul>
+
+@@ layouts/email.html.ep
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><%= xtext('market') . ' / ' . xtext('company_name') %></title>
+</head>
+<body>
+    <h1>Quicknote Message</h1>
+    <%= content %>
+</body>
 
 
 @@ layouts/default.html.ep

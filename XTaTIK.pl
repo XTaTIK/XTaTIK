@@ -3,7 +3,12 @@
 use Mojolicious::Lite;
 plugin 'Config';
 plugin 'FormChecker';
-plugin 'mail';
+
+my $mconf = {
+    how     => app->config('mail')->{how},
+    howargs => app->config('mail')->{howargs},
+};
+plugin mail => $mconf;
 
 require 'lib/data.html';
 push @{ app->renderer->classes }, 'Fake';
@@ -31,8 +36,15 @@ post '/contact' => sub {
 
     $c->form_checker(
         rules => {
-            name => { max => 2, },
+            name => { max => 200, },
             email => { max => 200, },
+            province => {
+                valid_values => [
+                    qw/AB  BC  MB  NB  NF  NT  NS  NU  ON  PE  QC  SK  YT/
+                ],
+                valid_values_error => 'Please choose your province',
+            },
+            message => { max => 100_000 },
         },
     );
 
@@ -42,6 +54,18 @@ post '/contact' => sub {
     # Check CSRF token
     return $c->render(text => 'Bad CSRF token!', status => 403)
         if $c->validation->csrf_protect->has_error('csrf_token');
+
+    $c->stash( visitor_ip => $c->tx->remote_address );
+
+    $c->mail(
+        to       => app->config('mail')->{to}{quicknote},
+        from     => app->config('mail')->{from}{quicknote},
+        subject  => 'Quicknote from '
+            . app->config('text')->{website_domain},
+
+        type => 'text/html',
+        data => $c->render_to_string('quicknote'),
+    );
 
     return $c->render( template => 'contact' );
 };
