@@ -8,10 +8,15 @@ plugin 'mail';
 require 'lib/data.html';
 push @{ app->renderer->classes }, 'Fake';
 
+######### HELPERS
+
 helper xtext => sub {
     my ( $c, $var ) = @_;
     return $c->config('text')->{$var};
 },
+
+
+######### ROUTES
 
 get '/' => 'index';
 
@@ -38,10 +43,13 @@ post '/contact' => sub {
     return $c->render(text => 'Bad CSRF token!', status => 403)
         if $c->validation->csrf_protect->has_error('csrf_token');
 
-
-
     return $c->render( template => 'contact' );
 };
+
+######### SUBS
+
+
+######### START APP
 
 app->start;
 
