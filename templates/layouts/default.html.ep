@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><%= title() ? title() . ' /' : '' %>
+        <%= xtext('market') . ' / ' . xtext('company_name') %></title>
+</head>
+<body>
+    <h1><%= xtext 'market' %>
+            / <%= xtext 'company_name' %></h1>
+
+    % if ( title ) {
+        <h2><%= title %></h2>
+    % }
+
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/products"><%=
+                    xtext 'products_nav_name'
+                %></a></li>
+            <li><a href="/history">Our History</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <%= content %>
+</body>
+
+<footer>
+    <small>Copyright © <%= (localtime)[5] + 1900 %>
+        by <%= xtext('company_name') %></small>
+</footer>

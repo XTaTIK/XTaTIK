@@ -1,0 +1,19 @@
+% layout 'default';
+% title 'Login';
+
+% if ( stash 'is_login_failed' ) {
+    <p class="message error">Your login or password is incorrect.</p>
+% }
+
+%= form_for login => ( method => 'POST' ) => begin
+    %= csrf_field
+    <ul>
+        <li><label for="login">Login:</label>
+            <%= text_field 'login' => ( id => 'login') %>
+        </li>
+        <li><label for="pass">Password:</label>
+            <%= password_field 'pass' => ( id => 'pass' ) %>
+        </li>
+    </ul>
+    %= submit_button 'Login'
+%= end

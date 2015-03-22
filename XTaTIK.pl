@@ -15,6 +15,8 @@ my $mconf = {
 };
 plugin mail => $mconf;
 
+app->secrets([ app->config('mojo_secrets') ]);
+
 require 'lib/data.html';
 push @{ app->renderer->classes }, 'Fake';
 
@@ -80,7 +82,7 @@ post '/contact' => sub {
             . app->config('text')->{website_domain},
 
         type => 'text/html',
-        data => $c->render_to_string('quicknote'),
+        data => $c->render_to_string('email-templates/quicknote'),
     );
 
     return $c->render( template => 'contact' );
