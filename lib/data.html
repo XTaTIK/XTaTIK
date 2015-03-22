@@ -57,6 +57,35 @@ __DATA__
     % end
 % }
 
+<ul id="locations">
+    % for my $loc ( @{xtext('locations')} ) {
+        <li>
+            <h3><%= $loc->{name} %></h3>
+            <address class="address">
+                <%== $loc->{address} %>
+            </address>
+            <address class="phones">
+                % if ( length $loc->{phone} ) {
+                    <span>Phone:</span> <%= $loc->{phone} %><br>
+                % } if ( length $loc->{tfphone} ) {
+                    <span>Toll-free:</span> <%= $loc->{tfphone} %><br>
+                % } if ( length $loc->{fax} ) {
+                    <span>Fax:</span> <%= $loc->{fax} %><br>
+                % } if ( length $loc->{tffax} ) {
+                    <span>Toll-free fax:</span> <%= $loc->{tffax} %><br>
+                % } if ( length $loc->{email} ) {
+                    <span>Email:</span> <%= $loc->{email} %><br>
+                % }
+            </address>
+                % if ( length $loc->{hours} ) {
+                    <%= $loc->{hours} %><br>
+                % } if ( length $loc->{note} ) {
+                    <small><%= $loc->{note} %></small>
+                % }
+        </li>
+    % }
+</ul>
+
 @@ quicknote.html.ep
 % layout 'email';
 % title 'Quicknote Message';

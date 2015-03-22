@@ -3,6 +3,9 @@
 use Mojolicious::Lite;
 plugin 'Config';
 plugin 'FormChecker';
+use HTML::Entities;
+
+### CONFIGURATION PREPROCESSING
 
 my $mconf = {
     how     => app->config('mail')->{how},
@@ -12,6 +15,12 @@ plugin mail => $mconf;
 
 require 'lib/data.html';
 push @{ app->renderer->classes }, 'Fake';
+
+my $locations = app->config('text')->{locations};
+for ( @$locations ) {
+    $_->{address} = join "<br>\n", map encode_entities($_),
+        split /\n/, $_->{address};
+}
 
 ######### HELPERS
 
