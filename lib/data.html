@@ -63,6 +63,11 @@ __DATA__
             <h3><%= $loc->{name} %></h3>
             <address class="address">
                 <%== $loc->{address} %>
+                % if ( length $loc->{hours} ) {
+                    <br><span class="hours"><%= $loc->{hours} %></span>
+                % } if ( length $loc->{note} ) {
+                    <br><small><%= $loc->{note} %></small>
+                % }
             </address>
             <address class="phones">
                 % if ( length $loc->{phone} ) {
@@ -74,14 +79,9 @@ __DATA__
                 % } if ( length $loc->{tffax} ) {
                     <span>Toll-free fax:</span> <%= $loc->{tffax} %><br>
                 % } if ( length $loc->{email} ) {
-                    <span>Email:</span> <%= $loc->{email} %><br>
+                    <span>Email:</span> <%= $loc->{email} %>
                 % }
             </address>
-                % if ( length $loc->{hours} ) {
-                    <%= $loc->{hours} %><br>
-                % } if ( length $loc->{note} ) {
-                    <small><%= $loc->{note} %></small>
-                % }
         </li>
     % }
 </ul>
