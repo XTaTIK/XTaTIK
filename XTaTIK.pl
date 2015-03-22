@@ -34,7 +34,7 @@ helper xtext => sub {
 
 get '/' => 'index';
 
-get $_ for qw(/products /about );
+get $_ for qw(/products /about /history);
 
 get '/contact' => sub {
     my $c = shift;
