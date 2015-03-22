@@ -1,6 +1,8 @@
 #!/usr/bin/env perl
 
 use Mojolicious::Lite;
+use lib qw/lib/;
+use XTaTIK::Model::Users;
 plugin 'Config';
 plugin 'FormChecker';
 use HTML::Entities;
@@ -29,12 +31,16 @@ helper xtext => sub {
     return $c->config('text')->{$var};
 },
 
+helper users => sub {
+    state $users = XTaTIK::Model::Users->new,
+},
+
 
 ######### ROUTES
 
 get '/' => 'index';
 
-get $_ for qw(/products /about /history);
+get $_ for qw(/products /about /history  /login);
 
 get '/contact' => sub {
     my $c = shift;
@@ -79,6 +85,36 @@ post '/contact' => sub {
 
     return $c->render( template => 'contact' );
 };
+
+post '/login' => sub {
+    my $c = shift;
+
+    if ( $c->users->check( $c->param('login'), $c->param('pass') ) ) {
+        $c->session( is_logged_in => 1 );
+        $c->redirect_to('user/index');
+    }
+    else {
+        $c->stash( is_login_failed => 1 );
+    }
+
+};
+
+any '/logout' => sub {
+    my $c = shift;
+    $c->session( is_logged_in => 0 );
+    $c->redirect_to('/login');
+};
+
+############# LOGGED IN ROUTES
+
+under '/user' => sub {
+    my $c = shift;
+
+    return 1 if $c->session('is_logged_in');
+    return $c->redirect_to('/login');
+};
+
+get '/' => 'user/index';
 
 ######### SUBS
 
