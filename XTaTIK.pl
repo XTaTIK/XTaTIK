@@ -3,6 +3,7 @@
 use Mojolicious::Lite;
 use lib qw/lib/;
 use XTaTIK::Model::Users;
+use XTaTIK::Model::Products;
 plugin 'Config';
 plugin 'FormChecker';
 use HTML::Entities;
@@ -35,6 +36,10 @@ helper xtext => sub {
 
 helper users => sub {
     state $users = XTaTIK::Model::Users->new,
+},
+
+helper products => sub {
+    state $products = XTaTIK::Model::Products->new,
 },
 
 
@@ -117,6 +122,84 @@ under '/user' => sub {
 };
 
 get '/' => 'user/index';
+get '/master-products-database' => sub {
+    my $c = shift;
+    $c->stash( products => $c->products->get_all );
+} => 'user/master-products-database';
+
+post '/master-products-database' => sub {
+    my $c = shift;
+
+    $c->form_checker(
+        error_class => 'message error',
+        rules => {
+            number => { max => 1000, },
+            ( map +( $_ => { optional => 1, max => 1000 } ),
+                    qw/image  title  category  group_master
+                    group_desc unit/ ),
+            ( map +( $_ => { optional => 1, max => 1000_000 } ),
+                    qw/description  tip_description  quote_description
+                    recommended/ ),
+        },
+    );
+
+    return $c->render( template => 'user/master-products-database' )
+        unless $c->form_checker_ok;
+
+    # Check CSRF token
+    return $c->render(text => 'Bad CSRF token!', status => 403)
+        if $c->validation->csrf_protect->has_error('csrf_token');
+
+    if ( $c->products->exists( $c->param('number') ) ) {
+        $c->stash( already_have_this_product => 1 );
+        return $c->render( template => 'user/master-products-database' );
+    }
+
+    $c->stash( product_add_ok => 1 );
+    $c->products->add(
+        map +( $_ => $c->param( $_ ) ),
+            qw/number  image  title  category  group_master
+                    group_desc unit description  tip_description  quote_description recommended/,
+    );
+
+} => 'user/master-products-database';
+
+post '/master-products-database/update' => sub {
+    my $c = shift;
+
+    # Check CSRF token
+    return $c->render(text => 'Bad CSRF token!', status => 403)
+        if $c->validation->csrf_protect->has_error('csrf_token');
+
+    my @ids = map /\d+/g, grep /^id/, @{$c->req->body_params->names};
+
+    for my $id ( @ids ) {
+        $c->products->update(
+            $id,
+            map +( $_ => $c->param( $_ . '_' . $id ) ),
+            qw/number  image  title  category  group_master
+                    group_desc unit description  tip_description  quote_description recommended/,
+        );
+    }
+
+    $c->flash( product_update_ok => 1 );
+    return $c->redirect_to('user/master-products-database');
+
+};
+
+post '/master-products-database/delete' => sub {
+    my $c = shift;
+
+    # Check CSRF token
+    return $c->render(text => 'Bad CSRF token!', status => 403)
+        if $c->validation->csrf_protect->has_error('csrf_token');
+
+    $c->products->delete( split ' ', $c->param('to_delete') );
+
+    $c->flash( product_delete_ok => 1 );
+    return $c->redirect_to('user/master-products-database');
+
+};
 
 ######### SUBS
 

@@ -15,6 +15,167 @@ __DATA__
 % title 'User Section';
 
 <ul class="link_button_list">
+    <li><a href="/user/master-products-database">Master products
+        database</a></li>
     <li><a href="/logout">Log out</a></li>
 </ul>
 
+@@ user/master-products-database.html.ep
+% layout 'default';
+% title 'Master Products Database';
+
+
+% if ( flash 'product_update_ok' ) {
+   <p class="message success">Products were successfully updated.</p>
+% }
+
+% if ( flash 'product_delete_ok' ) {
+   <p class="message success">Products were successfully deleted.</p>
+% }
+
+<h3>Add Product</h3>
+
+% if ( stash 'product_add_ok' ) {
+    <p class="message succcess">Product was successfully added.
+        <a href="<%= url_for 'user/master-products-database' %>">Add
+            another one</a>.
+    </p>
+% } else {
+    %= form_for '/user/master-products-database' => (method => 'POST') => begin
+        %= csrf_field
+
+        % if ( stash 'already_have_this_product' ) {
+            <p class="message error">This product number is already
+                in the database. Aborting add.
+            </p>
+        %}
+
+        <%== form_checker_error_wrapped %>
+
+        %= hidden_field add_product => 1
+
+        <small>Fields marked with an asterisk (*) are mandatory</small>
+        <small>Separate multiple images with a question mark (?).
+            If not specified, <samp>product_number.jpg</samp> will be used.
+        </small>
+        <small>
+            Category format: <samp>[cat1*::*cat2*::* ... *::*cat_n][cat1*::*cat2*::* ... *::*cat_n][cat3*::*NOCAT]</samp>
+        </small>
+        <small>Plural units are smart-deduced, but you can override
+            by giving plurals with a comma: e.g. <samp>each, eaches</samp>
+        </small>
+
+        <ul>
+            <li><label for="image">Image:</label
+                ><%= text_field 'image' => ( id => 'image' )
+            %></li>
+            <li><label for="number">Number:</label
+                ><%= text_field 'number' => ( id => 'number' )
+            %></li>
+            <li><label for="title">Title:</label
+                ><%= text_field 'title' => ( id => 'title' )
+            %></li>
+            <li><label for="description">Description:</label
+                ><%= text_area 'description', cols => 40, rows => 5,
+                     => ( id => 'description' )
+            %></li>
+            <li><label for="tip_description">Tip description:</label
+                ><%= text_area 'tip_description', cols => 40, rows => 5,
+                     => ( id => 'tip_description' )
+            %></li>
+            <li><label for="quote_description">Quote description:</label
+                ><%= text_area 'quote_description', cols => 40, rows => 3,
+                     => ( id => 'quote_description' )
+            %></li>
+            <li><label for="category">Category:</label
+                ><%= text_field 'category' => ( id => 'category' )
+            %></li>
+            <li><label for="group_master">Group master:</label
+                ><%= text_field 'group_master' => ( id => 'group_master' )
+            %></li>
+            <li><label for="group_desc">Group description:</label
+                ><%= text_field 'group_desc' => ( id => 'group_desc' )
+            %></li>
+            <li><label for="recommended">Recommended products:</label
+                ><%= text_area 'recommended', cols => 40, rows => 3,
+                     => ( id => 'recommended' )
+            %></li>
+            <li><label for="unit">Unit:</label
+                ><%= text_field 'unit' => ( id => 'unit' )
+            %></li>
+        </ul>
+        %= submit_button 'Add product'
+    %= end
+% }
+
+% if ( @{stash('products') || []} ) {
+    <h3>Delete Products</h3>
+
+    %= form_for '/user/master-products-database/delete' => ( method => 'POST' ) => begin
+        %= csrf_field
+        <%= text_area 'to_delete' => cols => 40, rows => 3 %>
+        %= submit_button 'Delete products'
+    %= end
+
+    <h3>Update Products</h3>
+
+    %= form_for '/user/master-products-database/update' => ( method => 'POST' ) => begin
+
+    %= csrf_field
+
+    %= submit_button 'Update products'
+
+    <ul>
+        % for my $p ( @{stash('products') || []}) {
+            <li>
+                %= hidden_field 'id_' . $p->{id} => $p->{id}
+                <ul>
+                    <li><label for="image">Image:</label
+                        ><%= text_field 'image_' . $p->{id} => $p->{image}
+                    %></li>
+                    <li><label for="number">Number:</label
+                        ><%= text_field 'number_' . $p->{id} => $p->{number}
+                    %></li>
+                    <li><label for="title">Title:</label
+                        ><%= text_field 'title_' . $p->{id} => $p->{title}
+                    %></li>
+                    <li><label for="description">Description:</label
+                        ><%= text_area 'description_' . $p->{id}
+                            => $p->{description}, cols => 40, rows => 5,
+                    %></li>
+                    <li><label for="tip_description">Tip description:</label
+                        ><%= text_area 'tip_description_' . $p->{id}
+                            => $p->{tip_description}, cols => 40, rows => 5,
+                    %></li>
+                    <li><label for="quote_description">Quote description:</label
+                        ><%= text_area 'quote_description_' . $p->{id}
+                            => $p->{quote_description}, cols => 40, rows => 3
+                    %></li>
+                    <li><label for="category">Category:</label
+                        ><%= text_field 'category_' . $p->{id}
+                            => $p->{category}
+                    %></li>
+                    <li><label for="group_master">Group master:</label
+                        ><%= text_field 'group_master_' . $p->{id}
+                            => $p->{group_master}
+                    %></li>
+                    <li><label for="group_desc">Group description:</label
+                        ><%= text_field 'group_desc_' . $p->{id}
+                             => $p->{group_desc}
+                    %></li>
+                    <li><label for="recommended">Recommended products:</label
+                        ><%= text_area 'recommended_' . $p->{id}
+                            => $p->{recommended}, cols => 40, rows => 3,
+                    %></li>
+                    <li><label for="unit">Unit:</label
+                        ><%= text_field 'unit_' . $p->{id}  => $p->{unit}
+                    %></li>
+                </ul>
+            </li>
+        % }
+    </ul>
+
+    %= submit_button 'Update products'
+
+    %= end
+% }
