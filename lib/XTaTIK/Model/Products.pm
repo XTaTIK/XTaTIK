@@ -87,6 +87,39 @@ sub get_all {
     ) || [];
 }
 
+sub get_category {
+    my $self = shift;
+    my $category = shift;
+    my $dbh = $self->_dbh;
+
+    $category =~ s{^/}{};
+    my $cat_line = $category =~ s{/}{*::*}gr;
+
+    # TODO: we'll need good tests for this category matching business,
+    # 1) Check that the regex works in common SQL servers
+    # 2) Check that weird stuff like same-name cat/subcat combinations
+    #       work fine
+    my $products = $dbh->selectall_arrayref(
+        'SELECT * FROM `products` WHERE `category`
+            REGEXP(?)',
+        { Slice => {} },
+        '\[' . quotemeta($cat_line) . '(\*::\*)?(.(?!\*::\*))*\]',
+    ) || [];
+
+    # This would be a nice thing to do with a variable-length
+    # look-behind in SQL (or at least in Perl)
+    # Let's filter out products from categories that are too high
+    # up the chain from where we currently are
+
+    my @cat_bits = map reverse, split /\Q*::*\E/, reverse $category, 3;
+    splice @cat_bits, 0, -3;
+
+    my ( $up_cat, $cur_cat, $down_cat ) = map quotemeta, @cat_bits;
+
+    @$products = grep $_->{category} =~ /
+    /x, @$products;
+}
+
 1;
 
 __END__

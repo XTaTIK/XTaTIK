@@ -47,7 +47,13 @@ helper products => sub {
 
 get '/' => 'index';
 
-get $_ for qw(/products /about /history  /login);
+get $_ for qw(/about  /history  /login);
+
+get '/products(*category)' => { category => '' } => sub {
+    my $c = shift;
+    my $products = $c->products->get_category( $c->stash('category') );
+} => 'products';
+
 
 get '/contact' => sub {
     my $c = shift;
