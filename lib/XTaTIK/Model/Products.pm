@@ -95,6 +95,7 @@ sub get_category {
     $category =~ s{^/}{};
     my $cat_line = $category =~ s{/}{*::*}gr;
 
+    # We'll get rid of any cats that are too high above of where we are
     my $is_deep = (() = $cat_line =~ /\Q*::*\E/g) > 1 ? 1 : 0;
     my @cat_bits = split /\Q*::*\E/, $cat_line;
     splice @cat_bits, -2;
@@ -104,16 +105,60 @@ sub get_category {
     # 1) Check that the regex works in common SQL servers
     # 2) Check that weird stuff like same-name cat/subcat combinations
     #       work fine
-    my $products = $dbh->selectall_arrayref(
+    my $data = $dbh->selectall_arrayref(
         'SELECT * FROM `products` WHERE `category`
             REGEXP(?)'
             . ($is_deep ? 'AND NOT REGEXP(?)' : ''),
         { Slice => {} },
-        '\[' . quotemeta($cat_line) . '(\*::\*)?(.(?!\*::\*))*\]',
+        '\[' . quotemeta($cat_line),
         (
             $is_deep ? ( '\[' . quotemeta($unwanted_cat) ) : ()
         ),
     ) || [];
+
+    # Right now we might have products that should not show up, since
+    # they are deeper than where we are right now. We need to
+    # get just cat names that lead to them and we'll only show them
+    # at the current level
+
+    # We basically have 3 cases:
+    #   1) Products at current level
+    #   2) Products in 1 category below that we're listing under
+    #       subcat headers
+    #   3) Products in >1 category below and we'll just
+    #       show subcats for them
+
+    my $current_level_re = qr/\Q[$cat_line]\E/;
+    my $one_below_re     = qr/
+        \Q[$cat_line\E      # our current location in the chain
+        \*::\*              # separator for a subcat
+        ((?:.(?!\*::\*))*?) # ensure there are no more cat separators
+                            # ... but test only until the closing category
+                            # ... block, since we can have multiple category
+                            # ... blocks past our current point
+        \]                  # end of current category block
+    /x;
+    my $sub_only_re      = qr/
+        \Q[$cat_line\E      # our current location in the chain
+        \*::\*(.*?)\*::\*   # we check we have more than one separator
+                            # ... which means there's more than one subcat
+                            # ... below us in this category block
+    /x;
+
+    my %subs;
+    for ( @$data ) {
+        if ( $_->{category} =~ /$current_level_re/ ) {
+            $_->{no_sub} = 1;
+            next;
+        }
+        elsif ( $_->{category} =~ /$one_below_re/ ) {
+            $subs{ $1 }++;
+            $_->{sub} = $1;
+        }
+        elsif ( $_->{category} =~ /$sub_only_re/ ) {
+            $subs{ $1 }++;
+        }
+    }
 }
 
 1;
