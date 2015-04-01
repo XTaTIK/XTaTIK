@@ -98,7 +98,7 @@ sub get_category {
     # We'll get rid of any cats that are too high above of where we are
     my $is_deep = (() = $cat_line =~ /\Q*::*\E/g) > 1 ? 1 : 0;
     my @cat_bits = split /\Q*::*\E/, $cat_line;
-    splice @cat_bits, -2;
+    splice @cat_bits, -2 if @cat_bits > 2;
     my $unwanted_cat = join '*::*', @cat_bits;
 
     # TODO: we'll need good tests for this category matching business,
@@ -129,9 +129,14 @@ sub get_category {
     #       show subcats for them
 
     my $current_level_re = qr/\Q[$cat_line]\E/;
+
+    # we have a special case of being at the top-most of the chain
+    # solve it like this for now:
+    my $top_most_sep = length $cat_line ? '\*::\*' : '';
+
     my $one_below_re     = qr/
         \Q[$cat_line\E      # our current location in the chain
-        \*::\*              # separator for a subcat
+        $top_most_sep       # separator for a subcat
         ((?:.(?!\*::\*))*?) # ensure there are no more cat separators
                             # ... but test only until the closing category
                             # ... block, since we can have multiple category
@@ -140,7 +145,8 @@ sub get_category {
     /x;
     my $sub_only_re      = qr/
         \Q[$cat_line\E      # our current location in the chain
-        \*::\*(.*?)\*::\*   # we check we have more than one separator
+        $top_most_sep
+        (.*?)\*::\*         # we check we have more than one separator
                             # ... which means there's more than one subcat
                             # ... below us in this category block
     /x;
