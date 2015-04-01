@@ -2,6 +2,7 @@ package XTaTIK::Model::Products;
 
 use Mojo::Base -base;
 use DBI;
+use List::UtilsBy qw/sort_by/;
 
 has _dbh => sub {
     DBI->connect("dbi:SQLite:dbname=XTaTIK.db","","")
@@ -165,6 +166,8 @@ sub get_category {
             $subs{ $1 }++;
         }
     }
+
+    return \%subs;
 }
 
 1;
