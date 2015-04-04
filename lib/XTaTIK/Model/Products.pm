@@ -154,20 +154,29 @@ sub get_category {
 
     my %subs;
     for ( @$data ) {
+        say "\n\nCurrent category: $_->{category}";
         if ( $_->{category} =~ /$current_level_re/ ) {
             $_->{no_sub} = 1;
+            say "\tcurrent_level";
             next;
         }
         elsif ( $_->{category} =~ /$one_below_re/ ) {
             $subs{ $1 }++;
             $_->{sub} = $1;
+            say "\tone below";
         }
         elsif ( $_->{category} =~ /$sub_only_re/ ) {
             $subs{ $1 }++;
+            say "\tsub only";
         }
     }
 
-    return \%subs;
+    return [
+        map +{
+            cat_name    => $_,
+            cat_url     => ( length $category ? "$category/$_" : $_ ),
+        }, sort keys %subs
+    ];
 }
 
 1;

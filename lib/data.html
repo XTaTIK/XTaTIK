@@ -10,9 +10,11 @@ __DATA__
 % layout 'default';
 % title xtext 'products_nav_name';
 
+<ul>
 % for ( @{ stash('products') } ) {
-
+    <li><a href="/products/<%= $_->{cat_url} %>"><%= $_->{cat_name} %></a></li>
 % }
+</ul>
 
 @@ user/index.html.ep
 % layout 'default';
