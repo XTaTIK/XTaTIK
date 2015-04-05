@@ -30,6 +30,7 @@ sub load_test_products {
     my $p = XTaTIK::Model::Products->new;
 
     save_db();
+    $p->_dbh->do('DELETE FROM `products`');
     $p->add( %$_ ) for __get_test_products();
 }
 
