@@ -27,7 +27,7 @@ __DATA__
 %= end
 
 <div>
-    <% stash('product')->{description} %>
+    <%== stash('product')->{description} %>
 </div>
             'recommended' => '',
             'description' => 'Test Desc 1',
@@ -150,6 +150,9 @@ __DATA__
             <li><label for="number">Number:</label
                 ><%= text_field 'number' => ( id => 'number' )
             %></li>
+            <li><label for="price">Price:</label
+                ><%= text_field 'price' => ( id => 'price' )
+            %></li>
             <li><label for="title">Title:</label
                 ><%= text_field 'title' => ( id => 'title' )
             %></li>
@@ -213,6 +216,9 @@ __DATA__
                     %></li>
                     <li><label for="number">Number:</label
                         ><%= text_field 'number_' . $p->{id} => $p->{number}
+                    %></li>
+                    <li><label for="price">Price:</label
+                        ><%= text_field 'price_' . $p->{id} => $p->{price}
                     %></li>
                     <li><label for="title">Title:</label
                         ><%= text_field 'title_' . $p->{id} => $p->{title}

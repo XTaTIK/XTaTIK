@@ -51,11 +51,11 @@ sub add {
         'INSERT INTO `products` (`number`, `image`, `title`,
                 `category`, `group_master`, `group_desc`,
                 `unit`, `description`, `tip_description`,
-                `quote_description`, `recommended`, `url`)
-            VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?)',
+                `quote_description`, `recommended`, `price`, `url`)
+            VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?, ?)',
         undef,
         @values{qw/number  image  title  category  group_master
-                    group_desc unit description  tip_description  quote_description recommended/},
+                    group_desc unit description  tip_description  quote_description recommended  price/},
         $url,
     );
 
@@ -65,6 +65,8 @@ sub add {
 sub delete {
     my $self = shift;
     my @to_delete = @_;
+
+    s/^\s+|\s+$//g for @to_delete;
 
     $self->_dbh->do(
         'DELETE FROM `products` WHERE `number` IN(' .
@@ -88,11 +90,13 @@ sub update {
             SET `number` = ?, `image` = ?, `title` = ?,
                 `category` = ?, `group_master` = ?, `group_desc` = ?,
                 `unit` = ?, `description` = ?, `tip_description` = ?,
-                `quote_description` = ?, `recommended` = ?, `url` =?
+                `quote_description` = ?, `recommended` = ?, `price` = ?
+                `url` = ?
+
             WHERE `id` = ?',
         undef,
         @values{qw/number  image  title  category  group_master
-                    group_desc unit description  tip_description  quote_description recommended/},
+                    group_desc unit description  tip_description  quote_description recommended  price/},
         $url,
         $id,
     );
@@ -235,6 +239,7 @@ CREATE TABLE `products` (
     `category`      TEXT,
     `group_master`  TEXT,
     `group_desc`    TEXT,
+    `price`         TEXT,
     `unit`          TEXT,
     `description`   TEXT,
     `tip_description`   TEXT,
