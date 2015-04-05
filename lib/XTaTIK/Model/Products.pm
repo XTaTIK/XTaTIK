@@ -14,7 +14,7 @@ sub exists {
 
     my $dbh = $self->_dbh;
 
-    return @{
+    return scalar @{
         $dbh->selectall_arrayref(
             'SELECT * FROM `products` WHERE `number` = ?',
             { Slice => {} },
@@ -24,18 +24,20 @@ sub exists {
 }
 
 sub get_by_url {
-    my $self    = shift;
+    my $self = shift;
     my $url  = shift;
 
     my $dbh = $self->_dbh;
 
-    return @{
+    my ( $product ) = @{
         $dbh->selectall_arrayref(
             'SELECT * FROM `products` WHERE `url` = ?',
             { Slice => {} },
             $url,
         ) || []
     };
+
+    return __process_products( $product );
 }
 
 sub add {
@@ -44,8 +46,7 @@ sub add {
     my $dbh = $self->_dbh;
     my $url = "$values{title} $values{number}" =~ s/\W+/-/gr;
 
-    $values{unit}  //= 'each';
-    $values{image} //= "$values{number}.jpg";
+    for ( keys %values ) { length $values{$_} or delete $values{$_} }
 
     $dbh->do(
         'INSERT INTO `products` (`number`, `image`, `title`,
@@ -108,10 +109,12 @@ sub get_all {
     my $self = shift;
     my $dbh = $self->_dbh;
 
-    return $dbh->selectall_arrayref(
-        'SELECT * FROM `products` ORDER BY `number`',
-        { Slice => {} },
-    ) || [];
+    return __process_products(
+        $dbh->selectall_arrayref(
+            'SELECT * FROM `products` ORDER BY `number`',
+            { Slice => {} },
+        ) || []
+    );
 }
 
 sub get_category {
@@ -226,6 +229,34 @@ sub get_category {
     $category =~ s{(^|/)[^/]+}{};
 
     return ( \@return, $return_path, $return_name );
+}
+
+sub __process_products {
+    my $data = shift;
+
+    my %units = (
+        each    => 'eaches',
+        box     => 'boxes',
+        pair    => 'pairs',
+        case    => 'cases',
+        pack    => 'packs',
+    );
+
+    for my $product ( ref $data eq 'ARRAY' ? @$data : $data ) {
+        $product->{price} = sprintf '%.2f', $product->{price};
+        @$product{qw/price_dollars  price_cents/}
+        = split /\./, $product->{price};
+
+        for ( qw/unit  image/ ) {
+            length $product->{$_} or delete $product->{$_};
+        }
+
+        $product->{unit}  //= 'each';
+        $product->{image} //= "$product->{number}.jpg";
+        $product->{unit_multi} = $units{ $product->{unit} };
+    }
+
+    return $data;
 }
 
 1;

@@ -15,11 +15,18 @@ __DATA__
 
 <img src="/content-pics/products/<%= stash('product')->{image} %>" alt="">
 
+<p>
+    <span class="number">#<%= stash('product')->{number} %></span>
+    <span class="price_large">
+        <%= stash('product')->{price_dollars}
+            %><sup>.<%= stash('product')->{price_cents} %></sup>
+        <span class="sku">per <%= stash('product')->{unit} %></span>
+    </span>
+</p>
+
 %= form_for '/cart/add' => (method => 'POST') => begin
     %= csrf_field
     %= hidden_field number => stash('product')->{number}
-
-    <p><%= stash('product')->{number} %></p>
 
     <%= text_field 'quantity' => ( value => 1 ) %>
 
@@ -29,17 +36,6 @@ __DATA__
 <div>
     <%== stash('product')->{description} %>
 </div>
-            'recommended' => '',
-            'description' => 'Test Desc 1',
-            'title' => 'Test Product 1',
-            'tip_description' => '',
-            'image' => '',
-            'group_desc' => '',
-            'group_master' => '',
-            'unit' => 'each',
-            'category' => '[]',
-            'id' => 1,
-            'quote_description' => ''
 
 @@ products.html.ep
 % layout 'default';

@@ -9,7 +9,7 @@ plugin 'FormChecker';
 use HTML::Entities;
 
 ### CONFIGURATION PREPROCESSING
-
+# app->mode('production');
 my $mconf = {
     how     => app->config('mail')->{how},
     howargs => app->config('mail')->{howargs},
@@ -68,9 +68,7 @@ get '/product/(*url)' => sub {
     my $c = shift;
     my ( $product ) = $c->products->get_by_url( $c->stash('url') );
     $product or $c->reply->not_found;
-    # use Acme::Dump::And::Dumper;
-    # die DnD [ $product ];
-    $c->stash( product => $product, );
+    $c->stash( product => $product );
 } => 'product';
 
 
