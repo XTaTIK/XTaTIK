@@ -10,9 +10,32 @@ __DATA__
 % layout 'default';
 % title xtext 'products_nav_name';
 
-<ul>
+<ul id="product_list">
 % for ( @{ stash('products') } ) {
-    <li><a href="/products/<%= $_->{cat_url} %>"><%= $_->{cat_name} %></a></li>
+    <li>
+        % if ( $_->{display_product} ) {
+        <a href="/product/<%= $_->{url}
+            %>"><%= $_->{title} %></a>
+        % } else {
+            <a href="/products/<%= $_->{cat_url} %>"
+                ><%= $_->{title} %></a>
+            <ul>
+                % for ( @{ $_->{contents} } ) {
+                    <li>
+                        % if ( $_->{is_subsub_cat} ) {
+                            <a href="/products/<%= $_->{cat_url} %>">
+                                <%= $_->{title} %>
+                            </a>
+                        % } else {
+                            <a href="/product/<%= $_->{url} %>">
+                                <%= $_->{title} %>
+                            </a>
+                        % }
+                    </li>
+                % }
+            </ul>
+        % }
+    </li>
 % }
 </ul>
 

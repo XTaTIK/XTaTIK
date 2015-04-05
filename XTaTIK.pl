@@ -52,6 +52,7 @@ get $_ for qw(/about  /history  /login);
 get '/products(*category)' => { category => '' } => sub {
     my $c = shift;
     my $products = $c->products->get_category( $c->stash('category') );
+
     # use Acme::Dump::And::Dumper;
     # die DnD [ $products ];
     $c->stash( products => $products );

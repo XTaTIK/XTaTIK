@@ -2,7 +2,7 @@ package XTaTIK::Model::Products;
 
 use Mojo::Base -base;
 use DBI;
-use List::UtilsBy qw/sort_by/;
+use List::UtilsBy qw/sort_by  extract_by/;
 
 has _dbh => sub {
     DBI->connect("dbi:SQLite:dbname=XTaTIK.db","","")
@@ -96,25 +96,10 @@ sub get_category {
     $category =~ s{^/}{};
     my $cat_line = $category =~ s{/}{*::*}gr;
 
-    # We'll get rid of any cats that are too high above of where we are
-    my $is_deep = (() = $cat_line =~ /\Q*::*\E/g) > 1 ? 1 : 0;
-    my @cat_bits = split /\Q*::*\E/, $cat_line;
-    splice @cat_bits, -2 if @cat_bits > 2;
-    my $unwanted_cat = join '*::*', @cat_bits;
-
-    # TODO: we'll need good tests for this category matching business,
-    # 1) Check that the regex works in common SQL servers
-    # 2) Check that weird stuff like same-name cat/subcat combinations
-    #       work fine
     my $data = $dbh->selectall_arrayref(
-        'SELECT * FROM `products` WHERE `category`
-            REGEXP(?)'
-            . ($is_deep ? 'AND NOT REGEXP(?)' : ''),
+        'SELECT * FROM `products` WHERE `category` REGEXP(?)',
         { Slice => {} },
         '\[' . quotemeta($cat_line),
-        (
-            $is_deep ? ( '\[' . quotemeta($unwanted_cat) ) : ()
-        ),
     ) || [];
 
     # Right now we might have products that should not show up, since
@@ -128,6 +113,10 @@ sub get_category {
     #       subcat headers
     #   3) Products in >1 category below and we'll just
     #       show subcats for them
+
+    my @cat_bits = split /\Q*::*\E/, $cat_line;
+    splice @cat_bits, -2 if @cat_bits > 2;
+    my $unwanted_cat = join '*::*', @cat_bits;
 
     my $current_level_re = qr/\Q[$cat_line]\E/;
 
@@ -147,36 +136,65 @@ sub get_category {
     my $sub_only_re      = qr/
         \Q[$cat_line\E      # our current location in the chain
         $top_most_sep
-        (.*?)\*::\*         # we check we have more than one separator
+        ( # grab both, sub cat and sub-sub cat
+            (?:.*?)\*::\*
+            .*?
+        )(?:\*::\*|\])      # we check we have more than one separator
                             # ... which means there's more than one subcat
                             # ... below us in this category block
     /x;
 
-    my %subs;
+    my %cats;
     for ( @$data ) {
-        say "\n\nCurrent category: $_->{category}";
+        $_->{url} = $_->{title} . ' ' . $_->{number};
+        $_->{url} =~ s/\W+/-/g;
+
         if ( $_->{category} =~ /$current_level_re/ ) {
-            $_->{no_sub} = 1;
-            say "\tcurrent_level";
-            next;
+            $_->{display_product} = 1;
         }
         elsif ( $_->{category} =~ /$one_below_re/ ) {
-            $subs{ $1 }++;
-            $_->{sub} = $1;
-            say "\tone below";
+            $_->{display_sub_cat} = $1;
+            $cats{ $1 }++;
         }
         elsif ( $_->{category} =~ /$sub_only_re/ ) {
-            $subs{ $1 }++;
-            say "\tsub only";
+            $_->{display_sub_only} = $1;
         }
     }
 
-    return [
-        map +{
-            cat_name    => $_,
-            cat_url     => ( length $category ? "$category/$_" : $_ ),
-        }, sort keys %subs
-    ];
+    my @return = sort_by { $_->{title} }
+        extract_by { $_->{display_product} } @$data;
+
+    for my $cat ( sort keys %cats ) {
+        push @return, {
+            is_subcat => 1,
+            title     => $cat,
+            cat_url     => (
+                length $category ? "$category/$cat" : $cat
+            ),
+            contents  => [
+                extract_by {
+                    ($_->{display_sub_cat}//'') eq $cat
+                    or ($_->{display_sub_only}//'') =~ /^\Q$cat\E/
+                } @$data
+            ],
+        }
+    }
+
+    for my $c ( @return ) {
+        $c->{contents} or next;
+
+        my %sub_cats;
+        $sub_cats{ (split /\Q*::*\E/, $_->{display_sub_only})[1] }++
+            for extract_by { $_->{display_sub_only} } @{ $c->{contents} };
+
+        push @{ $c->{contents} }, map +{
+            title => $_,
+            cat_url => "$c->{cat_url}/$_",
+            is_subsub_cat => 1,
+        }, sort keys %sub_cats;
+    }
+
+    return \@return;
 }
 
 1;
