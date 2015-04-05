@@ -41,6 +41,8 @@ my $ac = q{a[href^="/products/"]};
         '#product_list a[href="/product/Test-Product-2-001-TEST2"]',  1)
     ->element_count_is(
         '#product_list a[href="/product/Test-Product-3-001-TEST3"]',  1)
+
+    ->element_exists_not('#back_up_category')
 }
 
 {
@@ -73,6 +75,9 @@ my $ac = q{a[href^="/products/"]};
         '#product_list a[href="/product/Test-Product-4-001-TEST4"]',  1)
     ->element_count_is(
         '#product_list a[href="/product/Test-Product-5-001-TEST5"]',  1)
+
+    ->element_exists('#back_up_category a[href="/products"]')
+    ->text_is('#back_up_category a' => 'Back to category list')
 }
 
 {
@@ -85,6 +90,9 @@ my $ac = q{a[href^="/products/"]};
     ->text_is("#product_list a" => 'Test Product 4')
     ->element_count_is(
         '#product_list a[href="/product/Test-Product-4-001-TEST4"]',  1)
+
+    ->element_exists('#back_up_category a[href="/products/Test Cat 1"]')
+    ->text_is('#back_up_category a' => 'Back to Test Cat 1')
 }
 
 {
@@ -129,6 +137,10 @@ my $ac = q{a[href^="/products/"]};
     ->text_is("#product_list a" => 'Test Product 6')
     ->element_count_is(
         '#product_list a[href="/product/Test-Product-6-001-TEST6"]',  1)
+
+    ->element_exists('#back_up_category a[href="/products/'
+            . 'Test Cat 1/Test SubCat 2"]')
+    ->text_is('#back_up_category a' => 'Back to Test SubCat 2')
 }
 
 {
