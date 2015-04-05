@@ -23,20 +23,40 @@ sub exists {
     };
 }
 
+sub get_by_url {
+    my $self    = shift;
+    my $url  = shift;
+
+    my $dbh = $self->_dbh;
+
+    return @{
+        $dbh->selectall_arrayref(
+            'SELECT * FROM `products` WHERE `url` = ?',
+            { Slice => {} },
+            $url,
+        ) || []
+    };
+}
+
 sub add {
     my $self = shift;
     my %values = @_;
     my $dbh = $self->_dbh;
+    my $url = "$values{title} $values{number}" =~ s/\W+/-/gr;
+
+    $values{unit}  //= 'each';
+    $values{image} //= "$values{number}.jpg";
 
     $dbh->do(
         'INSERT INTO `products` (`number`, `image`, `title`,
                 `category`, `group_master`, `group_desc`,
                 `unit`, `description`, `tip_description`,
-                `quote_description`, `recommended`)
-            VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?)',
+                `quote_description`, `recommended`, `url`)
+            VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?)',
         undef,
         @values{qw/number  image  title  category  group_master
                     group_desc unit description  tip_description  quote_description recommended/},
+        $url,
     );
 
     return 1;
@@ -61,17 +81,19 @@ sub update {
     my $self = shift;
     my $id = shift;
     my %values = @_;
+    my $url = "$values{title} $values{number}" =~ s/\W+/-/gr;
 
     $self->_dbh->do(
         'UPDATE `products`
             SET `number` = ?, `image` = ?, `title` = ?,
                 `category` = ?, `group_master` = ?, `group_desc` = ?,
                 `unit` = ?, `description` = ?, `tip_description` = ?,
-                `quote_description` = ?, `recommended` = ?
+                `quote_description` = ?, `recommended` = ?, `url` =?
             WHERE `id` = ?',
         undef,
         @values{qw/number  image  title  category  group_master
                     group_desc unit description  tip_description  quote_description recommended/},
+        $url,
         $id,
     );
 
@@ -146,9 +168,6 @@ sub get_category {
 
     my %cats;
     for ( @$data ) {
-        $_->{url} = $_->{title} . ' ' . $_->{number};
-        $_->{url} =~ s/\W+/-/g;
-
         if ( $_->{category} =~ /$current_level_re/ ) {
             $_->{display_product} = 1;
         }
@@ -209,7 +228,7 @@ sub get_category {
 
 __END__
 CREATE TABLE `products` (
-    `id`            INTEGER PRIMARY KEY AUTOINCREMENT,
+    `url`           TEXT,
     `number`        TEXT,
     `image`         TEXT,
     `title`         TEXT,

@@ -6,6 +6,41 @@ __DATA__
 @@ index.html.ep
 % layout 'default';
 
+@@ cart/add.html.ep
+% layout 'default';
+
+@@ product.html.ep
+% layout 'default';
+% title stash('product')->{title};
+
+<img src="/content-pics/products/<%= stash('product')->{image} %>" alt="">
+
+%= form_for '/cart/add' => (method => 'POST') => begin
+    %= csrf_field
+    %= hidden_field number => stash('product')->{number}
+
+    <p><%= stash('product')->{number} %></p>
+
+    <%= text_field 'quantity' => ( value => 1 ) %>
+
+    %= submit_button 'Add to cart'
+%= end
+
+<div>
+    <% stash('product')->{description} %>
+</div>
+            'recommended' => '',
+            'description' => 'Test Desc 1',
+            'title' => 'Test Product 1',
+            'tip_description' => '',
+            'image' => '',
+            'group_desc' => '',
+            'group_master' => '',
+            'unit' => 'each',
+            'category' => '[]',
+            'id' => 1,
+            'quote_description' => ''
+
 @@ products.html.ep
 % layout 'default';
 % title xtext 'products_nav_name';

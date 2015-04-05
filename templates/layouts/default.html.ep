@@ -9,10 +9,6 @@
     <h1><%= xtext 'market' %>
             / <%= xtext 'company_name' %></h1>
 
-    % if ( title ) {
-        <h2><%= title %></h2>
-    % }
-
     <nav>
         <ul>
             <li><a href="/">Home</a></li>
@@ -24,6 +20,10 @@
             <li><a href="/contact">Contact</a></li>
         </ul>
     </nav>
+
+    % if ( title ) {
+        <h2><%= title %></h2>
+    % }
 
     <%= content %>
 </body>

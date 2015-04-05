@@ -64,6 +64,15 @@ get '/products(*category)' => { category => '' } => sub {
     );
 } => 'products';
 
+get '/product/(*url)' => sub {
+    my $c = shift;
+    my ( $product ) = $c->products->get_by_url( $c->stash('url') );
+    $product or $c->reply->not_found;
+    # use Acme::Dump::And::Dumper;
+    # die DnD [ $product ];
+    $c->stash( product => $product, );
+} => 'product';
+
 
 get '/contact' => sub {
     my $c = shift;
