@@ -10,6 +10,20 @@ __DATA__
 % layout 'default';
 % title xtext 'products_nav_name';
 
+% if ( defined(stash 'return_path') ) {
+    <p id="back_up_category">
+        % if ( defined(stash 'return_name') ) {
+            <a href="/products/<%= stash 'return_path' %>"
+                class="link_button">
+                Back to <%= stash 'return_name' %>
+            </a>
+        % } else {
+            <a href="/products"
+                class="link_button">Back to category list</a>
+        % }
+    </p>
+% }
+
 <ul id="product_list">
 % for ( @{ stash('products') } ) {
     <li>

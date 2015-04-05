@@ -194,7 +194,15 @@ sub get_category {
         }, sort keys %sub_cats;
     }
 
-    return \@return;
+    my ( $return_path, $return_name );
+    if ( length $category ) {
+        $return_path = $category =~ s{(^|/)[^/]+$}{}r;
+        $return_name = (split '/', $return_path)[-1];
+    }
+
+    $category =~ s{(^|/)[^/]+}{};
+
+    return ( \@return, $return_path, $return_name );
 }
 
 1;
