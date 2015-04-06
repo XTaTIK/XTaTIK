@@ -30,5 +30,7 @@
 
 <footer>
     <small>Copyright © <%= (localtime)[5] + 1900 %>
-        by <%= xtext('company_name') %></small>
+        by <a href="<%= xtext('main_web') %>"
+            ><%= xtext('company_name') %></a>
+    </small>
 </footer>
