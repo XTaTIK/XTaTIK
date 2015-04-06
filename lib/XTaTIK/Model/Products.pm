@@ -4,23 +4,27 @@ use Mojo::Base -base;
 use DBI;
 use List::UtilsBy qw/sort_by  extract_by/;
 
-has _dbh => sub {
-    DBI->connect("dbi:SQLite:dbname=XTaTIK.db","","")
-};
+has '_dbh';
 
 sub exists {
+    my $self    = shift;
+    my $number  = shift;
+    return $self->get_by_number( $number );
+}
+
+sub get_by_number {
     my $self    = shift;
     my $number  = shift;
 
     my $dbh = $self->_dbh;
 
-    return scalar @{
+    return (
         $dbh->selectall_arrayref(
             'SELECT * FROM `products` WHERE `number` = ?',
             { Slice => {} },
             $number,
         ) || []
-    };
+    )->[0];
 }
 
 sub get_by_url {

@@ -3,11 +3,14 @@
 use Mojolicious::Lite;
 use lib qw/lib/;
 use XTaTIK::Model::Users;
+use XTaTIK::Model::Cart;
 use XTaTIK::Model::Products;
 plugin 'Config';
 plugin 'AntiSpamMailTo';
 plugin 'FormChecker';
 use HTML::Entities;
+
+my $DBH = DBI->connect_cached("dbi:SQLite:dbname=XTaTIK.db","","");
 
 ### CONFIGURATION PREPROCESSING
 # app->mode('production');
@@ -33,18 +36,90 @@ for ( @$locations ) {
 helper xtext => sub {
     my ( $c, $var ) = @_;
     return $c->config('text')->{$var};
-},
+};
 
 helper users => sub {
-    state $users = XTaTIK::Model::Users->new,
-},
+    state $users = XTaTIK::Model::Users->new;
+};
 
 helper products => sub {
-    state $products = XTaTIK::Model::Products->new,
-},
+    state $products = XTaTIK::Model::Products->new;
+    $products->_dbh( $DBH );
+};
 
+helper cart => sub {
+    my $c = shift;
+
+    return $c->stash('__cart') if $c->stash('__cart');
+
+    my $cart = XTaTIK::Model::Cart->new(
+        _dbh      => $DBH,
+        _products => $c->products,
+    );
+
+    if ( my $id = $c->session('cart_id') ) {
+        $cart->id( $id );
+    }
+    else {
+        $c->session( cart_id => $cart->new_cart );
+    }
+
+    $cart->load;
+
+    $c->stash( __cart => $cart );
+    return $cart;
+};
+
+helper cart_dollars => sub {
+    my $c = shift;
+    my $dollars = $c->session('cart_dollars') // $c->cart->dollars;
+    $c->session( cart_dollars => $dollars );
+    return $dollars;
+};
+
+helper cart_cents => sub {
+    my $c = shift;
+    my $cents = $c->session('cart_cents') // $c->cart->cents;
+    $c->session( cart_cents => $cents);
+    return $cents;
+};
 
 ######### ROUTES
+
+app->hook(
+    before_dispatch => sub {
+        my $c = shift;
+        if ( $c->session('cart_id') ) {
+            $c->cart; # load cart into stash
+        }
+    },
+);
+
+app->hook(
+    after_dispatch => sub {
+        my $c = shift;
+        # use Acme::Dump::And::Dumper;
+        # die Dumper [
+        #     $c->cart,
+        #     $c->session('cart_id'),
+        # ];
+        if ( $c->session('cart_id') ) {
+            $c->cart->save;
+        }
+    },
+);
+
+post '/cart/add' => sub {
+    my $c = shift;
+
+    $c->cart->add( $c->param('quantity'), $c->param('number') );
+
+    $c->stash(
+        number    => $c->param('number'),
+        quantity  => $c->param('quantity'),
+        return_to => $c->req->headers->referrer || '/products',
+    );
+} => 'cart/add';
 
 get '/' => 'index';
 
