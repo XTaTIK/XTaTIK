@@ -62,7 +62,9 @@
                 % } if ( length $loc->{tffax} ) {
                     <span>Toll-free fax:</span> <%= $loc->{tffax} %><br>
                 % } if ( length $loc->{email} ) {
-                    <span>Email:</span> <%= $loc->{email} %>
+                    <span>Email:</span> <a
+                        href="<%== mailto_href $loc->{email} %>"
+                            ><%== mailto $loc->{email} %></a>
                 % }
             </address>
         </li>

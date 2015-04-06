@@ -5,6 +5,7 @@ use lib qw/lib/;
 use XTaTIK::Model::Users;
 use XTaTIK::Model::Products;
 plugin 'Config';
+plugin 'AntiSpamMailTo';
 plugin 'FormChecker';
 use HTML::Entities;
 
