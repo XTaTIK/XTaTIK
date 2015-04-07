@@ -28,6 +28,7 @@ sub restore_db {
 
 sub load_test_products {
     my $p = XTaTIK::Model::Products->new;
+    $p->_dbh( DBI->connect_cached("dbi:SQLite:dbname=XTaTIK.db","","") );
 
     save_db();
     $p->_dbh->do('DELETE FROM `products`');

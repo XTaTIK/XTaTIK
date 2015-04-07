@@ -1,7 +1,7 @@
 #!perl
 
 use Test::More;
-use Test::Mojo;
+# use Test::Mojo;
 
 use lib 't';
 use Test::XTaTIK;
@@ -9,7 +9,8 @@ use Test::XTaTIK;
 use FindBin;
 require "$FindBin::Bin/../XTaTIK.pl";
 
-my $t = Test::Mojo->new;
+use Test::Mojo::WithRoles 'ElementCounter';
+my $t = Test::Mojo::WithRoles->new;
 
 Test::XTaTIK->load_test_products;
 
@@ -21,13 +22,15 @@ my $ac = q{a[href^="/products/"]};
 {
     my $sfli = "$fli + li > ul > li:first-child ";
     $t->get_ok('/products')->status_is(200)
-    ->element_count_is($pi, 2)
-    ->element_count_is("$pi > $ap",  1)
-    ->element_count_is("$pi > $ac", 1)
-    ->element_count_is("$pi > ul > li", 4)
-    ->element_count_is("$pi > ul > li > $ap", 2)
-    ->element_count_is("$pi > ul > li > $ac", 2)
-
+    ->dive_in('#product_list > li')
+    ->element_count_is('', '<3')
+    ->element_count_is(" > $ap",  1)
+    ->element_count_is(" > $ac", 1)
+    ->dive_in(' > ul > li')
+    ->element_count_is('', 4)
+    ->element_count_is(" > $ap", 2)
+    ->element_count_is(" > $ac", 2)
+    ->dive_reset
     ->text_is("$fli > a"      => 'Test Product 1')
     ->text_is("$fli + li > a" => 'Test Cat 1'    )
     ->text_is("$sfli > a"                => 'Test Product 2')
