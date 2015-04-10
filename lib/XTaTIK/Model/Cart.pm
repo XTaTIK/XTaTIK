@@ -32,10 +32,14 @@ sub new_cart {
 sub all_items {
     my $self = shift;
 
-    my @numbers = map $_->{n}, @{ $self->contents };
-    my $products = $self->_products->get_by_number( @numbers );
-    use Acme::Dump::And::Dumper;
-    die DnD [ $products ];
+    my @contents = @{ $self->contents };
+    my @products = $self->_products->get_by_number(map $_->{n}, @contents);
+
+    my %quantities;
+    $quantities{ $_->{n} } = $_->{q} for @contents;
+    $_->{quantity} = $quantities{ $_->{number} } for @products;
+
+    return \@products;
 }
 
 sub add {

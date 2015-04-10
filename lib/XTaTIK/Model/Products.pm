@@ -26,7 +26,7 @@ sub get_by_number {
         @numbers,
     ) || [];
 
-    return wantarray ? $result->[0] : $result;
+    return wantarray ? @$result : $result->[0];
 }
 
 sub get_by_url {

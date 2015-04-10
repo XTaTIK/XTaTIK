@@ -130,12 +130,8 @@ post '/cart/add' => sub {
 get '/cart/' => sub {
     my $c = shift;
 
-    my $items = $c->cart->all_items;
+    $c->stash( products => $c->cart->all_items );
 
-    $c->stash(
-        products => $items,
-        have_products => scalar(@$items),
-    );
 } => 'cart/index';
 
 
