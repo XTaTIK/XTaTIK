@@ -3,7 +3,7 @@ package XTaTIK::Model::Cart;
 use Mojo::Base -base;
 use XTaTIK::Model::Products;
 use DBI;
-use JSON::MaybeXS;
+use JSON::Meth;
 
 my $Blank_Cart_Data = {
     contents => [],
@@ -21,12 +21,19 @@ sub new_cart {
         'INSERT INTO `carts` (`created_on`, `data`) VALUES (?, ?)',
         undef,
         time(),
-        encode_json( $Blank_Cart_Data ),
+        $Blank_Cart_Data->$j,
     );
 
     $self->id( $self->_dbh->last_insert_id("","","","") );
 
     return $self->id;
+}
+
+sub all_items {
+    my $self = shift;
+
+    use Acme::Dump::And::Dumper;
+    die DnD [ $self->_products ];
 }
 
 sub add {
@@ -68,8 +75,8 @@ sub load {
         ) || []
     )->[0];
 
-    my $cart = eval { decode_json $cart_row->{data} }
-        // decode_json encode_json $Blank_Cart_Data;
+    my $cart = eval { $cart_row->{data}->$j }
+        // $Blank_Cart_Data->$j->$j;
 
     $self->contents( $cart->{contents} );
     $self->_recalculate_total;
@@ -88,10 +95,10 @@ sub save {
     $self->_dbh->do(
         'UPDATE `carts` SET `data` = ? WHERE `id` = ?',
         undef,
-        encode_json({
+        {
             contents    => $self->contents,
             total       => $self->total,
-        }),
+        }->$j,
         $id,
     );
 
