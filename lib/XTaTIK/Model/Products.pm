@@ -2,6 +2,7 @@ package XTaTIK::Model::Products;
 
 use Mojo::Base -base;
 use DBI;
+use File::Spec::Functions qw/catfile/;
 use List::UtilsBy qw/sort_by  extract_by/;
 
 has '_dbh';
@@ -258,9 +259,12 @@ sub __process_products {
             length $product->{$_} or delete $product->{$_};
         }
 
-        $product->{unit}  //= 'each';
-        $product->{image} //= "$product->{number}.jpg";
+        $product->{unit}     //= 'each';
         $product->{unit_multi} = $units{ $product->{unit} };
+
+        $product->{image} //= "$product->{number}.jpg";
+        $product->{image}   = 'nopic.jpg'
+            unless -e catfile 'product-pics', $product->{image};
     }
 
     return $data;
