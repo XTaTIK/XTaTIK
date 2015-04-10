@@ -9,22 +9,24 @@ has '_dbh';
 sub exists {
     my $self    = shift;
     my $number  = shift;
-    return $self->get_by_number( $number );
+    return $self->get_by_number( $number )->[0];
 }
 
 sub get_by_number {
     my $self    = shift;
-    my $number  = shift;
+    my @numbers = @_;
 
     my $dbh = $self->_dbh;
 
-    return (
-        $dbh->selectall_arrayref(
-            'SELECT * FROM `products` WHERE `number` = ?',
-            { Slice => {} },
-            $number,
-        ) || []
-    )->[0];
+    my $result = $dbh->selectall_arrayref(
+        'SELECT * FROM `products` WHERE `number` IN (' .
+                ( join ',', ('?')x@numbers )
+            . ')',
+        { Slice => {} },
+        @numbers,
+    ) || [];
+
+    return wantarray ? $result->[0] : $result;
 }
 
 sub get_by_url {

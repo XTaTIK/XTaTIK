@@ -127,6 +127,18 @@ post '/cart/add' => sub {
     );
 } => 'cart/add';
 
+get '/cart/' => sub {
+    my $c = shift;
+
+    my $items = $c->cart->all_items;
+
+    $c->stash(
+        products => $items,
+        have_products => scalar(@$items),
+    );
+} => 'cart/index';
+
+
 get '/' => 'index';
 
 get $_ for qw(/about  /history  /login);

@@ -21,7 +21,7 @@
         </ul>
 
         <p id="cart">
-            Total: $<%= cart_dollars %><sup>.<%= cart_cents %></sup>
+            <a href="/cart/">Total: $<%= cart_dollars %><sup>.<%= cart_cents %></sup></a>
             <br>Cart ID: <%= session('cart_id') %>
         </p>
     </nav>

@@ -32,8 +32,10 @@ sub new_cart {
 sub all_items {
     my $self = shift;
 
+    my @numbers = map $_->{n}, @{ $self->contents };
+    my $products = $self->_products->get_by_number( @numbers );
     use Acme::Dump::And::Dumper;
-    die DnD [ $self->_products ];
+    die DnD [ $products ];
 }
 
 sub add {
@@ -75,8 +77,7 @@ sub load {
         ) || []
     )->[0];
 
-    my $cart = eval { $cart_row->{data}->$j }
-        // $Blank_Cart_Data->$j->$j;
+    my $cart = eval { $cart_row->{data}->$j } // $Blank_Cart_Data->$j->$j;
 
     $self->contents( $cart->{contents} );
     $self->_recalculate_total;
