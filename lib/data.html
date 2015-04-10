@@ -32,7 +32,8 @@ __DATA__
                         $_->{image} %>" alt=""></td>
                     <td><a href="/product/<%= $_->{url} %>"
                         ><%= $_->{title} %></a></td>
-                    <td>$<%= $_->{price} %></td>
+                    <td>$<%= $_->{price_dollars}
+                        %><sup>.<%= $_->{price_cents} %></sup></td>
                     <td>
                         <%= text_field 'quantity_' . $_->{number}
                             => ( value => $_->{quantity} )

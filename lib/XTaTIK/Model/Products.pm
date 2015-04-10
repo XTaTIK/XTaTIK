@@ -26,6 +26,7 @@ sub get_by_number {
         @numbers,
     ) || [];
 
+    $result = __process_products( $result );
     return wantarray ? @$result : $result->[0];
 }
 
