@@ -72,14 +72,20 @@ helper cart => sub {
 
 helper cart_dollars => sub {
     my $c = shift;
-    my $dollars = $c->session('cart_dollars') // $c->cart->dollars;
+    my $is_refresh = shift;
+    my $dollars = $is_refresh
+        ? $c->cart->dollars
+        : $c->session('cart_dollars') // $c->cart->dollars;
     $c->session( cart_dollars => $dollars );
     return $dollars;
 };
 
 helper cart_cents => sub {
     my $c = shift;
-    my $cents = $c->session('cart_cents') // $c->cart->cents;
+    my $is_refresh = shift;
+    my $cents = $is_refresh
+        ? $c->cart->cents
+        : $c->session('cart_cents') // $c->cart->cents;
     $c->session( cart_cents => $cents);
     return $cents;
 };
@@ -113,7 +119,7 @@ post '/cart/add' => sub {
     my $c = shift;
 
     $c->cart->add( $c->param('quantity'), $c->param('number') );
-
+    $c->cart_dollars('refresh'); $c->cart_cents('refresh');
     $c->stash(
         number    => $c->param('number'),
         quantity  => $c->param('quantity'),
