@@ -15,7 +15,7 @@ sub save_db {
 }
 
 sub restore_db {
-    return if -e 'squash-db';
+    return if -e 'squash-db' or -e 'do-not-restore-db';
     unless ( -e $BACKUP_DB_FILE_NAME ) {
         warn "We did not find backup products database. Aborting restore";
         return;
@@ -28,9 +28,34 @@ sub restore_db {
 
 sub load_test_products {
     my $p = XTaTIK::Model::Products->new;
-    $p->_dbh( DBI->connect_cached("dbi:SQLite:dbname=XTaTIK.db","","") );
-
     save_db();
+    $p->_dbh( DBI->connect_cached("dbi:SQLite:dbname=XTaTIK.db","","") );
+    use Acme::Dump::And::Dumper;
+
+    $p->_dbh->do(
+        'CREATE TABLE `carts` (
+            `id` INTEGER PRIMARY KEY,
+            `created_on` INT,
+            `data` TEXT
+        );'
+    );
+    $p->_dbh->do(
+        'CREATE TABLE `products` (
+            `url`           TEXT,
+            `number`        TEXT,
+            `image`         TEXT,
+            `title`         TEXT,
+            `category`      TEXT,
+            `group_master`  TEXT,
+            `group_desc`    TEXT,
+            `price`         TEXT,
+            `unit`          TEXT,
+            `description`   TEXT,
+            `tip_description`   TEXT,
+            `quote_description` TEXT,
+            `recommended`       TEXT
+        );'
+    );
     $p->_dbh->do('DELETE FROM `products`');
     $p->add( %$_ ) for __get_test_products();
 }

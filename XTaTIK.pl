@@ -92,40 +92,28 @@ helper cart_cents => sub {
 
 ######### ROUTES
 
-app->hook(
-    before_dispatch => sub {
-        my $c = shift;
-        if ( $c->session('cart_id') ) {
-            $c->cart; # load cart into stash
-        }
-    },
-);
+# app->hook(
+#     before_dispatch => sub {
+#         my $c = shift;
+#         if ( $c->session('cart_id') ) {
+#             # $c->cart; # load cart into stash
+#         }
+#     },
+# );
 
-app->hook(
-    after_dispatch => sub {
-        my $c = shift;
-        # use Acme::Dump::And::Dumper;
-        # die Dumper [
-        #     $c->cart,
-        #     $c->session('cart_id'),
-        # ];
-        if ( $c->session('cart_id') ) {
-            $c->cart->save;
-        }
-    },
-);
-
-post '/cart/add' => sub {
-    my $c = shift;
-
-    $c->cart->add( $c->param('quantity'), $c->param('number') );
-    $c->cart_dollars('refresh'); $c->cart_cents('refresh');
-    $c->stash(
-        number    => $c->param('number'),
-        quantity  => $c->param('quantity'),
-        return_to => $c->req->headers->referrer || '/products',
-    );
-} => 'cart/add';
+# app->hook(
+#     after_dispatch => sub {
+#         my $c = shift;
+#         # use Acme::Dump::And::Dumper;
+#         # die Dumper [
+#         #     $c->cart,
+#         #     $c->session('cart_id'),
+#         # ];
+#         if ( $c->session('cart_id') ) {
+#             # $c->cart->save;
+#         }
+#     },
+# );
 
 get '/cart/' => sub {
     my $c = shift;
@@ -134,6 +122,23 @@ get '/cart/' => sub {
 
 } => 'cart/index';
 
+post '/cart/add' => sub {
+    my $c = shift;
+
+    $c->cart->add( $c->param('quantity'), $c->param('number') );
+    $c->cart_dollars('refresh'); $c->cart_cents('refresh');
+    $c->cart->save;
+    $c->stash(
+        number    => $c->param('number'),
+        quantity  => $c->param('quantity'),
+        return_to => $c->req->headers->referrer || '/products',
+    );
+} => 'cart/add';
+
+post '/cart/checkout' => sub {
+    my $c = shift;
+
+} => 'cart/checkout';
 
 get '/' => 'index';
 

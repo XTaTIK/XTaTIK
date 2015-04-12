@@ -2,7 +2,7 @@ package XTaTIK::Model::Cart;
 
 use Mojo::Base -base;
 use XTaTIK::Model::Products;
-use DBI;
+use Mojo::Pg;
 use JSON::Meth;
 
 my $Blank_Cart_Data = {
