@@ -2,12 +2,17 @@ package Test::XTaTIK;
 
 use Mojo::Base -base;
 use File::Copy;
+use Mojo::Pg;
 use XTaTIK::Model::Products;
 
-my $DB_FILE_NAME = 'XTaTIK.db';
+my $secret = do 'secret.txt' or die "Failed to load secret.txt: $! $@";
+my $PG_URL = $secret->{pg_url};
+my $DB_FILE_NAME = 'NOOP';
 my $BACKUP_DB_FILE_NAME = "backup_$DB_FILE_NAME";
 
 sub save_db {
+    warn 'save_db is currently a noop';
+    return;
     return unless -e $DB_FILE_NAME;
     return if -e 'squash-db';
     move $DB_FILE_NAME, $BACKUP_DB_FILE_NAME
@@ -15,6 +20,8 @@ sub save_db {
 }
 
 sub restore_db {
+    warn 'restore_db is currently a noop';
+    return;
     return if -e 'squash-db' or -e 'do-not-restore-db';
     unless ( -e $BACKUP_DB_FILE_NAME ) {
         warn "We did not find backup products database. Aborting restore";
@@ -29,34 +36,41 @@ sub restore_db {
 sub load_test_products {
     my $p = XTaTIK::Model::Products->new;
     save_db();
-    $p->_dbh( DBI->connect_cached("dbi:SQLite:dbname=XTaTIK.db","","") );
-    use Acme::Dump::And::Dumper;
+    $p->_pg( Mojo::Pg->new($PG_URL) );
 
-    $p->_dbh->do(
-        'CREATE TABLE `carts` (
-            `id` INTEGER PRIMARY KEY,
-            `created_on` INT,
-            `data` TEXT
+    $p->_pg->db->query(
+        'drop table carts'
+    );
+    $p->_pg->db->query(
+        'drop table products'
+    );
+
+    $p->_pg->db->query(
+        'CREATE TABLE carts (
+            id            SERIAL PRIMARY KEY,
+            created_on INT,
+            data TEXT
+        )'
+    );
+    $p->_pg->db->query(
+        'CREATE TABLE products (
+            id            SERIAL PRIMARY KEY,
+            url           TEXT,
+            number        TEXT,
+            image         TEXT,
+            title         TEXT,
+            category      TEXT,
+            group_master  TEXT,
+            group_desc    TEXT,
+            price         TEXT,
+            unit          TEXT,
+            description   TEXT,
+            tip_description   TEXT,
+            quote_description TEXT,
+            recommended       TEXT
         );'
     );
-    $p->_dbh->do(
-        'CREATE TABLE `products` (
-            `url`           TEXT,
-            `number`        TEXT,
-            `image`         TEXT,
-            `title`         TEXT,
-            `category`      TEXT,
-            `group_master`  TEXT,
-            `group_desc`    TEXT,
-            `price`         TEXT,
-            `unit`          TEXT,
-            `description`   TEXT,
-            `tip_description`   TEXT,
-            `quote_description` TEXT,
-            `recommended`       TEXT
-        );'
-    );
-    $p->_dbh->do('DELETE FROM `products`');
+    $p->_pg->db->query('DELETE FROM "products"');
     $p->add( %$_ ) for __get_test_products();
 }
 

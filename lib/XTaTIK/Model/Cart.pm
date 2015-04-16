@@ -10,21 +10,21 @@ my $Blank_Cart_Data = {
     total    => '0.00',
 };
 
-has [qw/_dbh  _products  id   contents  total  dollars  cents
+has [qw/_pg  _products  id   contents  total  dollars  cents
     _is_modified
 /];
 
 sub new_cart {
     my $self = shift;
 
-    $self->_dbh->do(
-        'INSERT INTO `carts` (`created_on`, `data`) VALUES (?, ?)',
-        undef,
-        time(),
-        $Blank_Cart_Data->$j,
+    $self->id(
+        $self->_pg->db->query(
+            'INSERT INTO carts (created_on, data) VALUES (?, ?)
+                RETURNING id',
+            time(),
+            $Blank_Cart_Data->$j,
+        )->hash->{id}
     );
-
-    $self->id( $self->_dbh->last_insert_id("","","","") );
 
     return $self->id;
 }
@@ -73,13 +73,10 @@ sub load {
     my $id = $self->id
         or die "MISSING CART ID on load";
 
-    my $cart_row = (
-        $self->_dbh->selectall_arrayref(
-            'SELECT * FROM `carts` WHERE `id` = ?',
-            { Slice => {} },
-            $id,
-        ) || []
-    )->[0];
+    my $cart_row = $self->_pg->db->query(
+        'SELECT * FROM "carts" WHERE "id" = ?',
+        $id,
+    )->hash;
 
     my $cart = eval { $cart_row->{data}->$j } // $Blank_Cart_Data->$j->$j;
 
@@ -97,9 +94,8 @@ sub save {
     my $id = $self->id
         or die "MISSING CART ID on save";
 
-    $self->_dbh->do(
-        'UPDATE `carts` SET `data` = ? WHERE `id` = ?',
-        undef,
+    $self->_pg->db->query(
+        'UPDATE "carts" SET "data" = ? WHERE "id" = ?',
         {
             contents    => $self->contents,
             total       => $self->total,
@@ -132,10 +128,10 @@ sub _recalculate_total {
 
 __END__
 
-CREATE TABLE `carts` (
-    `id` INTEGER PRIMARY KEY,
-    `created_on` INT,
-    `data` TEXT
+CREATE TABLE carts (
+    id            SERIAL PRIMARY KEY,
+    created_on INT,
+    data TEXT
 );
 
 

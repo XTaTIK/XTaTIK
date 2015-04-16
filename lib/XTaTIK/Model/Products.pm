@@ -1,11 +1,12 @@
 package XTaTIK::Model::Products;
 
 use Mojo::Base -base;
-use DBI;
+use Mojo::Pg;
 use File::Spec::Functions qw/catfile/;
 use List::UtilsBy qw/sort_by  extract_by/;
+use Scalar::Util qw/blessed/;
 
-has '_dbh';
+has '_pg';
 
 sub exists {
     my $self    = shift;
@@ -17,15 +18,14 @@ sub get_by_number {
     my $self    = shift;
     my @numbers = @_;
 
-    my $dbh = $self->_dbh;
+    return unless @numbers;
 
-    my $result = $dbh->selectall_arrayref(
-        'SELECT * FROM `products` WHERE `number` IN (' .
+    my $result = $self->_pg->db->query(
+        'SELECT * FROM "products" WHERE "number" IN (' .
                 ( join ',', ('?')x@numbers )
             . ')',
-        { Slice => {} },
         @numbers,
-    ) || [];
+    )->hashes;
 
     $result = __process_products( $result );
     return wantarray ? @$result : $result->[0];
@@ -35,15 +35,10 @@ sub get_by_url {
     my $self = shift;
     my $url  = shift;
 
-    my $dbh = $self->_dbh;
-
-    my ( $product ) = @{
-        $dbh->selectall_arrayref(
-            'SELECT * FROM `products` WHERE `url` = ?',
-            { Slice => {} },
+    my $product = $self->_pg->db->query(
+            'SELECT * FROM "products" WHERE "url" = ?',
             $url,
-        ) || []
-    };
+        )->hash;
 
     return __process_products( $product );
 }
@@ -51,18 +46,16 @@ sub get_by_url {
 sub add {
     my $self = shift;
     my %values = @_;
-    my $dbh = $self->_dbh;
     my $url = "$values{title} $values{number}" =~ s/\W+/-/gr;
 
     for ( keys %values ) { length $values{$_} or delete $values{$_} }
 
-    $dbh->do(
-        'INSERT INTO `products` (`number`, `image`, `title`,
-                `category`, `group_master`, `group_desc`,
-                `unit`, `description`, `tip_description`,
-                `quote_description`, `recommended`, `price`, `url`)
+    $self->_pg->db->query(
+        'INSERT INTO "products" ("number", "image", "title",
+                "category", "group_master", "group_desc",
+                "unit", "description", "tip_description",
+                "quote_description", "recommended", "price", "url")
             VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?, ?)',
-        undef,
         @values{qw/number  image  title  category  group_master
                     group_desc unit description  tip_description  quote_description recommended  price/},
         $url,
@@ -77,11 +70,10 @@ sub delete {
 
     s/^\s+|\s+$//g for @to_delete;
 
-    $self->_dbh->do(
-        'DELETE FROM `products` WHERE `number` IN(' .
+    $self->_pg->db->query(
+        'DELETE FROM "products" WHERE "number" IN(' .
                 (join ',', ('?')x@to_delete )
             .');',
-        undef,
         @to_delete,
     );
 
@@ -94,16 +86,15 @@ sub update {
     my %values = @_;
     my $url = "$values{title} $values{number}" =~ s/\W+/-/gr;
 
-    $self->_dbh->do(
-        'UPDATE `products`
-            SET `number` = ?, `image` = ?, `title` = ?,
-                `category` = ?, `group_master` = ?, `group_desc` = ?,
-                `unit` = ?, `description` = ?, `tip_description` = ?,
-                `quote_description` = ?, `recommended` = ?, `price` = ?
-                `url` = ?
+    $self->_pg->db->query(
+        'UPDATE "products"
+            SET "number" = ?, "image" = ?, "title" = ?,
+                "category" = ?, "group_master" = ?, "group_desc" = ?,
+                "unit" = ?, "description" = ?, "tip_description" = ?,
+                "quote_description" = ?, "recommended" = ?, "price" = ?
+                "url" = ?
 
-            WHERE `id` = ?',
-        undef,
+            WHERE "id" = ?',
         @values{qw/number  image  title  category  group_master
                     group_desc unit description  tip_description  quote_description recommended  price/},
         $url,
@@ -115,29 +106,25 @@ sub update {
 
 sub get_all {
     my $self = shift;
-    my $dbh = $self->_dbh;
 
     return __process_products(
-        $dbh->selectall_arrayref(
-            'SELECT * FROM `products` ORDER BY `number`',
-            { Slice => {} },
-        ) || []
+        $self->_pg->db->query(
+            'SELECT * FROM "products" ORDER BY "number"',
+        )->hashes
     );
 }
 
 sub get_category {
     my $self = shift;
     my $category = shift;
-    my $dbh = $self->_dbh;
 
     $category =~ s{^/}{};
     my $cat_line = $category =~ s{/}{*::*}gr;
 
-    my $data = $dbh->selectall_arrayref(
-        'SELECT * FROM `products` WHERE `category` REGEXP(?)',
-        { Slice => {} },
+    my $data = $self->_pg->db->query(
+        'SELECT * FROM "products" WHERE "category" ~ ?',
         '\[' . quotemeta($cat_line),
-    ) || [];
+    )->hashes;
 
     # Right now we might have products that should not show up, since
     # they are deeper than where we are right now. We need to
@@ -250,7 +237,7 @@ sub __process_products {
         pack    => 'packs',
     );
 
-    for my $product ( ref $data eq 'ARRAY' ? @$data : $data ) {
+    for my $product ( blessed($data) ? @$data : $data ) {
         $product->{price} = sprintf '%.2f', $product->{price};
         @$product{qw/price_dollars  price_cents/}
         = split /\./, $product->{price};
@@ -273,19 +260,23 @@ sub __process_products {
 1;
 
 __END__
-CREATE TABLE `products` (
-    `url`           TEXT,
-    `number`        TEXT,
-    `image`         TEXT,
-    `title`         TEXT,
-    `category`      TEXT,
-    `group_master`  TEXT,
-    `group_desc`    TEXT,
-    `price`         TEXT,
-    `unit`          TEXT,
-    `description`   TEXT,
-    `tip_description`   TEXT,
-    `quote_description` TEXT,
-    `recommended`       TEXT
+
+
+
+CREATE TABLE products (
+    id            SERIAL PRIMARY KEY,
+    url           TEXT,
+    number        TEXT,
+    image         TEXT,
+    title         TEXT,
+    category      TEXT,
+    group_master  TEXT,
+    group_desc    TEXT,
+    price         TEXT,
+    unit          TEXT,
+    description   TEXT,
+    tip_description   TEXT,
+    quote_description TEXT,
+    recommended       TEXT
 );
 

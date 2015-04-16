@@ -9,8 +9,9 @@ plugin 'Config';
 plugin 'AntiSpamMailTo';
 plugin 'FormChecker';
 use HTML::Entities;
+use Mojo::Pg;
 
-my $DBH = DBI->connect_cached("dbi:SQLite:dbname=XTaTIK.db","","");
+my $PG = Mojo::Pg->new( app->config('pg_url') );
 
 ### CONFIGURATION PREPROCESSING
 # app->mode('production');
@@ -44,7 +45,7 @@ helper users => sub {
 
 helper products => sub {
     state $products = XTaTIK::Model::Products->new;
-    $products->_dbh( $DBH );
+    $products->_pg( $PG );
 };
 
 helper cart => sub {
@@ -53,7 +54,7 @@ helper cart => sub {
     return $c->stash('__cart') if $c->stash('__cart');
 
     my $cart = XTaTIK::Model::Cart->new(
-        _dbh      => $DBH,
+        _pg       => $PG,
         _products => $c->products,
     );
 
