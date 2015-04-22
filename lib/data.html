@@ -39,7 +39,8 @@ __DATA__
                     <td>$<%= $_->{price_dollars}
                         %><sup>.<%= $_->{price_cents} %></sup></td>
                     <td>
-                        <%= text_field 'quantity_' . $_->{number}
+                        <%= hidden_field 'id_' . $_->{id} %>
+                        <%= text_field 'quantity_' . $_->{id}
                             => ( value => $_->{quantity} )
                         %>
                     </td>
