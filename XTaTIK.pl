@@ -10,6 +10,7 @@ plugin 'AntiSpamMailTo';
 plugin 'FormChecker';
 use HTML::Entities;
 use Mojo::Pg;
+use experimental 'postderef';
 
 my $PG = Mojo::Pg->new( app->config('pg_url') );
 
@@ -93,29 +94,6 @@ helper cart_cents => sub {
 
 ######### ROUTES
 
-# app->hook(
-#     before_dispatch => sub {
-#         my $c = shift;
-#         if ( $c->session('cart_id') ) {
-#             # $c->cart; # load cart into stash
-#         }
-#     },
-# );
-
-# app->hook(
-#     after_dispatch => sub {
-#         my $c = shift;
-#         # use Acme::Dump::And::Dumper;
-#         # die Dumper [
-#         #     $c->cart,
-#         #     $c->session('cart_id'),
-#         # ];
-#         if ( $c->session('cart_id') ) {
-#             # $c->cart->save;
-#         }
-#     },
-# );
-
 get '/cart/' => sub {
     my $c = shift;
 
@@ -139,7 +117,36 @@ post '/cart/add' => sub {
 post '/cart/checkout' => sub {
     my $c = shift;
 
+    my @ids = map /(\d+)/, grep /^id/, $c->req->params->names->@*;
+
+    for ( @ids ) {
+        $c->cart->alter_quantity(
+            $c->param('number_'   . $_),
+            $c->param('quantity_' . $_)
+        );
+    }
+    @ids and $c->cart->save;
+    $c->cart_dollars('refresh'); $c->cart_cents('refresh');
 } => 'cart/checkout';
+
+post '/cart/checkout-review' => sub {
+    my $c = shift;
+
+    my $custom = $c->xtext('paypal')->{custom};
+    $custom =~ s/\$promo_code/$c->param('promo_code')/ge;
+
+    my $cart = $c->cart;
+    my $tax_rate = $c->xtext('tax')->{ $c->param('province') } / 100;
+    my @total = split /\./, _cur( $cart->total * (1+$tax_rate) );
+    $c->stash(
+        cart_products   => $cart->all_items,
+        tax             => _cur( $cart->total * $tax_rate ),
+        shipping        => _cur( $c->xtext('shipping') * (1+$tax_rate) ),
+        total_dollars   => $total[0],
+        total_cents     => $total[1],
+        custom          => $custom,
+    );
+} => 'cart/checkout-review';
 
 get '/' => 'index';
 
@@ -149,9 +156,6 @@ get '/products(*category)' => { category => '' } => sub {
     my $c = shift;
     my ( $products, $return_path, $return_name )
     = $c->products->get_category( $c->stash('category') );
-
-    # use Acme::Dump::And::Dumper;
-    # die DnD [ $return_path, $return_name ];
 
     $c->stash(
         products    => $products,
@@ -319,6 +323,10 @@ post '/master-products-database/delete' => sub {
     return $c->redirect_to('user/master-products-database');
 
 };
+
+sub _cur {
+    return sprintf '%.02f', shift;
+}
 
 ######### SUBS
 

@@ -42,6 +42,27 @@ sub all_items {
     return \@products;
 }
 
+sub alter_quantity {
+    my ( $self, $num, $qty ) = @_;
+
+    return $self->remove($num)
+        if $qty <= 0;
+
+    for ( @{ $self->contents } ) {
+        next unless $_->{n} eq $num;
+        $_->{q} = $qty;
+        $self->_recalculate_total;
+        return;
+    }
+}
+
+sub remove {
+    my ( $self, $num ) = @_;
+    @{ $self->contents } = grep $_->{n} ne $num, @{ $self->contents };
+    $self->_recalculate_total;
+    return;
+}
+
 sub add {
     my ( $self, $quantity, $number ) = @_;
 
