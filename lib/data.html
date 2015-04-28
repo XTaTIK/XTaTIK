@@ -63,46 +63,56 @@ __DATA__
 
 %= form_for '/cart/checkout-review' => (method => 'POST') => begin
     %= csrf_field
-
+    <%== form_checker_error_wrapped %>
     <ul>
         <li>
             <label for="c_name">* First Name:</label
-            ><%= text_field 'name' => id => 'c_name' %>
+            ><%= text_field 'name' => stash('name') => id => 'c_name' %>
         </li>
         <li>
             <label for="c_lname">* Last Name:</label
-            ><%= text_field 'lname' => id => 'c_lname' %>
+            ><%= text_field 'lname' => stash('lname')  => id => 'c_lname' %>
         </li>
         <li>
             <label for="c_address1">* Address line 1:</label
-            ><%= text_field 'address1' => id => 'c_address1' %>
+            ><%= text_field 'address1' => stash('address1')
+                => id => 'c_address1' %>
         </li>
         <li>
             <label for="c_address2">Address line 2:</label
-            ><%= text_field 'address2' => id => 'c_address2' %>
+            ><%= text_field 'address2' => stash('address2')
+                => id => 'c_address2' %>
         </li>
         <li>
             <label for="c_city">* City:</label
-            ><%= text_field 'city' => id => 'c_city' %>
+            ><%= text_field 'city' => stash('city') => id => 'c_city' %>
         </li>
         <li>
             <label for="c_province">* Province:</label
-            ><%= select_field 'province' => [
-                    ['--Please choose one--','none'],
-                    ['Alberta',             'AB'],
-                    ['British Columbia',    'BC'],
-                    ['Manitoba',            'MB'],
-                    ['New Brunswick',       'NB'],
-                    ['New Foundland',       'NL'],
-                    ['Northwest Terriories','NT'],
-                    ['Nova Scotia',         'NS'],
-                    ['Nunavut',             'NU'],
-                    ['Ontario',             'ON'],
-                    ['Prince Edward Island','PE'],
-                    ['Quebec',              'QC'],
-                    ['Saskatchewan',        'SK'],
-                    ['Yukon',               'YT'],
-                ] => id => 'c_province'
+            ><%= select_field 'province' => do {
+                    [
+                        map [
+                            @$_,
+                            stash('province') eq $_->[1]
+                                ? ( selected => 'selected' )
+                                : ()
+                        ],
+                        ['--Please choose one--','none'],
+                        ['Alberta',             'AB'],
+                        ['British Columbia',    'BC'],
+                        ['Manitoba',            'MB'],
+                        ['New Brunswick',       'NB'],
+                        ['New Foundland',       'NL'],
+                        ['Northwest Terriories','NT'],
+                        ['Nova Scotia',         'NS'],
+                        ['Nunavut',             'NU'],
+                        ['Ontario',             'ON'],
+                        ['Prince Edward Island','PE'],
+                        ['Quebec',              'QC'],
+                        ['Saskatchewan',        'SK'],
+                        ['Yukon',               'YT'],
+                    ]
+                } => id => 'c_province'
             %>
         </li>
         <li>

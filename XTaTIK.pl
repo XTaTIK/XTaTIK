@@ -132,6 +132,64 @@ post '/cart/checkout' => sub {
 post '/cart/checkout-review' => sub {
     my $c = shift;
 
+    $c->form_checker(
+        rules => {
+            name    => {
+                max => 300,
+                name => 'First name',
+            },
+            lname    => {
+                max => 300,
+                name => 'Last name',
+            },
+            address1 => {
+                max => 1000,
+                name => 'Address line 1',
+            },
+            address2 => {
+                max => 1000,
+                name => 'Address line 2',
+                optional => 1,
+            },
+            city    => {
+                max => 300,
+            },
+            do_save_address => {
+                optional => 1,
+                select => 1,
+            },
+            province=> {
+                valid_values => [
+                    qw/AB BC MB NB NL NT NS NU ON PE QC SK YT/
+                ],
+                valid_values_error => 'Please specify province',
+            },
+            zip => {
+                max => 20,
+                name => 'Postal code',
+            },
+            phone => {
+                name => 'Phone number',
+            },
+            toc => {
+                mandatory_error => 'You must accept Terms and Conditions',
+            },
+            promo_code => {
+                name => 'Promo code',
+                optional => 1,
+                max => 100,
+            },
+        },
+    );
+
+    unless ( $c->form_checker_ok ) {
+        $c->flash(
+            form_checker_error_wrapped => $c->form_checker_error_wrapped,
+        );
+        $c->render(template => 'cart/checkout');
+        return;
+    }
+
     my $custom = $c->xtext('paypal')->{custom};
     $custom =~ s/\$promo_code/$c->param('promo_code')/ge;
 
