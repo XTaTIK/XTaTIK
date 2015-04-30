@@ -20,15 +20,44 @@ sub checkout {
         custom          => $custom,
     );
 
-    return $c->render_to_string( inline => $self->_template );
+    return $c->render_to_string( inline => $self->_template_checkout );
+}
+
+sub thank_you {
+    my ( $self, $c ) = @_;
+
+    return $c->render_to_string( inline => $self->_template_thank_you );
 }
 
 sub _cur {
     return sprintf '%.02f', shift;
 }
 
-sub _template {
+sub _template_thank_you {
     return <<'END_HTML';
+    <p>Thank you for your purchase!'
+        Your order will be shipped on the <strong>next
+        business day</strong>. And will arrive within
+        <strong>5–7 business days</strong>.</p>
+END_HTML
+}
+
+sub _template_checkout {
+    return <<'END_HTML';
+
+<dl>
+    <dt>Cost of products:</dt>
+        <dd>$<%= cart->total %></dd>
+    <dt><abbr title="Goods and Services Tax">GST</abbr>:</dt>
+        <dd>$<%= stash 'tax' %></dd>
+    <dt>Shipping charge:</dt>
+        <dd>$<%= stash 'shipping' %>
+            <small>(includes applicable taxes)</small></dd>
+    <dt>Total:</dt>
+        <dd>$<%= stash 'total_dollars'
+            %><sup>.<%= stash 'total_cents' %></sup></dd>
+</dl>
+
 <form action="https://www.paypal.com/ca/cgi-bin/webscr" method="POST"
     id="checkout_paynow_form">
     %= hidden_field 'upload'            => 1

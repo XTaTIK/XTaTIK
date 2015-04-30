@@ -112,7 +112,11 @@ get '/cart/' => sub {
 any '/cart/thank-you' => sub {
     my $c = shift;
 
-    $c->cart->all_items;
+    # TODO: refactor this into Module::Plugable
+    my $handler = 'XTaTIK::Plugin::Cart::' . $c->config('checkout_system');
+    eval "require $handler" or die $@;
+
+    $c->stash( thank_you_html => $handler->new->thank_you( $c ) );
 } => 'cart/thank-you';
 
 post '/cart/add' => sub {
@@ -220,13 +224,10 @@ post '/cart/checkout-review' => sub {
     }
 
      # TODO: refactor this into Module::Plugable
-    my $handler = 'XTaTIK::Plugin::Cart::'
-        . $c->config('checkout_system');
+    my $handler = 'XTaTIK::Plugin::Cart::' . $c->config('checkout_system');
     eval "require $handler" or die $@;
 
-    my $out = $handler->new->checkout( $c );
-
-    $c->stash( checkout_html => $out );
+    $c->stash( checkout_html => $handler->new->checkout( $c ) );
 
 } => 'cart/checkout-review';
 
