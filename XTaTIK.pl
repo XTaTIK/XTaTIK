@@ -12,6 +12,12 @@ use HTML::Entities;
 use Mojo::Pg;
 use experimental 'postderef';
 
+# Refactor this variable:
+my @CHECKOUT_FORM_FIELDS = qw/
+address1  address2  city  csrf_token  do_save_address
+lname  name  phone  promo_code  province  toc  zip
+/;
+
 my $PG = Mojo::Pg->new( app->config('pg_url') );
 
 ### CONFIGURATION PREPROCESSING
@@ -127,10 +133,25 @@ post '/cart/checkout' => sub {
     }
     @ids and $c->cart->save;
     $c->cart_dollars('refresh'); $c->cart_cents('refresh');
+
+    for ( @CHECKOUT_FORM_FIELDS ) {
+        next if length $c->param($_);
+        next unless length $c->session($_);
+        $c->param( $_ => $c->session($_) );
+    }
 } => 'cart/checkout';
 
 post '/cart/checkout-review' => sub {
     my $c = shift;
+
+    if ( $c->param('do_save_address') ) {
+        $c->session( $_ => $c->param($_) )
+        for @CHECKOUT_FORM_FIELDS;
+    }
+    else {
+        $c->session( $_ => undef )
+            for @CHECKOUT_FORM_FIELDS;
+    }
 
     $c->form_checker(
         rules => {
