@@ -1,7 +1,8 @@
 #!/usr/bin/env perl
 
 use Mojolicious::Lite;
-use lib qw/lib/;
+
+use lib 'lib';
 use XTaTIK::Model::Users;
 use XTaTIK::Model::Cart;
 use XTaTIK::Model::Products;
@@ -12,7 +13,8 @@ use HTML::Entities;
 use Mojo::Pg;
 use experimental 'postderef';
 
-# Refactor this variable:
+
+# TODO: Refactor this variable:
 my @CHECKOUT_FORM_FIELDS = qw/
 address1  address2  city  csrf_token  do_save_address
 lname  name  phone  promo_code  province  toc  zip
@@ -106,6 +108,12 @@ get '/cart/' => sub {
     $c->stash( products => $c->cart->all_items );
 
 } => 'cart/index';
+
+any '/cart/thank-you' => sub {
+    my $c = shift;
+
+    $c->cart->all_items;
+} => 'cart/thank-you';
 
 post '/cart/add' => sub {
     my $c = shift;
@@ -211,20 +219,15 @@ post '/cart/checkout-review' => sub {
         return;
     }
 
-    my $custom = $c->xtext('paypal')->{custom};
-    $custom =~ s/\$promo_code/$c->param('promo_code')/ge;
+     # TODO: refactor this into Module::Plugable
+    my $handler = 'XTaTIK::Plugin::Cart::'
+        . $c->config('checkout_system');
+    eval "require $handler" or die $@;
 
-    my $cart = $c->cart;
-    my $tax_rate = $c->xtext('tax')->{ $c->param('province') } / 100;
-    my @total = split /\./, _cur( $cart->total * (1+$tax_rate) );
-    $c->stash(
-        cart_products   => $cart->all_items,
-        tax             => _cur( $cart->total * $tax_rate ),
-        shipping        => _cur( $c->xtext('shipping') * (1+$tax_rate) ),
-        total_dollars   => $total[0],
-        total_cents     => $total[1],
-        custom          => $custom,
-    );
+    my $out = $handler->new->checkout( $c );
+
+    $c->stash( checkout_html => $out );
+
 } => 'cart/checkout-review';
 
 get '/' => 'index';

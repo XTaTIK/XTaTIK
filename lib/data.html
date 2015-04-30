@@ -23,39 +23,13 @@ __DATA__
             %><sup>.<%= stash 'total_cents' %></sup></dd>
 </dl>
 
+<%== stash('checkout_html') %>
 
-<form action="https://www.paypal.com/ca/cgi-bin/webscr" method="POST"
-    id="checkout_paynow_form">
-    %= hidden_field 'upload'            => 1
-    %= hidden_field 'cmd'               => '_cart'
-    %= hidden_field 'custom'            => stash 'custom'
-    %= hidden_field 'business'          => xtext('paypal')->{email}
-    %= hidden_field 'currency_code'     => xtext 'currency'
-    %= hidden_field 'cancel_return'     => xtext('current_site') . 'cart/'
-    %= hidden_field 'return'        => xtext('current_site') . 'thank-you'
-    %= hidden_field 'tax_cart'          => stash 'tax'
-    %= hidden_field 'handling_cart'     => stash 'shipping'
-    %= hidden_field 'address_override'  => 1
-    %= hidden_field 'country'           => 'CA'; # TODO: allow for others
-    %= hidden_field 'address1'          => param('address1')
-    %= hidden_field 'address2'          => param('address2')
-    %= hidden_field 'city'              => param('city')
-    %= hidden_field 'state'             => param('province')
-    %= hidden_field 'zip'               => param('zip')
-    %= hidden_field 'night_phone_a'     => 1; # TODO: sort phones out
-    %= hidden_field 'night_phone_b'     => param('phone')
+@@ cart/thank-you.html.ep
+% title 'Thank You For Your Purchase';
+% layout 'default';
 
-    % for ( 1 .. @{stash('cart_products')||[]} ) {
-        % my $p = stash('cart_products')->[$_-1];
-        %= hidden_field 'item_name_'   . $_ => $p->{title}
-        %= hidden_field 'item_number_' . $_ => $p->{number}
-        %= hidden_field 'amount_'      . $_ => $p->{price}
-        %= hidden_field 'quantity_'    . $_ => $p->{quantity}
-    % }
-
-    %= submit_button 'Proceed to PayPal to complete this purchase'
-</form>
-
+<%== xtext('thank_you_message') %>
 
 @@ cart/checkout.html.ep
 % title 'Enter Your Information';
