@@ -5,7 +5,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use experimental 'postderef';
 
 my @CHECKOUT_FORM_FIELDS = qw/
-    address1  address2  city  do_save_address
+    address1  address2  city  do_save_address  email
     lname  name  phone  promo_code  province  toc  zip
 /;
 
@@ -73,6 +73,10 @@ sub checkout_review {
 
     $self->form_checker(
         rules => {
+            email    => {
+                max => 300,
+                email => 'Email',
+            },
             name    => {
                 max => 300,
                 name => 'First name',

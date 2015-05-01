@@ -13,7 +13,14 @@ sub checkout {
         custom        => $custom,
         __costs($c),
     );
-    $c->session( cart_province => $c->param('province') );
+    $c->session(
+        customer_data => {
+            map +( $_ => $c->param($_) ), qw/
+                address1  address2  city  email
+                lname  name  phone  promo_code  province  zip
+            /
+        },
+    );
 
     return $c->render_to_string( inline => $self->_template_checkout );
 }
@@ -35,16 +42,42 @@ sub thank_you {
             . $c->config('text')->{website_domain},
     );
 
+    # Send order email to customer
+    eval { # eval, since we don't know what address we're trying to send to
+        $c->mail(
+            to       => $c->config('mail')->{to}{order},
+            from     => $c->config('mail')->{from}{order},
+            subject  => $c->stash('title'),
+            type     => 'text/html',
+            data     => $c->render_to_string('email-templates/order-to-customer'),
+        );
+    };
+
+    $c->stash(
+        title => "New Order #$order_num on "
+            . $c->config('text')->{website_domain},
+        promo_code => $c->session('customer_data')->{promo_code} // 'N/A',
+        map +( "cust_$_" => $c->session('customer_data')->{$_} ),
+            qw/address1  address2  city  email  lname  name  phone
+                province  zip/
+    );
+
+    # Send order email to ourselves
     $c->mail(
         to       => $c->config('mail')->{to}{order},
         from     => $c->config('mail')->{from}{order},
         subject  => $c->stash('title'),
         type     => 'text/html',
-        data     => $c->render_to_string('email-templates/order'),
+        data     => $c->render_to_string('email-templates/order-to-company'),
     );
 
     $c->cart->drop;
-    $c->session( cart_id => undef );
+    $c->session(
+        cart_id       => undef,
+        cart_dollars  => undef,
+        cart_cents    => undef,
+        customer_data => undef,
+    );
 
     return $c->render_to_string( inline => $self->_template_thank_you );
 }
@@ -53,7 +86,8 @@ sub __costs {
     my $c = shift;
 
     my $tax_rate = $c->xtext('tax')->{
-        $c->param('province') // $c->session('cart_province')
+        $c->param('province')
+        // ($c->session('customer_data') || {})->{province}
     } / 100;
     my @total = split /\./, __cur( $c->cart->total * (1+$tax_rate) );
     return (

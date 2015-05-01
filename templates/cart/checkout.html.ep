@@ -6,6 +6,10 @@
     <%== form_checker_error_wrapped %>
     <ul>
         <li>
+            <label for="c_email">* Email:</label
+            ><%= text_field 'email' => id => 'c_email' %>
+        </li>
+        <li>
             <label for="c_name">* First Name:</label
             ><%= text_field 'name' => id => 'c_name' %>
         </li>
