@@ -74,7 +74,6 @@ sub thank_you {
     );
 
     # TODO: there's gotta be a nicer way of doing this:
-    $c->cart->drop;
     $c->stash(__cart => undef);
     $c->session(cart_id => undef);
     $c->cart;
