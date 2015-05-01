@@ -2,6 +2,10 @@ package XTaTIK::Plugin::Cart::PayPal;
 
 use Mojo::Base -base;
 
+sub __cur($) {
+    return sprintf '%.02f', shift;
+}
+
 sub checkout {
     my ( $self, $c ) = @_;
 
@@ -86,21 +90,41 @@ sub thank_you {
 sub __costs {
     my $c = shift;
 
-    my $tax_rate = $c->xtext('tax')->{
+    my ( $shipping, $gst, $hst, $pst, $total_d, $total_c);
+    my $xtext_tax = $c->xtext('PST')->{
         $c->param('province')
         // ($c->session('customer_data') || {})->{province}
-    } / 100;
-    my @total = split /\./, __cur( $c->cart->total * (1+$tax_rate) );
-    return (
-        tax             => __cur( $c->cart->total * $tax_rate ),
-        shipping        => __cur( $c->xtext('shipping') * (1+$tax_rate) ),
-        total_dollars   => $total[0],
-        total_cents     => $total[1],
-    );
-}
+    };
 
-sub __cur {
-    return sprintf '%.02f', shift;
+    # TODO: are we sure shipping charges get the full tax??
+    if ( ref $xtext_tax ) {
+        my $hst_rate = $$xtext_tax / 100;
+        $hst      = __cur $c->cart->total * $hst_rate;
+        $shipping = __cur $c->xtext('shipping');
+        ( $total_d, $total_c ) = split /\./,
+            __cur +($c->cart->total + $shipping) * (1+$hst_rate);
+        $shipping *=  1 + $hst_rate;
+    }
+    else {
+        my $pst_rate = $xtext_tax / 100;
+        my $gst_rate = $c->xtext('GST') / 100;
+        $gst = __cur $c->cart->total * $gst_rate;
+        $pst = __cur $c->cart->total * $pst_rate;
+        $shipping = __cur $c->xtext('shipping');
+        ( $total_d, $total_c ) = split /\./,
+            __cur +($c->cart->total + $shipping) * (1+$pst_rate+$gst_rate);
+        $shipping *= 1 + $pst_rate + $gst_rate;
+
+    }
+
+    return (
+        gst             => $gst,
+        pst             => $pst,
+        hst             => $hst,
+        shipping        => $shipping,
+        total_dollars   => $total_d,
+        total_cents     => $total_c,
+    );
 }
 
 sub _template_email {
@@ -131,8 +155,22 @@ sub _template_checkout {
 <dl>
     <dt>Cost of products:</dt>
         <dd>$<%= cart->total %></dd>
-    <dt><abbr title="Goods and Services Tax">GST</abbr>:</dt>
-        <dd>$<%= stash 'tax' %></dd>
+
+    % if ( stash('hst')+0 ) {
+        <dt><abbr title="Harmonized Sales Tax">HST</abbr>:</dt>
+            <dd><strong>$<%= stash 'hst' %></strong></dd>
+    % }
+
+    % if ( stash('gst')+0 ) {
+        <dt><abbr title="Goods and Services Tax">GST</abbr>:</dt>
+            <dd><strong>$<%= stash 'gst' %></strong></dd>
+    % }
+
+    % if ( stash('pst')+0 ) {
+        <dt><abbr title="Provincial Sales Tax">PST</abbr>:</dt>
+            <dd><strong>$<%= stash 'pst' %></strong></dd>
+    % }
+
     <dt>Shipping charge:</dt>
         <dd>$<%= stash 'shipping' %>
             <small>(includes applicable taxes)</small></dd>

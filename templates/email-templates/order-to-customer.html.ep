@@ -15,8 +15,20 @@ order.</p>
 <dl>
     <dt>Cost of products:</dt>
         <dd>$<%= cart->total %></dd>
-    <dt><abbr title="Goods and Services Tax">GST</abbr>:</dt>
-        <dd>$<%= stash 'tax' %></dd>
+    % if ( stash 'hst' ) {
+        <dt><abbr title="Harmonized Sales Tax">HST</abbr>:</dt>
+            <dd><strong>$<%= stash 'hst' %></strong></dd>
+    % }
+
+    % if ( stash 'gst' ) {
+        <dt><abbr title="Goods and Services Tax">GST</abbr>:</dt>
+            <dd><strong>$<%= stash 'gst' %></strong></dd>
+    % }
+
+    % if ( stash 'pst' ) {
+        <dt><abbr title="Provincial Sales Tax">PST</abbr>:</dt>
+            <dd><strong>$<%= stash 'pst' %></strong></dd>
+    % }
     <dt>Shipping charge:</dt>
         <dd>$<%= stash 'shipping' %>
             <small>(includes applicable taxes)</small></dd>
