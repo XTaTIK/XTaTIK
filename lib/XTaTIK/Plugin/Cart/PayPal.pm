@@ -29,7 +29,7 @@ sub thank_you {
     my ( $self, $c ) = @_;
 
     $c->redirect_to('/cart/')
-        unless $c->session('cart_id');
+        unless @{$c->cart->all_items};
 
     my $order_num = sprintf $c->xtext('order_number'), $c->cart->id;
 
