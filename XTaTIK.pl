@@ -31,6 +31,7 @@ my $mconf = {
 plugin mail => $mconf;
 
 app->secrets([ app->config('mojo_secrets') ]);
+app->session( app->session( expiration => 60*60*24*7 ) );
 
 require 'lib/data.html';
 push @{ app->renderer->classes }, 'Fake';
