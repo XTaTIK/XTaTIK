@@ -14,6 +14,14 @@ has [qw/_pg  _products  id   contents  total  dollars  cents
     _is_modified
 /];
 
+sub drop {
+    my $self = shift;
+    $self->_pg->db->query(
+        'DELETE FROM carts WHERE id = ?',
+        $self->id,
+    );
+}
+
 sub new_cart {
     my $self = shift;
 

@@ -8,17 +8,12 @@ sub checkout {
     my $custom = $c->xtext('paypal')->{custom};
     $custom =~ s/\$promo_code/$c->param('promo_code')/ge;
 
-    my $cart = $c->cart;
-    my $tax_rate = $c->xtext('tax')->{ $c->param('province') } / 100;
-    my @total = split /\./, _cur( $cart->total * (1+$tax_rate) );
     $c->stash(
-        cart_products   => $cart->all_items,
-        tax             => _cur( $cart->total * $tax_rate ),
-        shipping        => _cur( $c->xtext('shipping') * (1+$tax_rate) ),
-        total_dollars   => $total[0],
-        total_cents     => $total[1],
-        custom          => $custom,
+        cart_products => $c->cart->all_items,
+        custom        => $custom,
+        __costs($c),
     );
+    $c->session( cart_province => $c->param('province') );
 
     return $c->render_to_string( inline => $self->_template_checkout );
 }
@@ -26,19 +21,72 @@ sub checkout {
 sub thank_you {
     my ( $self, $c ) = @_;
 
+    $c->redirect_to('/cart/')
+        unless $c->session('cart_id');
+
+    my $order_num = sprintf $c->xtext('order_number'), $c->cart->id;
+
+    $c->stash(
+        cart_products => $c->cart->all_items,
+        visitor_ip    => $c->tx->remote_address,
+        order_number  => $order_num,
+        __costs($c),
+        title => "Your Order #$order_num on "
+            . $c->config('text')->{website_domain},
+    );
+
+    $c->mail(
+        to       => $c->config('mail')->{to}{order},
+        from     => $c->config('mail')->{from}{order},
+        subject  => $c->stash('title'),
+        type     => 'text/html',
+        data     => $c->render_to_string('email-templates/order'),
+    );
+
+    $c->cart->drop;
+    $c->session( cart_id => undef );
+
     return $c->render_to_string( inline => $self->_template_thank_you );
 }
 
-sub _cur {
+sub __costs {
+    my $c = shift;
+
+    my $tax_rate = $c->xtext('tax')->{
+        $c->param('province') // $c->session('cart_province')
+    } / 100;
+    my @total = split /\./, __cur( $c->cart->total * (1+$tax_rate) );
+    return (
+        tax             => __cur( $c->cart->total * $tax_rate ),
+        shipping        => __cur( $c->xtext('shipping') * (1+$tax_rate) ),
+        total_dollars   => $total[0],
+        total_cents     => $total[1],
+    );
+}
+
+sub __cur {
     return sprintf '%.02f', shift;
+}
+
+sub _template_email {
+    return <<'END_HTML';
+% layout 'email';
+% title 'Quicknote Message';
+
+<p></p>
+END_HTML
 }
 
 sub _template_thank_you {
     return <<'END_HTML';
-    <p>Thank you for your purchase!'
+    <p>Thank you for your purchase!
         Your order will be shipped on the <strong>next
-        business day</strong>. And will arrive within
+        business day</strong> and will arrive within
         <strong>5–7 business days</strong>.</p>
+
+    <p>Your order number is <strong><%= stash 'order_number' %></strong>.
+    Have this number handy if you contact us with any questions about your
+    order.</p>
 END_HTML
 }
 
@@ -93,3 +141,12 @@ END_HTML
 }
 
 1;
+
+__END__
+
+
+=pod
+
+Override C<checkout> and C<thank_you> methods in your own cart plugin
+
+=cut

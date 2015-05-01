@@ -1,0 +1,52 @@
+% layout 'email';
+
+<p>Thank you for your purchase! Your order will be shipped on
+    the <strong>next business day</strong> and will arrive within
+        <strong>5–7 business days</strong>.</p>
+
+<h3>Order Number</h3>
+
+<p>Your order number is <strong><%= stash 'order_number' %></strong>.
+Have this number handy if you contact us with any questions about your
+order.</p>
+
+<h3>Order Summary</h3>
+
+<dl>
+    <dt>Cost of products:</dt>
+        <dd>$<%= cart->total %></dd>
+    <dt><abbr title="Goods and Services Tax">GST</abbr>:</dt>
+        <dd>$<%= stash 'tax' %></dd>
+    <dt>Shipping charge:</dt>
+        <dd>$<%= stash 'shipping' %>
+            <small>(includes applicable taxes)</small></dd>
+    <dt>Total:</dt>
+        <dd>$<%= stash 'total_dollars'
+            %><sup>.<%= stash 'total_cents' %></sup></dd>
+</dl>
+
+<h3>Products on Your Order</h3>
+
+<table>
+<thead>
+    <tr>
+        <th>Number</th>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Price per unit</th>
+        <th><abbr title="Unit of Measure">UoM</abbr></th>
+    </tr>
+</thead>
+<tbody>
+    % for ( 1 .. @{stash('cart_products')||[]} ) {
+        % my $p = stash('cart_products')->[$_-1];
+        <tr>
+            <td><%= $p->{number} %></td>
+            <td><%= $p->{title} %></td>
+            <td><%= $p->{quantity} %></td>
+            <td><%= $p->{price} %></td>
+            <td><%= $p->{unit} %></td>
+        </tr>
+    % }
+</tbody>
+</table>
