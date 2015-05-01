@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo 'Type create user FOO with superuser (or use more restricted permissions)';
-sudo -u postres psql;
+sudo -u postgres psql;
 echo 'Creating XTaTIK database';
 createdb XTaTIK;
 echo 'Connecting to XTaTIK database. Setup the tables';
