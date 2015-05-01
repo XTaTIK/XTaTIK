@@ -39,10 +39,10 @@ sub load_test_products {
     $p->_pg( Mojo::Pg->new($PG_URL) );
 
     $p->_pg->db->query(
-        'drop table carts'
+        'drop table if exists carts'
     );
     $p->_pg->db->query(
-        'drop table products'
+        'drop table if exists products'
     );
 
     $p->_pg->db->query(
