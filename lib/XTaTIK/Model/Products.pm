@@ -11,7 +11,7 @@ has '_pg';
 sub exists {
     my $self    = shift;
     my $number  = shift;
-    return $self->get_by_number( $number )->[0];
+    return $self->get_by_number( $number );
 }
 
 sub get_by_number {
@@ -91,7 +91,7 @@ sub update {
             SET "number" = ?, "image" = ?, "title" = ?,
                 "category" = ?, "group_master" = ?, "group_desc" = ?,
                 "unit" = ?, "description" = ?, "tip_description" = ?,
-                "quote_description" = ?, "recommended" = ?, "price" = ?
+                "quote_description" = ?, "recommended" = ?, "price" = ?,
                 "url" = ?
 
             WHERE "id" = ?',

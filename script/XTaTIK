@@ -1,0 +1,9 @@
+#!/usr/bin/env perl
+
+use Mojolicious::Lite;
+use lib 'lib';
+
+require Mojolicious::Commands;
+Mojolicious::Commands->start_app('XTaTIK');
+
+__END__

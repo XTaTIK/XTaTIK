@@ -1,0 +1,8 @@
+% layout 'default';
+
+<p class="message success">
+    Successfully added <%= stash 'quantity' %> of <%= stash 'number' %>
+        to the cart.
+
+    <a href="<%= stash 'return_to' %>">Continue shopping.</a>
+</p>

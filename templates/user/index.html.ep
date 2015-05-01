@@ -1,0 +1,8 @@
+% layout 'default';
+% title 'User Section';
+
+<ul class="link_button_list">
+    <li><a href="/user/master-products-database">Master products
+        database</a></li>
+    <li><a href="/logout">Log out</a></li>
+</ul>

@@ -1,0 +1,26 @@
+% layout 'default';
+% title stash('product')->{title};
+
+<img src="/content-pics/products/<%= stash('product')->{image} %>" alt="">
+
+<p>
+    <span class="number">#<%= stash('product')->{number} %></span>
+    <span class="price_large">
+        <%= stash('product')->{price_dollars}
+            %><sup>.<%= stash('product')->{price_cents} %></sup>
+        <span class="sku">per <%= stash('product')->{unit} %></span>
+    </span>
+</p>
+
+%= form_for '/cart/add' => (method => 'POST') => begin
+    %= csrf_field
+    %= hidden_field number => stash('product')->{number}
+
+    <%= text_field 'quantity' => ( value => 1 ) %>
+
+    %= submit_button 'Add to cart'
+%= end
+
+<div>
+    <%== stash('product')->{description} %>
+</div>

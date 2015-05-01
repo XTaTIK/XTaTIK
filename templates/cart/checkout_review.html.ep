@@ -1,0 +1,4 @@
+% title 'Review Totals';
+% layout 'default';
+
+<%== stash('checkout_html') %>

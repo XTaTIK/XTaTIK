@@ -1,0 +1,44 @@
+% title 'Your Cart';
+% layout 'default';
+
+% if ( @{ stash('products')||[] } ) {
+
+    <p>Here are the items you're purchasing. To remove a product, set quantity to zero.</p>
+
+    %= form_for '/cart/checkout' => (method => 'POST') => begin
+        %= csrf_field
+        <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            % for ( @{ stash('products') } ) {
+                <tr>
+                    <td><img src="/product-pics/thumbs-tiny/<%=
+                        $_->{image} %>" alt=""></td>
+                    <td><a href="/product/<%= $_->{url} %>"
+                        ><%= $_->{title} %></a></td>
+                    <td>$<%= $_->{price_dollars}
+                        %><sup>.<%= $_->{price_cents} %></sup></td>
+                    <td>
+                        <%= hidden_field 'id_' . $_->{id} => $_->{id} %>
+                        <%= hidden_field 'number_' . $_->{id}
+                            => $_->{number} %>
+                        <%= text_field 'quantity_' . $_->{id}
+                            => ( value => $_->{quantity} )
+                        %>
+                    </td>
+                </tr>
+            % }
+        </tbody>
+        </table>
+        %= submit_button 'Proceed to the next step'
+    %= end
+% } else {
+    <p class="message error">There are no products in your cart.</p>
+% }

@@ -1,16 +1,12 @@
 #!perl
 
 use Test::More;
-# use Test::Mojo;
+
+use Test::Mojo::WithRoles 'ElementCounter';
+my $t = Test::Mojo::WithRoles->new('XTaTIK');
 
 use lib 't';
 use Test::XTaTIK;
-
-use FindBin;
-require "$FindBin::Bin/../XTaTIK.pl";
-
-use Test::Mojo::WithRoles 'ElementCounter';
-my $t = Test::Mojo::WithRoles->new;
 
 Test::XTaTIK->load_test_products;
 
