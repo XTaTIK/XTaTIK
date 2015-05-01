@@ -45,6 +45,7 @@ sub thank_you {
     # Send order email to customer
     eval { # eval, since we don't know what address we're trying to send to
         $c->mail(
+            test     => $c->config('mail')->{test},
             to       => $c->config('mail')->{to}{order},
             from     => $c->config('mail')->{from}{order},
             subject  => $c->stash('title'),
@@ -62,8 +63,9 @@ sub thank_you {
                 province  zip/
     );
 
-    # Send order email to ourselves
+    #Send order email to ourselves
     $c->mail(
+        test     => $c->config('mail')->{test},
         to       => $c->config('mail')->{to}{order},
         from     => $c->config('mail')->{from}{order},
         subject  => $c->stash('title'),
@@ -71,13 +73,13 @@ sub thank_you {
         data     => $c->render_to_string('email-templates/order-to-company'),
     );
 
+    # TODO: there's gotta be a nicer way of doing this:
     $c->cart->drop;
-    $c->session(
-        cart_id       => undef,
-        cart_dollars  => undef,
-        cart_cents    => undef,
-        customer_data => undef,
-    );
+    $c->stash(__cart => undef);
+    $c->session(cart_id => undef);
+    $c->cart;
+    $c->cart_dollars('refresh');
+    $c->cart_cents('refresh');
 
     return $c->render_to_string( inline => $self->_template_thank_you );
 }

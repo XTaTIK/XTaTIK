@@ -34,6 +34,10 @@ sub new_cart {
         )->hash->{id}
     );
 
+    # This is needed, for when we swap carts
+    $self->contents([]);
+    $self->_recalculate_total;
+
     return $self->id;
 }
 
