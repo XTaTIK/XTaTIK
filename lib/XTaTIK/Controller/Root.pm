@@ -56,6 +56,7 @@ sub contact_post {
     $self->stash( visitor_ip => $self->tx->remote_address );
 
     $self->mail(
+        test     => $self->config('mail')->{test},
         to       => $self->config('mail')->{to}{quicknote},
         from     => $self->config('mail')->{from}{quicknote},
         subject  => 'Quicknote from '
