@@ -55,7 +55,7 @@ sub add {
                 "category", "group_master", "group_desc",
                 "unit", "description", "tip_description",
                 "quote_description", "recommended", "price",
-                "ONprice", "url")
+                "onprice", "url")
             VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?, ?, ?)',
         @values{qw/number  image  title  category  group_master
                     group_desc unit description  tip_description  quote_description recommended  price

@@ -63,6 +63,7 @@ sub load_test_products {
             group_master  TEXT,
             group_desc    TEXT,
             price         TEXT,
+            onprice       TEXT,
             unit          TEXT,
             description   TEXT,
             tip_description   TEXT,
