@@ -86,7 +86,7 @@ sub master_products_database_update {
             $id,
             map +( $_ => $self->param( $_ . '_' . $id ) ),
             qw/number  image  title  category  group_master
-                    group_desc unit description  tip_description  quote_description recommended/,
+                    group_desc unit description  tip_description  quote_description recommended  price/,
         );
     }
 
