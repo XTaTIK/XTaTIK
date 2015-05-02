@@ -32,6 +32,8 @@
                         <%= text_field 'quantity_' . $_->{id}
                             => ( value => $_->{quantity} )
                         %>
+                        <%= $_->{quantity} > 1
+                            ? $_->{unit_multi} : $_->{unit} %>
                     </td>
                 </tr>
             % }
