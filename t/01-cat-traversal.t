@@ -178,9 +178,3 @@ my $ac = q{a[href^="/products/"]};
 Test::XTaTIK->restore_db;
 
 done_testing();
-
-__END__
-
-Test Product 7
-Test SubSubSubCat 2
-    Test Product 8
