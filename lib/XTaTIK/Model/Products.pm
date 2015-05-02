@@ -6,7 +6,7 @@ use File::Spec::Functions qw/catfile/;
 use List::UtilsBy qw/sort_by  extract_by/;
 use Scalar::Util qw/blessed/;
 
-has '_pg';
+has [qw/_pg  _pricing_region/];
 
 sub exists {
     my $self    = shift;
@@ -27,7 +27,7 @@ sub get_by_number {
         @numbers,
     )->hashes;
 
-    $result = __process_products( $result );
+    $result = $self->_process_products( $result );
     return wantarray ? @$result : $result->[0];
 }
 
@@ -40,7 +40,7 @@ sub get_by_url {
             $url,
         )->hash;
 
-    return __process_products( $product );
+    return $self->_process_products( $product );
 }
 
 sub add {
@@ -54,10 +54,12 @@ sub add {
         'INSERT INTO "products" ("number", "image", "title",
                 "category", "group_master", "group_desc",
                 "unit", "description", "tip_description",
-                "quote_description", "recommended", "price", "url")
-            VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?, ?)',
+                "quote_description", "recommended", "price",
+                "ONprice", "url")
+            VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?, ?, ?)',
         @values{qw/number  image  title  category  group_master
-                    group_desc unit description  tip_description  quote_description recommended  price/},
+                    group_desc unit description  tip_description  quote_description recommended  price
+                        ONprice/},
         $url,
     );
 
@@ -107,7 +109,7 @@ sub update {
 sub get_all {
     my $self = shift;
 
-    return __process_products(
+    return $self->_process_products(
         $self->_pg->db->query(
             'SELECT * FROM "products" ORDER BY "number"',
         )->hashes
@@ -226,8 +228,8 @@ sub get_category {
     return ( \@return, $return_path, $return_name );
 }
 
-sub __process_products {
-    my $data = shift;
+sub _process_products {
+    my ( $self, $data ) = @_;
 
     my %units = (
         each    => 'eaches',
@@ -238,6 +240,13 @@ sub __process_products {
     );
 
     for my $product ( blessed($data) ? @$data : $data ) {
+        $product->{price}
+        = $product->{ lc($self->_pricing_region) . 'price' }
+        // $product->{price} // 0;
+
+        $product->{contact_for_pricing} = 1
+            unless $product->{price} > 0;
+
         $product->{price} = sprintf '%.2f', $product->{price};
         @$product{qw/price_dollars  price_cents/}
         = split /\./, $product->{price};

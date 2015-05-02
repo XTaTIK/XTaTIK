@@ -18,6 +18,7 @@ sub startup {
     $self->plugin('Config');
     $self->plugin('AntiSpamMailTo');
     $self->plugin('FormChecker');
+    $self->plugin('IP2Location');
 
     my $mconf = {
         how     => $self->config('mail')->{how},
@@ -93,7 +94,9 @@ sub _helper_users {
 };
 
 sub _helper_products {
+    my $c = shift;
     state $products = XTaTIK::Model::Products->new;
+    $products->_pricing_region( $c->geoip_region );
     $products->_pg( $PG );
 };
 

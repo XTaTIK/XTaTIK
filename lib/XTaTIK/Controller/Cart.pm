@@ -54,6 +54,10 @@ sub checkout {
 
     for ( @CHECKOUT_FORM_FIELDS ) {
         next if length $self->param($_);
+
+        $self->param( $_ => $c->geoip_region )
+            if $_ eq 'province' and not length $self->session($_);
+
         next unless length $self->session($_);
         $self->param( $_ => $self->session($_) );
     }

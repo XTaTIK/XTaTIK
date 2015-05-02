@@ -10,7 +10,8 @@ my $Blank_Cart_Data = {
     total    => '0.00',
 };
 
-has [qw/_pg  _products  id   contents  total  dollars  cents
+has [qw/
+    _pg  _products  id   contents  total  dollars  cents
     _is_modified
 /];
 
@@ -85,7 +86,7 @@ sub add {
     $added or push @{ $self->contents }, +{
         n   => $number,
         q   => $quantity,
-        p   => $product->{price},
+        p   => $product->{'price'},
     };
 
     $self->_recalculate_total;

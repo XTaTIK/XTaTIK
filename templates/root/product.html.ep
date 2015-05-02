@@ -12,15 +12,18 @@
     </span>
 </p>
 
-%= form_for '/cart/add' => (method => 'POST') => begin
-    %= csrf_field
-    %= hidden_field number => stash('product')->{number}
+% if ( stash('product')->{contact_for_pricing} ) {
+    <p>Please <a href="/contact">contact sales rep</a> for pricing.</p>
+% } else {
+    %= form_for '/cart/add' => (method => 'POST') => begin
+        %= csrf_field
+        %= hidden_field number => stash('product')->{number}
 
-    <%= text_field 'quantity' => ( value => 1 ) %>
+        <%= text_field 'quantity' => ( value => 1 ) %>
 
-    %= submit_button 'Add to cart'
-%= end
-
+        %= submit_button 'Add to cart'
+    %= end
+% }
 <div>
     <%== stash('product')->{description} %>
 </div>
