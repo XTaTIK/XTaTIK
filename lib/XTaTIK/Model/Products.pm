@@ -254,9 +254,10 @@ sub _process_products {
         for ( qw/unit  image/ ) {
             length $product->{$_} or delete $product->{$_};
         }
-
         $product->{unit}     //= 'each';
-        $product->{unit_multi} = $units{ $product->{unit} };
+        my ( $unit_noun ) = $product->{unit} =~ /(\w+)/;
+        $product->{unit_multi} = $product->{unit}
+        =~ s/\Q$unit_noun\E/$units{ $unit_noun }/gr;
 
         $product->{image} //= "$product->{number}.jpg";
         $product->{image}   = 'nopic.jpg'
