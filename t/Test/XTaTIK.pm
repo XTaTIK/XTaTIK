@@ -34,6 +34,8 @@ sub restore_db {
 }
 
 sub load_test_products {
+    my $products_to_load = shift // __get_test_products();
+
     my $p = XTaTIK::Model::Products->new;
     save_db();
     $p->_pg( Mojo::Pg->new($PG_URL) );
@@ -72,11 +74,11 @@ sub load_test_products {
         );'
     );
     $p->_pg->db->query('DELETE FROM "products"');
-    $p->add( %$_ ) for __get_test_products();
+    $p->add( %$_ ) for @$products_to_load;
 }
 
 sub __get_test_products {
-    return (
+    return [
         {
             number              => '001-TEST1',
             image               => '',
@@ -205,7 +207,7 @@ sub __get_test_products {
         #     quote_description   => '',
         #     recommended         => '',
         # },
-    );
+    ];
 }
 
 1;
