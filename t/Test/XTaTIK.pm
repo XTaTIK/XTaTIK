@@ -34,6 +34,7 @@ sub restore_db {
 }
 
 sub load_test_products {
+    my $self = shift;
     my $products_to_load = shift // __get_test_products();
 
     my $p = XTaTIK::Model::Products->new;
