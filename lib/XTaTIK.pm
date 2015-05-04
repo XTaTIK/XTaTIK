@@ -19,6 +19,11 @@ sub startup {
     $self->plugin('AntiSpamMailTo');
     $self->plugin('FormChecker');
     $self->plugin('IP2Location');
+    $self->plugin('AssetPack');
+
+    $self->asset(
+        'main.css' => '/CSS/main.scss',
+    );
 
     my $mconf = {
         how     => $self->config('mail')->{how},

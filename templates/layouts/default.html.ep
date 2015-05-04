@@ -7,6 +7,8 @@
         / Canada<%=
             geoip_region() eq '00' ? '' : ', ' . geoip_region()
         %></title>
+
+    %= asset 'main.css';
 </head>
 <body>
     <h1><%= xtext 'market' %>
