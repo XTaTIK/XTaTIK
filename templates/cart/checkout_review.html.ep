@@ -1,4 +1,12 @@
 % title 'Review Totals';
 % layout 'default';
 
+<ul class="checkout-crumbs">
+   <li>Review products</li>
+   <li>Enter contact information</li>
+   <li class="active">Review Pricing</li>
+   <li>Pay for the order</li>
+</ul>
+
 <%== stash('checkout_html') %>
+

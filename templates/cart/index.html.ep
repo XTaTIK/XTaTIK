@@ -1,6 +1,13 @@
 % title 'Your Cart';
 % layout 'default';
 
+<ul class="checkout-crumbs">
+   <li class="active">Review products</li>
+   <li>Enter contact information</li>
+   <li>Review Pricing</li>
+   <li>Pay for the order</li>
+</ul>
+
 % if ( @{ stash('products')||[] } ) {
 
     <p>Here are the items you're purchasing. To remove a product, set quantity to zero.</p>

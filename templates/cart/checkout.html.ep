@@ -1,6 +1,13 @@
 % title 'Enter Your Information';
 % layout 'default';
 
+<ul class="checkout-crumbs">
+   <li>Review products</li>
+   <li class="active">Enter contact information</li>
+   <li>Review Pricing</li>
+   <li>Pay for the order</li>
+</ul>
+
 %= form_for '/cart/checkout-review' => (method => 'POST') => begin
     %= csrf_field
     <%== form_checker_error_wrapped %>
