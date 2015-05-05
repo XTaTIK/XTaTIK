@@ -39,6 +39,25 @@ sub load_test_products {
     $products_to_load
         or croak 'Must provide test products';
 
+    for ( @$products_to_load ) {
+        $_ = {
+            number              => '001-TEST' . rand,
+            image               => '',
+            title               => '',
+            category            => '[]',
+            group_master        => '',
+            group_desc          => '',
+            unit                => '',
+            description         => '',
+            tip_description     => '',
+            quote_description   => '',
+            recommended         => '',
+            price               => '',
+
+            %$_,
+        },
+    }
+
     my $p = XTaTIK::Model::Products->new;
     save_db();
     $p->_pg( Mojo::Pg->new($PG_URL) );
