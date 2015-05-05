@@ -39,9 +39,10 @@ sub load_test_products {
     $products_to_load
         or croak 'Must provide test products';
 
-    for ( @$products_to_load ) {
-        $_ = {
-            number              => '001-TEST' . rand,
+    for my $idx ( 0..$#$products_to_load ) {
+        my $p = $products_to_load->[$idx];
+        $p = {
+            number              => '001-TEST' . ($idx+1),
             image               => '',
             category            => '[]',
             group_master        => '',
@@ -53,10 +54,11 @@ sub load_test_products {
             recommended         => '',
             price               => '',
 
-            %$_,
+            %$p,
         },
 
-        $_->{title} //= 'Product ' . $_->{number};
+        $p->{title} //= 'Product ' . $p->{number};
+        $products_to_load->[$idx] = $p;
     }
 
     my $p = XTaTIK::Model::Products->new;
