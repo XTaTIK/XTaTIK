@@ -43,7 +43,6 @@ sub load_test_products {
         $_ = {
             number              => '001-TEST' . rand,
             image               => '',
-            title               => '',
             category            => '[]',
             group_master        => '',
             group_desc          => '',
@@ -56,6 +55,8 @@ sub load_test_products {
 
             %$_,
         },
+
+        $_->{title} //= 'Product ' . $_->{number};
     }
 
     my $p = XTaTIK::Model::Products->new;
