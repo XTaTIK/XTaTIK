@@ -6,7 +6,7 @@ use File::Spec::Functions qw/catfile/;
 use List::UtilsBy qw/sort_by  extract_by/;
 use Scalar::Util qw/blessed/;
 
-has [qw/_pg  _pricing_region/];
+has [qw/pg  pricing_region/];
 
 sub exists {
     my $self    = shift;
@@ -20,7 +20,7 @@ sub get_by_number {
 
     return unless @numbers;
 
-    my $result = $self->_pg->db->query(
+    my $result = $self->pg->db->query(
         'SELECT * FROM "products" WHERE "number" IN (' .
                 ( join ',', ('?')x@numbers )
             . ')',
@@ -35,7 +35,7 @@ sub get_by_url {
     my $self = shift;
     my $url  = shift;
 
-    my $product = $self->_pg->db->query(
+    my $product = $self->pg->db->query(
             'SELECT * FROM "products" WHERE "url" = ?',
             $url,
         )->hash;
@@ -50,7 +50,7 @@ sub add {
 
     for ( keys %values ) { length $values{$_} or delete $values{$_} }
 
-    $self->_pg->db->query(
+    $self->pg->db->query(
         'INSERT INTO "products" ("number", "image", "title",
                 "category", "group_master", "group_desc",
                 "unit", "description", "tip_description",
@@ -72,7 +72,7 @@ sub delete {
 
     s/^\s+|\s+$//g for @to_delete;
 
-    $self->_pg->db->query(
+    $self->pg->db->query(
         'DELETE FROM "products" WHERE "number" IN(' .
                 (join ',', ('?')x@to_delete )
             .');',
@@ -88,7 +88,7 @@ sub update {
     my %values = @_;
     my $url = "$values{title} $values{number}" =~ s/\W+/-/gr;
 
-    $self->_pg->db->query(
+    $self->pg->db->query(
         'UPDATE "products"
             SET "number" = ?, "image" = ?, "title" = ?,
                 "category" = ?, "group_master" = ?, "group_desc" = ?,
@@ -110,7 +110,7 @@ sub get_all {
     my $self = shift;
 
     return $self->_process_products(
-        $self->_pg->db->query(
+        $self->pg->db->query(
             'SELECT * FROM "products" ORDER BY "number"',
         )->hashes
     );
@@ -123,7 +123,7 @@ sub get_category {
     $category =~ s{^/}{};
     my $cat_line = $category =~ s{/}{*::*}gr;
 
-    my $data = $self->_pg->db->query(
+    my $data = $self->pg->db->query(
         'SELECT * FROM "products" WHERE "category" ~ ?',
         '\[' . quotemeta($cat_line),
     )->hashes;
@@ -241,7 +241,7 @@ sub _process_products {
 
     for my $product ( blessed($data) ? @$data : $data ) {
         $product->{price}
-        = $product->{ lc($self->_pricing_region) . 'price' }
+        = $product->{ lc($self->pricing_region) . 'price' }
         // $product->{price} // 0;
 
         $product->{contact_for_pricing} = 1

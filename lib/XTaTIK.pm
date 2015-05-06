@@ -101,8 +101,8 @@ sub _helper_users {
 sub _helper_products {
     my $c = shift;
     state $products = XTaTIK::Model::Products->new;
-    $products->_pricing_region( $c->geoip_region );
-    $products->_pg( $PG );
+    $products->pricing_region( $c->geoip_region );
+    $products->pg( $PG );
 };
 
 sub _helper_cart {
@@ -111,8 +111,8 @@ sub _helper_cart {
     return $c->stash('__cart') if $c->stash('__cart');
 
     my $cart = XTaTIK::Model::Cart->new(
-        _pg       => $PG,
-        _products => $c->products,
+        pg       => $PG,
+        products => $c->products,
     );
 
     if ( my $id = $c->session('cart_id') ) {

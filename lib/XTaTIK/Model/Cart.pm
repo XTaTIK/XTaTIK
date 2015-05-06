@@ -11,7 +11,7 @@ my $Blank_Cart_Data = {
 };
 
 has [qw/
-    _pg  _products  id   contents  total  dollars  cents
+    pg  products  id   contents  total  dollars  cents
     _is_modified
 /];
 
@@ -19,7 +19,7 @@ sub new_cart {
     my $self = shift;
 
     $self->id(
-        $self->_pg->db->query(
+        $self->pg->db->query(
             'INSERT INTO carts (created_on, data) VALUES (?, ?)
                 RETURNING id',
             time(),
@@ -38,7 +38,7 @@ sub all_items {
     my $self = shift;
 
     my @contents = @{ $self->contents };
-    my @products = $self->_products->get_by_number(map $_->{n}, @contents);
+    my @products = $self->products->get_by_number(map $_->{n}, @contents);
 
     my %quantities;
     $quantities{ $_->{n} } = $_->{q} for @contents;
@@ -71,7 +71,7 @@ sub remove {
 sub add {
     my ( $self, $quantity, $number ) = @_;
 
-    my $product = $self->_products->get_by_number( $number )
+    my $product = $self->products->get_by_number( $number )
         or return;
 
     my $added = 0;
@@ -99,7 +99,7 @@ sub load {
     my $id = $self->id
         or die "MISSING CART ID on load";
 
-    my $cart_row = $self->_pg->db->query(
+    my $cart_row = $self->pg->db->query(
         'SELECT * FROM "carts" WHERE "id" = ?',
         $id,
     )->hash;
@@ -120,7 +120,7 @@ sub save {
     my $id = $self->id
         or die "MISSING CART ID on save";
 
-    $self->_pg->db->query(
+    $self->pg->db->query(
         'UPDATE "carts" SET "data" = ? WHERE "id" = ?',
         {
             contents    => $self->contents,
