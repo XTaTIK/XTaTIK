@@ -15,10 +15,13 @@ $t->app->config(
         'Cat4',
         'Cat3',
         'Cat1',
-        'Cat2*::*SubCat3',
-        'Cat2*::*SubCat3*::*SubSubCat5',
-        'Cat2*::*SubCat3*::*SubSubCat4',
-        'Cat2*::*SubCat3*::*SubSubCat3',
+        'Cat2*::*Cat2',
+        'Cat2*::*Cat4',
+        'Cat2*::*Cat1',
+        'Cat3*::*SubCat3',
+        'Cat3*::*SubCat3*::*SubSubCat5',
+        'Cat3*::*SubCat3*::*SubSubCat4',
+        'Cat3*::*SubCat3*::*SubSubCat3',
     ],
 );
 
@@ -33,18 +36,31 @@ $t->app->config(
         ->dived_text_is(':first-child + li + li + li > a' => 'Cat2' )
         ->dived_text_is(':first-child + li + li + li + li > a' => 'Cat5' )
 
-        ->dive_in(':first-child + li + li + li') # Cat2
-        ->element_count_is(' a[href^="/products/"]', 5)
-        ->dived_text_is(':first-child > a' => 'Product 001-TEST2' )
-        ->dived_text_is(':first-child + li > a' => 'SubCat3' )
-        ->dived_text_is(':first-child + li + li > a' => 'SubCat1' )
-        ->dived_text_is(':first-child + li + li + li > a' => 'SubCat2' )
-        ->dived_text_is(':first-child + li + li + li + li > a'
-            => 'SubCat4' )
-        ->dived_text_is(':first-child + li + li + li + li + li > a'
-            => 'SubCat5' );
+        ->dive_reset
+        ->dive_in('#product_list > li:first-child + li ') # Cat3
+        ->element_count_is(' li a[href^="/products/"]', 5)
+        ->dive_in(' li:first-child ')
+        ->dived_text_is(' a' => 'Product 001-TEST3' )
+        ->dived_text_is(' + li > a' => 'SubCat3' )
+        ->dived_text_is(' + li + li > a' => 'SubCat1' )
+        ->dived_text_is(' + li + li + li > a' => 'SubCat2' )
+        ->dived_text_is(' + li + li + li + li > a' => 'SubCat4' )
+        ->dived_text_is(' + li + li + li + li + li > a' => 'SubCat5' )
 
-    $t->get_ok('/products/Cat2/SubCat3')
+        ->dive_reset
+        ->dive_in('#product_list > li:first-child + li + li + li') # Cat2
+        ->element_count_is(' li a[href^="/products/"]', 5)
+        ->dive_in(' li:first-child ')
+        ->dived_text_is(' a' => 'Product 001-TEST2' )
+        ->dived_text_is(' + li > a' => 'Cat2' )
+        ->dived_text_is(' + li + li > a' => 'Cat4' )
+        ->dived_text_is(' + li + li + li > a' => 'Cat1' )
+        ->dived_text_is(' + li + li + li + li > a' => 'Cat3' )
+        ->dived_text_is(' + li + li + li + li + li > a' => 'Cat5' );
+}
+
+{
+    $t->get_ok('/products/Cat3/SubCat3')
         ->dive_reset
         ->dive_in('#product_list > li')
         ->element_count_is('', 6) # 5 cats + 1 product
@@ -63,9 +79,10 @@ done_testing();
 
 sub _get_test_products {
     return [
-        ( map +( { category => "[Cat$_]",                 }, ), 1..5,  ),
-        ( map +( { category => "[Cat2*::*SubCat$_]",         }, ), 1..5,  ),
-        ( map +( { category => "[Cat2*::*SubCat3*::*SubSubCat$_]", }, ),
+        ( map +( { category => "[Cat$_]",                    }, ), 1..5,  ),
+        ( map +( { category => "[Cat2*::*Cat$_]",            }, ), 1..5,  ),
+        ( map +( { category => "[Cat3*::*SubCat$_]",         }, ), 1..5,  ),
+        ( map +( { category => "[Cat3*::*SubCat3*::*SubSubCat$_]", }, ),
             1..5, ),
     ];
 }
