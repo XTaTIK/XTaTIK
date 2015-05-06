@@ -10,6 +10,18 @@ use Test::XTaTIK;
 
 Test::XTaTIK->load_test_products( _get_test_products() );
 
+$t->app->config(
+    custom_cat_sorting => [
+        'Cat4',
+        'Cat3',
+        'Cat1',
+        'Cat2*::*SubCat3',
+        'Cat2*::*SubCat3*::*SubSubCat5',
+        'Cat2*::*SubCat3*::*SubSubCat4',
+        'Cat2*::*SubCat3*::*SubSubCat3',
+    ],
+);
+
 {
     $t->get_ok('/products')
         ->dive_reset
@@ -21,7 +33,7 @@ Test::XTaTIK->load_test_products( _get_test_products() );
         ->dived_text_is(':first-child + li + li + li > a' => 'Cat2' )
         ->dived_text_is(':first-child + li + li + li + li > a' => 'Cat5' )
 
-        ->dive_in(':first-child + li + li + li')
+        ->dive_in(':first-child + li + li + li') # Cat2
         ->element_count_is(' a[href^="/products/"]', 5)
         ->dived_text_is(':first-child > a' => 'Product 001-TEST2' )
         ->dived_text_is(':first-child + li > a' => 'SubCat3' )
