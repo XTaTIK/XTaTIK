@@ -63,23 +63,23 @@ sub load_test_products {
 
     my $p = XTaTIK::Model::Products->new;
     save_db();
-    $p->_pg( Mojo::Pg->new($PG_URL) );
+    $p->pg( Mojo::Pg->new($PG_URL) );
 
-    $p->_pg->db->query(
+    $p->pg->db->query(
         'drop table if exists carts'
     );
-    $p->_pg->db->query(
+    $p->pg->db->query(
         'drop table if exists products'
     );
 
-    $p->_pg->db->query(
+    $p->pg->db->query(
         'CREATE TABLE carts (
             id            SERIAL PRIMARY KEY,
             created_on INT,
             data TEXT
         )'
     );
-    $p->_pg->db->query(
+    $p->pg->db->query(
         'CREATE TABLE products (
             id            SERIAL PRIMARY KEY,
             url           TEXT,
@@ -98,7 +98,7 @@ sub load_test_products {
             recommended       TEXT
         );'
     );
-    $p->_pg->db->query('DELETE FROM "products"');
+    $p->pg->db->query('DELETE FROM "products"');
     $p->add( %$_ ) for @$products_to_load;
 }
 
