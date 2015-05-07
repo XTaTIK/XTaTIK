@@ -100,9 +100,11 @@ sub _helper_users {
 
 sub _helper_products {
     my $c = shift;
-    state $products = XTaTIK::Model::Products->new;
-    $products->pricing_region( $c->geoip_region );
-    $products->pg( $PG );
+    state $products = XTaTIK::Model::Products->new(
+        pricing_region => $c->geoip_region,
+        pg => $PG,
+        custom_cat_sorting => $c->config('custom_cat_sorting'),
+    );
 };
 
 sub _helper_cart {

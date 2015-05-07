@@ -6,7 +6,7 @@ use File::Spec::Functions qw/catfile/;
 use List::UtilsBy qw/sort_by  extract_by/;
 use Scalar::Util qw/blessed/;
 
-has [qw/pg  pricing_region/];
+has [qw/pg  pricing_region  custom_cat_sorting/];
 
 sub exists {
     my $self    = shift;
@@ -187,7 +187,7 @@ sub get_category {
     my @return = sort_by { $_->{title} }
         extract_by { $_->{display_product} } @$data;
 
-    for my $cat ( sort keys %cats ) {
+    for my $cat ( sort { $self->_custom_sort } sort keys %cats ) {
         push @return, {
             is_subcat => 1,
             title     => $cat,
@@ -226,6 +226,20 @@ sub get_category {
     $category =~ s{(^|/)[^/]+}{};
 
     return ( \@return, $return_path, $return_name );
+}
+
+sub _custom_sort {
+    my $self = shift;
+    my $counter = 1;
+    my %order = map +( $_ => $counter++ ),
+        @{ $self->custom_cat_sorting || [] };
+
+    return 0 if ( not $order{$b}
+            and not $order{$b}
+        ) or not $order{$b};
+
+    return 1 if not $order{$a};
+    return $order{$a} <=> $order{$b}
 }
 
 sub _process_products {
