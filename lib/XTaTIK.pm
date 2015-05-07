@@ -59,6 +59,8 @@ sub startup {
     $r->get('/history' )->to('root#history'      );
     $r->get('/login'   )->to('root#login'        );
     $r->post('/contact')->to('root#contact_post' );
+    $r->get('/feedback')->to('root#feedback'     );
+    $r->post('/feedback')->to('root#feedback_post');
     $r->get('/product/(*url)')->to('root#product');
     $r->get('/products(*category)')
         ->to('root#products_category', { category => '' });

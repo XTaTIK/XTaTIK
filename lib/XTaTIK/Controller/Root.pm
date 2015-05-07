@@ -7,6 +7,7 @@ sub about   {}
 sub history {}
 sub login   {}
 sub contact {}
+sub feedback{}
 
 sub products_category {
     my $self = shift;
@@ -67,6 +68,36 @@ sub contact_post {
     );
 
     return $self->render( template => 'root/contact' );
+}
+
+sub feedback_post {
+    my $self = shift;
+
+    $self->form_checker(
+        error_class => 'message error',
+        rules => {
+            email    => { max => 200, optional => 1, },
+            feedback => { max => 100_000, },
+        },
+    );
+
+    return $self->render( template => 'root/feedback' )
+        unless $self->form_checker_ok;
+
+    $self->stash( visitor_ip => $self->tx->remote_address );
+
+    $self->mail(
+        test     => $self->config('mail')->{test},
+        to       => $self->config('mail')->{to}{feedback},
+        from     => $self->config('mail')->{from}{feedback},
+        subject  => 'Site Feedback from '
+            . $self->config('text')->{website_domain},
+
+        type => 'text/html',
+        data => $self->render_to_string('email-templates/feedback'),
+    );
+
+    return $self->render( template => 'root/feedback' );
 }
 
 1;

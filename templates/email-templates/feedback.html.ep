@@ -1,0 +1,9 @@
+% layout 'email';
+% title 'Site Feedback';
+
+<ul>
+    <li><strong>Sent on:</strong><%= scalar(localtime) %></li>
+    <li><strong>Host:</strong><%= stash 'visitor_ip' %></li>
+    <li><strong>Email:</strong><%= param 'email' %></li>
+    <li><strong>Feedback:</strong><%= param 'feedback' %></li>
+</ul>

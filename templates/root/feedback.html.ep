@@ -1,0 +1,27 @@
+% layout 'default';
+% title 'Site Feedback';
+
+% if ( form_checker_ok() ) {
+    <p class="message success">Your feedback was successfully sent.
+        Thank you very much!</p>
+% } else {
+
+    <p>If you have any ideas on how we can make this website better,
+        please send them to us:</p>
+
+    %= form_for feedback => (method => 'POST') => begin
+
+        <%== form_checker_error_wrapped %>
+
+        <ul>
+            <li><label for="email">Email <small>(specify only if you'd be
+                OK with us contacting you on this matter)</small>:</label>
+                <%= text_field 'email'%></li>
+            <li><label for="feedback"
+                    class="textarea_label">*Feedback:</label
+                ><%= text_area 'feedback', cols => 40, rows => 5 %>
+            </li>
+        </ul>
+        %= submit_button 'Send'
+    % end
+% }

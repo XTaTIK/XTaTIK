@@ -36,6 +36,8 @@
     % }
 
     <%= content %>
+
+    <p id="feedback"><a href="/feedback">Feedback</a></p>
 </body>
 
 <footer>
