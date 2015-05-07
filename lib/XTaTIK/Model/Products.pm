@@ -3,6 +3,7 @@ package XTaTIK::Model::Products;
 use Mojo::Base -base;
 use Mojo::Pg;
 use File::Spec::Functions qw/catfile/;
+use List::AllUtils qw/uniq/;
 use List::UtilsBy qw/sort_by  extract_by/;
 use Scalar::Util qw/blessed/;
 
@@ -187,7 +188,9 @@ sub get_category {
     my @return = sort_by { $_->{title} }
         extract_by { $_->{display_product} } @$data;
 
-    for my $cat ( sort { $self->_custom_sort } sort keys %cats ) {
+    for my $cat ( sort { $self->_custom_sort($cat_line) }
+        sort keys %cats
+    ) {
         push @return, {
             is_subcat => 1,
             title     => $cat,
@@ -214,7 +217,8 @@ sub get_category {
             title => $_,
             cat_url => "$c->{cat_url}/$_",
             is_subsub_cat => 1,
-        }, sort keys %sub_cats;
+        }, sort { $self->_custom_sort($cat_line, 'sub', $c->{title}) }
+            sort keys %sub_cats;
     }
 
     my ( $return_path, $return_name );
@@ -229,10 +233,26 @@ sub get_category {
 }
 
 sub _custom_sort {
-    my $self = shift;
+    my ( $self, $cat_line, $is_subcat, $subcat ) = @_;
+
+    # TODO: refactor this mess
+    my @cats;
+    if ( $is_subcat ) {
+        my $top_bit = length $cat_line ? $cat_line . '*::*' : '';
+        @cats = grep /^\Q$top_bit$subcat\E/,
+            @{ $self->custom_cat_sorting || [] };
+        s/^\Q$top_bit$subcat\E(?:\Q*::*\E)?// for @cats;
+        @cats = grep length, uniq @cats;
+    }
+    else {
+        my $strip_line = $cat_line;
+        $cat_line =~ s/\Q*::*\E(?!\Q*::*\E).*//;
+        @cats = grep /^\Q$cat_line\E/, @{ $self->custom_cat_sorting || [] };
+        s/^\Q$strip_line\E(?:\Q*::*\E)?// for @cats;
+        @cats = grep length, uniq @cats;
+    }
     my $counter = 1;
-    my %order = map +( $_ => $counter++ ),
-        @{ $self->custom_cat_sorting || [] };
+    my %order = map +( $_ => $counter++ ), @cats;
 
     return 0 if ( not $order{$b}
             and not $order{$b}

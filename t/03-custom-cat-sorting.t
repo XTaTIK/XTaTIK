@@ -14,14 +14,14 @@ $t->app->config(
     custom_cat_sorting => [
         'Cat4',
         'Cat3',
-        'Cat1',
-        'Cat2*::*Cat2',
-        'Cat2*::*Cat4',
-        'Cat2*::*Cat1',
         'Cat3*::*SubCat3',
         'Cat3*::*SubCat3*::*SubSubCat5',
         'Cat3*::*SubCat3*::*SubSubCat4',
         'Cat3*::*SubCat3*::*SubSubCat3',
+        'Cat1',
+        'Cat2*::*Cat2',
+        'Cat2*::*Cat4',
+        'Cat2*::*Cat1',
     ],
 );
 
