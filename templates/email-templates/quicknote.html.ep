@@ -7,5 +7,5 @@
     <li><strong>Name:</strong><%= param 'name' %></li>
     <li><strong>Email:</strong><%= param 'email' %></li>
     <li><strong>Province:</strong><%= param 'province' %></li>
-    <li><strong>Message:</strong><%= param 'message' %></li>
+    <li><strong>Message:</strong><br><%== stash 'message' %></li>
 </ul>

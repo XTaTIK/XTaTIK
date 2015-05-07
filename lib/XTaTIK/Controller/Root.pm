@@ -1,6 +1,7 @@
 package XTaTIK::Controller::Root;
 
 use Mojo::Base 'Mojolicious::Controller';
+use XTaTIK::Common qw/n_to_br/;
 
 sub index   {}
 sub about   {}
@@ -55,6 +56,7 @@ sub contact_post {
         if $self->validation->csrf_protect->has_error('csrf_token');
 
     $self->stash( visitor_ip => $self->tx->remote_address );
+    $self->stash( message => n_to_br( $self->param('message')) );
 
     $self->mail(
         test     => $self->config('mail')->{test},
@@ -84,7 +86,10 @@ sub feedback_post {
     return $self->render( template => 'root/feedback' )
         unless $self->form_checker_ok;
 
-    $self->stash( visitor_ip => $self->tx->remote_address );
+    $self->stash(
+        visitor_ip => $self->tx->remote_address,
+        feedback   => n_to_br( $self->param('feedback') ),
+    );
 
     $self->mail(
         test     => $self->config('mail')->{test},

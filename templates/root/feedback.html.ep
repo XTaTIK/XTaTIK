@@ -9,7 +9,7 @@
     <p>If you have any ideas on how we can make this website better,
         please send them to us:</p>
 
-    %= form_for feedback => (method => 'POST') => begin
+    %= form_for '/feedback' => (method => 'POST') => begin
 
         <%== form_checker_error_wrapped %>
 
