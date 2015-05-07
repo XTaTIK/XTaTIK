@@ -242,15 +242,16 @@ sub _custom_sort {
         @cats = grep /^\Q$top_bit$subcat\E/,
             @{ $self->custom_cat_sorting || [] };
         s/^\Q$top_bit$subcat\E(?:\Q*::*\E)?// for @cats;
-        @cats = grep length, uniq @cats;
     }
     else {
         my $strip_line = $cat_line;
         $cat_line =~ s/\Q*::*\E(?!\Q*::*\E).*//;
         @cats = grep /^\Q$cat_line\E/, @{ $self->custom_cat_sorting || [] };
         s/^\Q$strip_line\E(?:\Q*::*\E)?// for @cats;
-        @cats = grep length, uniq @cats;
     }
+
+    @cats = grep length, uniq @cats;
+
     my $counter = 1;
     my %order = map +( $_ => $counter++ ), @cats;
 
