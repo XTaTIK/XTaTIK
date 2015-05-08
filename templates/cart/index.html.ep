@@ -8,12 +8,15 @@
    <li>Pay for the order</li>
 </ul>
 
-% if ( @{ stash('products')||[] } ) {
+<p>To remove a product, set quantity to zero.</p>
 
-    <p>Here are the items you're purchasing. To remove a product, set quantity to zero.</p>
+%= form_for '/cart/checkout' => (method => 'POST') => begin
+    %= csrf_field
 
-    %= form_for '/cart/checkout' => (method => 'POST') => begin
-        %= csrf_field
+    % if ( @{stash('cart')} ) {
+        <h3>Purchase</h3>
+        <p>Here are the items you're purchasing.</p>
+
         <table>
         <thead>
             <tr>
@@ -24,7 +27,7 @@
             </tr>
         </thead>
         <tbody>
-            % for ( @{ stash('products') } ) {
+            % for ( @{stash('cart')} ) {
                 <tr>
                     <td><img src="/product-pics/thumbs-tiny/<%=
                         $_->{image} %>" alt=""></td>
@@ -46,8 +49,45 @@
             % }
         </tbody>
         </table>
-        %= submit_button 'Proceed to the next step'
-    %= end
-% } else {
+    % }
+
+    % if ( @{stash('quote')} ) {
+        <h3>Quote Request</h3>
+        <p>These items are not avilable for purchase online, but you
+            can still submit a quote request:</p>
+            <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for ( @{stash('quote')} ) {
+                    <tr>
+                        <td><img src="/product-pics/thumbs-tiny/<%=
+                            $_->{image} %>" alt=""></td>
+                        <td><a href="/product/<%= $_->{url} %>"
+                            ><%= $_->{title} %></a></td>
+                        <td>
+                            <%= hidden_field 'id_' . $_->{id} => $_->{id} %>
+                            <%= hidden_field 'number_' . $_->{id}
+                                => $_->{number} %>
+                            <%= text_field 'quantity_' . $_->{id}
+                                => ( value => $_->{quantity} )
+                            %>
+                            <%= $_->{quantity} > 1
+                                ? $_->{unit_multi} : $_->{unit} %>
+                        </td>
+                    </tr>
+                % }
+            </tbody>
+            </table>
+    % }
+    %= submit_button 'Proceed to the next step'
+%= end
+
+% unless ( @{stash('cart')} or @{stash('quote')} ) {
     <p class="message error">There are no products in your cart.</p>
 % }

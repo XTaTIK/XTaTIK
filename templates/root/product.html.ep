@@ -5,25 +5,31 @@
 
 <p>
     <span class="number">#<%= stash('product')->{number} %></span>
-    <span class="price_large">
-        <%= stash('product')->{price_dollars}
-            %><sup>.<%= stash('product')->{price_cents} %></sup>
-        <span class="sku">per <%= stash('product')->{unit} %></span>
-    </span>
+    % if ( stash('product')->{contact_for_pricing} ) {
+        <span class="contact_for_pricing">This product is not
+            available for purchase online. Please add it to a quote.</span>
+    % } else {
+        <span class="price_large">
+            <%= stash('product')->{price_dollars}
+                %><sup>.<%= stash('product')->{price_cents} %></sup>
+            <span class="sku">per <%= stash('product')->{unit} %></span>
+        </span>
+    % }
 </p>
 
-% if ( stash('product')->{contact_for_pricing} ) {
-    <p>Please <a href="/contact">contact sales rep</a> for pricing.</p>
-% } else {
-    %= form_for '/cart/add' => (method => 'POST') => begin
-        %= csrf_field
-        %= hidden_field number => stash('product')->{number}
+%= form_for '/cart/add' => (method => 'POST') => begin
+    %= csrf_field
+    %= hidden_field number => stash('product')->{number}
 
-        <%= text_field 'quantity' => ( value => 1 ) %>
+    <%= text_field 'quantity' => ( value => 1 ) %>
 
+    % if ( stash('product')->{contact_for_pricing} ) {
+        %= submit_button 'Add to quote'
+    % } else {
         %= submit_button 'Add to cart'
-    %= end
-% }
+    % }
+%= end
+
 <div>
     <%== stash('product')->{description} %>
 </div>

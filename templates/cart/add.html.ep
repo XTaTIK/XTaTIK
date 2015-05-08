@@ -2,7 +2,7 @@
 
 <p class="message success">
     Successfully added <%= stash 'quantity' %> of <%= stash 'number' %>
-        to the cart.
+        to the <%= stash('is_quote') ? 'quote' : 'cart' %>.
 
     <a href="<%= stash 'return_to' %>">Continue shopping.</a>
 </p>

@@ -11,7 +11,15 @@ my @CHECKOUT_FORM_FIELDS = qw/
 
 sub index {
     my $self = shift;
-    $self->stash( products => $self->cart->all_items );
+
+    my ( @cart, @quote );
+    $_->{price} > 0 ? push @cart, $_ : push @quote, $_
+        for $self->cart->all_items->@*;
+
+    $self->stash(
+        cart    => \@cart,
+        quote   => \@quote,
+    );
 };
 
 sub thank_you {
@@ -28,12 +36,15 @@ sub thank_you {
 sub add {
     my $self = shift;
 
-    $self->cart->add( $self->param('quantity'), $self->param('number') );
+    my $p = $self->cart
+        ->add( $self->param('quantity'), $self->param('number') );
+
     $self->cart_dollars('refresh'); $self->cart_cents('refresh');
     $self->cart->save;
     $self->stash(
         number    => $self->param('number'),
         quantity  => $self->param('quantity'),
+        is_quote  => $p->{price} > 0 ? 0 : 1,
         return_to => $self->req->headers->referrer || '/products',
     );
 };
