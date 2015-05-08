@@ -14,6 +14,7 @@ my $PG;
 sub startup {
     my $self = shift;
     $self->moniker('XTaTIK');
+    $self->secrets([ $self->config('mojo_secrets') ]);
 
     $self->plugin('Config');
     $self->plugin('AntiSpamMailTo');
@@ -40,7 +41,6 @@ sub startup {
     # Initialize globals (this is probably a stupid way to do things)
     $PG = Mojo::Pg->new( $self->config('pg_url') );
 
-    $self->secrets([ $self->config('mojo_secrets') ]);
     $self->session( expiration => 60*60*24*7 );
 
     $self->helper( xtext        => \&_helper_xtext        );
