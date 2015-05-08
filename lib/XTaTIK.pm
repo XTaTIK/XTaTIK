@@ -14,9 +14,10 @@ my $PG;
 sub startup {
     my $self = shift;
     $self->moniker('XTaTIK');
+    $self->plugin('Config');
+
     $self->secrets([ $self->config('mojo_secrets') ]);
 
-    $self->plugin('Config');
     $self->plugin('AntiSpamMailTo');
     $self->plugin('FormChecker');
     $self->plugin('IP2Location');
