@@ -5,6 +5,8 @@ use XTaTIK::Model::Products;
 use Mojo::Pg;
 use JSON::Meth;
 
+use experimental 'postderef';
+
 my $Blank_Cart_Data = {
     contents => [],
     total    => '0.00',
@@ -45,6 +47,21 @@ sub all_items {
     $_->{quantity} = $quantities{ $_->{number} } for @products;
 
     return \@products;
+}
+
+sub all_items_cart_quote {
+    my $self = shift;
+    my ( @cart, @quote );
+    $_->{price} > 0 ? push @cart, $_ : push @quote, $_
+        for $self->all_items->@*;
+
+    return \@cart, \@quote;
+}
+
+sub all_items_cart_quote_kv {
+    my $self = shift;
+    my ( $cart, $quote ) = $self->all_items_cart_quote;
+    return ( cart => $cart, quote => $quote );
 }
 
 sub alter_quantity {

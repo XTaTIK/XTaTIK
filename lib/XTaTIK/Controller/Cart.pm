@@ -12,14 +12,7 @@ my @CHECKOUT_FORM_FIELDS = qw/
 sub index {
     my $self = shift;
 
-    my ( @cart, @quote );
-    $_->{price} > 0 ? push @cart, $_ : push @quote, $_
-        for $self->cart->all_items->@*;
-
-    $self->stash(
-        cart    => \@cart,
-        quote   => \@quote,
-    );
+    $self->stash( $self->cart->all_items_cart_quote_kv );
 };
 
 sub thank_you {

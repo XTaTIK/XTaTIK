@@ -13,7 +13,7 @@ sub checkout {
     $custom =~ s/\$promo_code/$c->param('promo_code')/ge;
 
     $c->stash(
-        cart_products => $c->cart->all_items,
+        $c->cart->all_items_cart_quote_kv,
         custom        => $custom,
         __costs($c),
     );
@@ -36,14 +36,20 @@ sub thank_you {
         unless @{$c->cart->all_items};
 
     my $order_num = sprintf $c->xtext('order_number'), $c->cart->id;
+    my $quote_num = sprintf $c->xtext('quote_number'), $c->cart->id;
 
+    my ( $cart, $quote ) = $c->cart->all_items_cart_quote;
+    my $cart_title  = @$cart  ? "Order #$order_num " : '';
+    my $quote_title = @$quote ? "Quote #$quote_num " : '';
     $c->stash(
-        cart_products => $c->cart->all_items,
+        cart          => $cart,
+        quote         => $quote,
         visitor_ip    => $c->tx->remote_address,
         order_number  => $order_num,
+        quote_number  => $quote_num,
         __costs($c),
-        title => "Your Order #$order_num on "
-            . $c->config('text')->{website_domain},
+        title => "Your $cart_title $quote_title on "
+                . $c->config('text')->{website_domain},
     );
 
     # Send order email to customer
@@ -59,8 +65,8 @@ sub thank_you {
     };
 
     $c->stash(
-        title => "New Order #$order_num on "
-            . $c->config('text')->{website_domain},
+        title => "New $cart_title $quote_title on "
+                . $c->config('text')->{website_domain},
         promo_code => $c->session('customer_data')->{promo_code} // 'N/A',
         map +( "cust_$_" => $c->session('customer_data')->{$_} ),
             qw/address1  address2  city  email  lname  name  phone
@@ -69,12 +75,12 @@ sub thank_you {
 
     #Send order email to ourselves
     $c->mail(
-        test     => $c->config('mail')->{test},
-        to       => $c->config('mail')->{to}{order},
-        from     => $c->config('mail')->{from}{order},
-        subject  => $c->stash('title'),
-        type     => 'text/html',
-        data     => $c->render_to_string('email-templates/order-to-company'),
+        test    => $c->config('mail')->{test},
+        to      => $c->config('mail')->{to}{order},
+        from    => $c->config('mail')->{from}{order},
+        subject => $c->stash('title'),
+        type    => 'text/html',
+        data    => $c->render_to_string('email-templates/order-to-company'),
     );
 
     # TODO: there's gotta be a nicer way of doing this:
@@ -118,9 +124,9 @@ sub __costs {
     }
 
     return (
-        gst             => $gst,
-        pst             => $pst,
-        hst             => $hst,
+        gst             => $gst//0,
+        pst             => $pst//0,
+        hst             => $hst//0,
         shipping        => $shipping,
         total_dollars   => $total_d,
         total_cents     => $total_c,
@@ -138,14 +144,39 @@ END_HTML
 
 sub _template_thank_you {
     return <<'END_HTML';
-    <p>Thank you for your purchase!
-        Your order will be shipped on the <strong>next
-        business day</strong> and will arrive within
-        <strong>5–7 business days</strong>.</p>
 
-    <p>Your order number is <strong><%= stash 'order_number' %></strong>.
-    Have this number handy if you contact us with any questions about your
-    order.</p>
+    % if ( @{stash('quote')} ) {
+        % if ( @{stash('quote')} and @{stash('cart')} ) {
+            <h3>Your Quote Request</h3>
+        % }
+        <p>Thank you for your interest in our products.
+            A sales representative will contact you
+            within 2 business days.
+        </p>
+
+        <p>Your quote number is
+            <strong><%= stash 'quote_number' %></strong>.
+            Have this number handy if you contact us with
+            any questions about your quote request.
+        </p>
+    % }
+
+    % if ( @{stash('cart')} ) {
+        % if ( @{stash('quote')} and @{stash('cart')} ) {
+            <h3>Your Purchase</h3>
+        % }
+        <p>Thank you for your purchase!
+            Your order will be shipped on the <strong>next
+            business day</strong> and will arrive within
+            <strong>5–7 business days</strong>.
+        </p>
+
+        <p>Your order number is
+            <strong><%= stash 'order_number' %></strong>.
+            Have this number handy if you contact us with any
+            questions about yourorder.
+        </p>
+    % }
 END_HTML
 }
 
@@ -188,7 +219,7 @@ sub _template_checkout {
     %= hidden_field 'currency_code'     => xtext 'currency'
     %= hidden_field 'cancel_return'     => xtext('current_site') . 'cart/'
     %= hidden_field 'return' => xtext('current_site') . 'cart/thank-you'
-    %= hidden_field 'tax_cart'          => stash 'tax'
+    %= hidden_field 'tax_cart'          => (stash('pst')+stash('gst')+stash('hst'))
     %= hidden_field 'handling_cart'     => stash 'shipping'
     %= hidden_field 'address_override'  => 1
     %= hidden_field 'country'           => 'CA'; # TODO: allow for others
@@ -200,8 +231,8 @@ sub _template_checkout {
     %= hidden_field 'night_phone_a'     => 1; # TODO: sort phones out
     %= hidden_field 'night_phone_b'     => param('phone')
 
-    % for ( 1 .. @{stash('cart_products')||[]} ) {
-        % my $p = stash('cart_products')->[$_-1];
+    % for ( 1 .. @{stash('cart')} ) {
+        % my $p = stash('cart')->[$_-1];
         %= hidden_field 'item_name_'   . $_ => $p->{title}
         %= hidden_field 'item_number_' . $_ => $p->{number}
         %= hidden_field 'amount_'      . $_ => $p->{price}
