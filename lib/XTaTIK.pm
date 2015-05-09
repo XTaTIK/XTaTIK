@@ -18,6 +18,8 @@ sub startup {
 
     $self->secrets([ $self->config('mojo_secrets') ]);
 
+    $self->config( hypnotoad => {listen => ['http://*:3005']} );
+
     $self->plugin('AntiSpamMailTo');
     $self->plugin('FormChecker');
     $self->plugin('IP2Location');
