@@ -65,10 +65,17 @@ sub checkout {
         next unless length $self->session($_);
         $self->param( $_ => $self->session($_) );
     }
+
+    $self->stash(
+        $self->cart->all_items_cart_quote_kv,
+    );
 }
 
 sub checkout_review {
     my $self = shift;
+
+    my ( $cart ) = $self->cart->all_items_cart_quote;
+    @$cart or $self->redirect_to('/cart/thank-you');
 
     if ( $self->param('do_save_address') ) {
         $self->session( $_ => $self->param($_) )

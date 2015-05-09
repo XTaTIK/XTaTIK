@@ -145,6 +145,17 @@ END_HTML
 sub _template_thank_you {
     return <<'END_HTML';
 
+    <ul class="checkout-crumbs">
+       <li>Review products</li>
+       <li>Enter contact information</li>
+        % if ( @{stash('cart')} ) {
+           <li>Review Pricing</li>
+           <li>Pay for the order</li>
+        % }
+       <li class="active">Receive confirmation</li>
+    </ul>
+
+
     % if ( @{stash('quote')} ) {
         % if ( @{stash('quote')} and @{stash('cart')} ) {
             <h3>Your Quote Request</h3>

@@ -4,8 +4,11 @@
 <ul class="checkout-crumbs">
    <li>Review products</li>
    <li>Enter contact information</li>
-   <li class="active">Review Pricing</li>
-   <li>Pay for the order</li>
+    % if ( @{stash('cart')} ) {
+       <li class="active">Review Pricing</li>
+       <li>Pay for the order</li>
+    % }
+   <li>Receive confirmation</li>
 </ul>
 
 <%== stash('checkout_html') %>

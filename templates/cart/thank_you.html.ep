@@ -1,4 +1,4 @@
-% title 'Thank You For Your Purchase';
+% title 'Thank You';
 % layout 'default';
 
 <%== stash('thank_you_html') %>

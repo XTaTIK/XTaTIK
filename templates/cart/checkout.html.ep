@@ -2,10 +2,13 @@
 % layout 'default';
 
 <ul class="checkout-crumbs">
-   <li>Review products</li>
-   <li class="active">Enter contact information</li>
-   <li>Review Pricing</li>
-   <li>Pay for the order</li>
+    <li>Review products</li>
+    <li class="active">Enter contact information</li>
+    % if ( @{stash('cart')} ) {
+       <li>Review Pricing</li>
+       <li>Pay for the order</li>
+    % }
+    <li>Receive confirmation</li>
 </ul>
 
 %= form_for '/cart/checkout-review' => (method => 'POST') => begin
@@ -79,5 +82,10 @@
             %><label for="c_toc">*I have read and agree with <a target="_blank" href="/terms">Terms and Conditions</a> and <a target="_blank" href="/privacy-policy">Privacy Policy</a></label>
         </li>
     </ul>
-    %= submit_button 'Calculate taxes and shipping charge'
+    % if ( @{stash('cart')} ) {
+        %= submit_button 'Calculate taxes and shipping charge'
+    % } else {
+        %= submit_button 'Submit quote request'
+    % }
+
 %= end
