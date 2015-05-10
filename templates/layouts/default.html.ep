@@ -8,7 +8,7 @@
             geoip_region() eq '00' ? '' : ', ' . geoip_region()
         %></title>
 
-    %= asset 'main.css';
+    %= asset 'app.css';
 </head>
 <body>
     <h1><%= xtext 'market' %>
@@ -39,11 +39,14 @@
     <%= content %>
 
     <p id="feedback"><a href="/feedback">Feedback</a></p>
-</body>
 
-<footer>
-    <small>Copyright © <%= (localtime)[5] + 1900 %>
-        by <a href="<%= xtext('main_web') %>"
-            ><%= xtext('company_name') %></a>
-    </small>
-</footer>
+    <footer>
+        <small>Copyright © <%= (localtime)[5] + 1900 %>
+            by <a href="<%= xtext('main_web') %>"
+                ><%= xtext('company_name') %></a>
+        </small>
+    </footer>
+
+    %= asset 'app.js';
+</body>
+</html>

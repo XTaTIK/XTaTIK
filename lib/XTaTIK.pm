@@ -27,7 +27,16 @@ sub startup {
     $self->plugin('AssetPack');
 
     $self->asset(
-        'main.css' => '/CSS/main.scss',
+        'app.css' => qw{
+        http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css
+            /CSS/main.scss
+        }
+    );
+
+    $self->asset(
+        'app.js' => qw{
+        http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js
+        },
     );
 
     my $mconf = {
