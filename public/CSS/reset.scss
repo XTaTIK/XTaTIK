@@ -1,0 +1,15 @@
+
+.unstyled_list {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.unstyled_list li {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+#article_list {
+    @extend .unstyled_list;
+}

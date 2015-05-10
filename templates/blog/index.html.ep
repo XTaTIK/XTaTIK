@@ -1,10 +1,12 @@
 % layout 'default';
 % title 'Blog';
 
-<ul id="article_list">
+<ul id="article_list" class="row">
     % for my $post ( @$posts ) {
-        <li><a href="/blog/<%= $post->{url} %>"
-            ><%= $post->{title}%> <small><%= $post->{date} %></small></a
+        <li class="col-sm-6 col-md-4"><a href="/blog/<%= $post->{url} %>">
+            <img src="/content-pics/blog/thumbs/<%= $post->{url} %>.jpg"
+                alt="" class="thumbnail">
+            <%= $post->{title}%> <small><%= $post->{date} %></small></a
         ></li>
     % }
 </ul>

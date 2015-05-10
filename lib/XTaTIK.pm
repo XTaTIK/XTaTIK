@@ -28,6 +28,7 @@ sub startup {
 
     $self->asset(
         'app.css' => qw{
+        /CSS/reset.scss
         http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css
         /CSS/main.scss
         }
