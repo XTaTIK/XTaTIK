@@ -54,42 +54,44 @@ sub startup {
     $self->helper( cart_cents   => \&_helper_cart_cents   );
 
     my $r = $self->routes;
+    { # Root routes
+        $r->get('/'        )->to('root#index'        );
+        $r->get('/contact' )->to('root#contact'      );
+        $r->get('/about'   )->to('root#about'        );
+        $r->get('/history' )->to('root#history'      );
+        $r->get('/login'   )->to('root#login'        );
+        $r->post('/contact')->to('root#contact_post' );
+        $r->get('/feedback')->to('root#feedback'     );
+        $r->post('/feedback')->to('root#feedback_post');
+        $r->get('/product/(*url)')->to('root#product');
+        $r->get('/products(*category)')
+            ->to('root#products_category', { category => '' });
+    }
+    { # Cart routes
+        my $rc = $r->under('/cart');
+        $rc->get( '/'               )->to('cart#index'          );
+        $rc->any( '/thank-you'      )->to('cart#thank_you'      );
+        $rc->post('/add'            )->to('cart#add'            );
+        $rc->post('/checkout'       )->to('cart#checkout'       );
+        $rc->post('/checkout-review')->to('cart#checkout_review');
+    }
 
-    # Root routes
-    $r->get('/'        )->to('root#index'        );
-    $r->get('/contact' )->to('root#contact'      );
-    $r->get('/about'   )->to('root#about'        );
-    $r->get('/history' )->to('root#history'      );
-    $r->get('/login'   )->to('root#login'        );
-    $r->post('/contact')->to('root#contact_post' );
-    $r->get('/feedback')->to('root#feedback'     );
-    $r->post('/feedback')->to('root#feedback_post');
-    $r->get('/product/(*url)')->to('root#product');
-    $r->get('/products(*category)')
-        ->to('root#products_category', { category => '' });
+    { # User section routes
+        $r->post('/login' )->to('user#login' );
+        $r->any( '/logout')->to('user#logout');
 
-    # Cart routes
-    my $rc = $r->under('/cart');
-    $rc->get( '/'               )->to('cart#index'          );
-    $rc->any( '/thank-you'      )->to('cart#thank_you'      );
-    $rc->post('/add'            )->to('cart#add'            );
-    $rc->post('/checkout'       )->to('cart#checkout'       );
-    $rc->post('/checkout-review')->to('cart#checkout_review');
-
-    # User section routes
-    $r->post('/login' )->to('user#login' );
-    $r->any( '/logout')->to('user#logout');
-    my $ru = $r->under('/user')->to('user#is_logged_in');
-    $ru->get('/')->to('user#index')->name('user/index');
-    $ru->get('/master-products-database')
-        ->to('user#master_products_database')
-        ->name('user/master_products_database');
-    $ru->post('/master-products-database')
-        ->to('user#master_products_database_post');
-    $ru->post('/master-products-database/update')
-        ->to('user#master_products_database_update');
-    $ru->post('/master-products-database/delete')
-        ->to('user#master_products_database_delete');
+        my $ru = $r->under('/user')->to('user#is_logged_in');
+        $ru->get('/')->to('user#index')->name('user/index');
+        $ru->get('/master-products-database')
+            ->to('user#master_products_database')
+            ->name('user/master_products_database');
+        $ru->post('/master-products-database')
+            ->to('user#master_products_database_post');
+        $ru->post('/master-products-database/update')
+            ->to('user#master_products_database_update');
+        $ru->post('/master-products-database/delete')
+            ->to('user#master_products_database_delete');
+    }
 }
 
 #### HELPERS
