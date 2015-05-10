@@ -1,4 +1,7 @@
 
+$lighter-border-color: #eee;
+
+
 h1 {
     margin: 0;
 }
@@ -10,3 +13,34 @@ h1 {
 footer {
     padding-bottom: 40px;
 }
+
+.blog_nav {
+    clear: both;
+    list-style: none;
+    overflow: hidden;
+    padding: .5em 0;
+    margin-top: 1em;
+    border: 1px dotted $lighter-border-color;
+    border-left: 0;
+    border-right: 0;
+    font-size: 90%;
+
+    .next {
+        float: right;
+    }
+
+    .next:after {
+        content: "→";
+        padding-left: .5em;
+    }
+
+    .prev {
+        float: left;
+    }
+
+    .prev:before {
+        content: "←";
+        padding-right: .5em;
+    }
+}
+
