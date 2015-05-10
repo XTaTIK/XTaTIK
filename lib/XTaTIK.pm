@@ -22,7 +22,7 @@ sub startup {
     $self->config( hypnotoad => {listen => ['http://*:3005']} );
 
     $self->plugin('AntiSpamMailTo');
-    $self->plugin('FormChecker');
+    $self->plugin('FormChecker' => error_class => 'foo');
     $self->plugin('IP2Location');
     $self->plugin('AssetPack');
 

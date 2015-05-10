@@ -2,19 +2,24 @@
 % title 'Contact';
 
 % if ( form_checker_ok() ) {
-
-    <p class="message success">Your message was successfully sent.</p>
-
+    <p class="alert alert-success"><i class="glyphicon glyphicon-ok"></i>
+        Your message was successfully sent.</p>
 % } else {
     %= form_for contact => (method => 'POST') => begin
         %= csrf_field
-
+    <div class="form-group">
         <%== form_checker_error_wrapped %>
 
-        <ul>
-            <li><label for="name">*Name:</label><%= text_field 'name' %></li>
-            <li><label for="email">*Email:</label><%= text_field 'email'%></li>
-            <li><label for="province">*Province:</label
+        <div class="form-group">
+            <label for="name">*Name:</label
+            ><%= text_field 'name', class => 'form-control' %>
+        </div>
+        <div class="form-group">
+            <label for="email">*Email:</label
+            ><%= text_field 'email', class => 'form-control' %>
+        </div>
+        <div class="form-group">
+            <label for="province">*Province:</label
                 ><%= select_field province => [
                     [ '--please select--' => 'none' ],
                     [ 'Alberta' => 'AB' ],
@@ -30,43 +35,54 @@
                     [ 'Quebec' => 'QC'],
                     [ 'Saskatchewan' => 'SK'],
                     [ 'Yukon' => 'YT'],
-                ]
-            %></li>
-            <li><label for="Message" class="textarea_label">*Message:</label
-                ><%= text_area 'message', cols => 40, rows => 5 %>
-            </li>
-        </ul>
-        %= submit_button 'Send'
+                ] , class => 'form-control'
+            %>
+        </div>
+        <div class="form-group">
+            <label for="Message" class="textarea_label">*Message:</label
+                ><%= text_area 'message', cols => 40, rows => 5,
+                    class => 'form-control' %>
+        </div>
+    </div>
+        %= submit_button 'Send message', class => 'btn btn-primary'
     % end
 % }
 
-<ul id="locations">
+<hr>
+
+<div id="locations" class="row">
     % for my $loc ( @{xtext('locations')} ) {
-        <li>
-            <h3><%= $loc->{name} %></h3>
-            <address class="address">
-                <%== $loc->{address} %>
-                % if ( length $loc->{hours} ) {
-                    <br><span class="hours"><%= $loc->{hours} %></span>
-                % } if ( length $loc->{note} ) {
-                    <br><small><%= $loc->{note} %></small>
-                % }
-            </address>
-            <address class="phones">
-                % if ( length $loc->{phone} ) {
-                    <span>Phone:</span> <%= $loc->{phone} %><br>
-                % } if ( length $loc->{tfphone} ) {
-                    <span>Toll-free:</span> <%= $loc->{tfphone} %><br>
-                % } if ( length $loc->{fax} ) {
-                    <span>Fax:</span> <%= $loc->{fax} %><br>
-                % } if ( length $loc->{tffax} ) {
-                    <span>Toll-free fax:</span> <%= $loc->{tffax} %><br>
-                % } if ( length $loc->{email} ) {
-                    <span>Email:</span> <a
-                        href="<%== mailto_href $loc->{email} %>"
-                            ><%== mailto $loc->{email} %></a>
-                % }
-            </address>
-        </li>
+        <div class="col-sm-6 col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><%= $loc->{name} %></h3>
+                </div>
+                <div class="panel-body">
+                    <address class="address">
+                        <%== $loc->{address} %>
+                        % if ( length $loc->{hours} ) {
+                            <br><span class="hours"><%= $loc->{hours} %></span>
+                        % } if ( length $loc->{note} ) {
+                            <br><small><%= $loc->{note} %></small>
+                        % }
+                    </address>
+                    <address class="phones">
+                        % if ( length $loc->{phone} ) {
+                            <span>Phone:</span> <%= $loc->{phone} %><br>
+                        % } if ( length $loc->{tfphone} ) {
+                            <span>Toll-free:</span> <%= $loc->{tfphone} %><br>
+                        % } if ( length $loc->{fax} ) {
+                            <span>Fax:</span> <%= $loc->{fax} %><br>
+                        % } if ( length $loc->{tffax} ) {
+                            <span>Toll-free fax:</span> <%= $loc->{tffax} %><br>
+                        % } if ( length $loc->{email} ) {
+                            <span>Email:</span> <a
+                                href="<%== mailto_href $loc->{email} %>"
+                                    ><%== mailto $loc->{email} %></a>
+                        % }
+                    </address>
+                </div>
+            </div>
+        </div>
     % }
-</ul>
+</div>

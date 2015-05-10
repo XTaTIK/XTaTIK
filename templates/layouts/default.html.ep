@@ -57,6 +57,8 @@
 
         <%= content %>
 
+        <hr>
+
         <p id="feedback"><a href="/feedback">Feedback</a></p>
 
         <footer>
