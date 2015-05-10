@@ -29,13 +29,15 @@ sub startup {
     $self->asset(
         'app.css' => qw{
         http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css
-            /CSS/main.scss
+        /CSS/main.scss
         }
     );
 
     $self->asset(
         'app.js' => qw{
+        http://code.jquery.com/jquery-1.11.3.min.js
         http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js
+        /JS/ie10-viewport-bug-workaround.js
         },
     );
 
