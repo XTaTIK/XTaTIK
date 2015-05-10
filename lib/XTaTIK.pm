@@ -5,6 +5,7 @@ use Mojo::Base 'Mojolicious';
 use XTaTIK::Model::Cart;
 use XTaTIK::Model::Products;
 use XTaTIK::Model::Users;
+use XTaTIK::Model::Blog;
 
 use HTML::Entities;
 use Mojo::Pg;
@@ -52,6 +53,9 @@ sub startup {
     $self->helper( cart         => \&_helper_cart         );
     $self->helper( cart_dollars => \&_helper_cart_dollars );
     $self->helper( cart_cents   => \&_helper_cart_cents   );
+    $self->helper(
+        blog => sub { state $blog = XTaTIK::Model::Blog->new; }
+    );
 
     my $r = $self->routes;
     { # Root routes
@@ -67,6 +71,7 @@ sub startup {
         $r->get('/products(*category)')
             ->to('root#products_category', { category => '' });
     }
+
     { # Cart routes
         my $rc = $r->under('/cart');
         $rc->get( '/'               )->to('cart#index'          );
@@ -74,6 +79,12 @@ sub startup {
         $rc->post('/add'            )->to('cart#add'            );
         $rc->post('/checkout'       )->to('cart#checkout'       );
         $rc->post('/checkout-review')->to('cart#checkout_review');
+    }
+
+    { # Blog routes
+        my $rb = $r->under('/blog');
+        $rb->get('/'     )->to('blog#index');
+        $rb->get('/*post')->to('blog#read');
     }
 
     { # User section routes

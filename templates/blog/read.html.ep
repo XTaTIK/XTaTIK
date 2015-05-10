@@ -1,0 +1,7 @@
+% layout 'default';
+
+%= include 'blog/blog_nav';
+    <article>
+        <%== $blog_body %>
+    </article>
+%= include 'blog/blog_nav';

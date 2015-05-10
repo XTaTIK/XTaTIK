@@ -1,0 +1,9 @@
+% layout 'default';
+
+<ul id="article_list">
+    % for my $post ( @$posts ) {
+        <li><a href="/blog/<%= $post->{url} %>"
+            ><%= $post->{title}%> <small><%= $post->{date} %></small></a
+        ></li>
+    % }
+</ul>
