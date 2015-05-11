@@ -1,5 +1,6 @@
 % layout 'default';
 % title stash('product')->{title};
+% stash active_page => 'products';
 
 <img src="/content-pics/products/<%= stash('product')->{image} %>" alt="">
 

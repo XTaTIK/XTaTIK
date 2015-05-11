@@ -1,5 +1,6 @@
 % layout 'default';
 % title 'Site Feedback';
+% stash active_page => 'feedback';
 
 % if ( form_checker_ok() ) {
     <p class="alert alert-success"><i class="glyphicon glyphicon-ok"></i>

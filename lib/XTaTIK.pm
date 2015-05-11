@@ -70,6 +70,11 @@ sub startup {
     $self->helper(
         blog => sub { state $blog = XTaTIK::Model::Blog->new; }
     );
+    $self->helper( active_page => sub {
+        my ( $c, $name ) = @_;
+        my $active = $c->stash('active_page') // '';
+        return $active eq $name ? ' class="active"' : '';
+    });
 
     my $r = $self->routes;
     { # Root routes

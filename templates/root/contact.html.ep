@@ -1,5 +1,6 @@
 % layout 'default';
 % title 'Contact';
+% stash active_page => 'contact';
 
 % if ( form_checker_ok() ) {
     <p class="alert alert-success"><i class="glyphicon glyphicon-ok"></i>

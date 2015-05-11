@@ -1,1 +1,2 @@
 % layout 'default';
+% stash active_page => 'home';

@@ -1,5 +1,6 @@
 % layout 'default';
 % title 'Blog';
+% stash active_page => 'blog';
 
 <ul id="article_list" class="row">
     % for my $post ( @$posts ) {
