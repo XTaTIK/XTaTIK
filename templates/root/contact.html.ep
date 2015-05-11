@@ -2,53 +2,59 @@
 % title 'Contact';
 % stash active_page => 'contact';
 
-% if ( form_checker_ok() ) {
-    <p class="alert alert-success"><i class="glyphicon glyphicon-ok"></i>
-        Your message was successfully sent.</p>
-% } else {
-    %= form_for contact => (method => 'POST') => begin
-        %= csrf_field
-    <ul>
-        <%== form_checker_error_wrapped %>
+<div class="row">
+    <div class="col-md-6">
+        % if ( form_checker_ok() ) {
+            <p class="alert alert-success"><i class="glyphicon glyphicon-ok"></i>
+                Your message was successfully sent.</p>
+        % } else {
+            %= form_for contact => (method => 'POST') => begin
+                %= csrf_field
+            <ul>
+                <%== form_checker_error_wrapped %>
 
-        <li class="form-group">
-            <label for="name">*Name:</label
-            ><%= text_field 'name', class => 'form-control' %>
-        </li>
-        <li class="form-group">
-            <label for="email">*Email:</label
-            ><%= text_field 'email', class => 'form-control' %>
-        </li>
-        <li class="form-group">
-            <label for="province">*Province:</label
-                ><%= select_field province => [
-                    [ '--please select--' => 'none' ],
-                    [ 'Alberta' => 'AB' ],
-                    [ 'British Columbia' => 'BC'],
-                    [ 'Manitoba' => 'MB'],
-                    [ 'New Brunswick' => 'NB'],
-                    [ 'New Foundland' => 'NF'],
-                    [ 'Northwest Terriories' => 'NT'],
-                    [ 'Nova Scotia' => 'NS'],
-                    [ 'Nunavut' => 'NU'],
-                    [ 'Ontario' => 'ON'],
-                    [ 'Prince Edward Island' => 'PE'],
-                    [ 'Quebec' => 'QC'],
-                    [ 'Saskatchewan' => 'SK'],
-                    [ 'Yukon' => 'YT'],
-                ] , class => 'form-control'
-            %>
-        </li>
-        <li class="form-group">
-            <label for="Message" class="textarea_label">*Message:</label
-                ><%= text_area 'message', cols => 40, rows => 5,
-                    class => 'form-control' %>
-        </li>
-    </ul>
-        %= submit_button 'Send message', class => 'btn btn-primary'
-    % end
-% }
-
+                <li class="form-group">
+                    <label for="name">*Name:</label
+                    ><%= text_field 'name', class => 'form-control' %>
+                </li>
+                <li class="form-group">
+                    <label for="email">*Email:</label
+                    ><%= text_field 'email', class => 'form-control' %>
+                </li>
+                <li class="form-group">
+                    <label for="province">*Province:</label
+                        ><%= select_field province => [
+                            [ '--please select--' => 'none' ],
+                            [ 'Alberta' => 'AB' ],
+                            [ 'British Columbia' => 'BC'],
+                            [ 'Manitoba' => 'MB'],
+                            [ 'New Brunswick' => 'NB'],
+                            [ 'New Foundland' => 'NF'],
+                            [ 'Northwest Terriories' => 'NT'],
+                            [ 'Nova Scotia' => 'NS'],
+                            [ 'Nunavut' => 'NU'],
+                            [ 'Ontario' => 'ON'],
+                            [ 'Prince Edward Island' => 'PE'],
+                            [ 'Quebec' => 'QC'],
+                            [ 'Saskatchewan' => 'SK'],
+                            [ 'Yukon' => 'YT'],
+                        ] , class => 'form-control'
+                    %>
+                </li>
+                <li class="form-group">
+                    <label for="Message" class="textarea_label">*Message:</label
+                        ><%= text_area 'message', cols => 40, rows => 5,
+                            class => 'form-control' %>
+                </li>
+            </ul>
+                %= submit_button 'Send message', class => 'btn btn-primary'
+            % end
+        % }
+    </div>
+    <div class="col-md-6">
+        <%== xtext('maps')->{ $c->geoip_region } %>
+    </div>
+</div>
 <hr>
 
 <div id="locations" class="row">
