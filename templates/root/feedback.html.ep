@@ -2,8 +2,8 @@
 % title 'Site Feedback';
 
 % if ( form_checker_ok() ) {
-    <p class="message success">Your feedback was successfully sent.
-        Thank you very much!</p>
+    <p class="alert alert-success"><i class="glyphicon glyphicon-ok"></i>
+        Your feedback was successfully sent. Thank you very much!</p>
 % } else {
 
     <p>If you have any ideas on how we can make this website better,
@@ -14,14 +14,17 @@
         <%== form_checker_error_wrapped %>
 
         <ul>
-            <li><label for="email">Email <small>(specify only if you'd be
-                OK with us contacting you on this matter)</small>:</label>
-                <%= text_field 'email'%></li>
-            <li><label for="feedback"
+            <li class="form-group"
+                ><label for="email">Email <small>(specify only if you'd be
+                OK with us contacting you on this matter, if
+                    necessary)</small>:</label>
+                <%= text_field 'email', class => 'form-control' %></li>
+            <li class="form-group"><label for="feedback"
                     class="textarea_label">*Feedback:</label
-                ><%= text_area 'feedback', cols => 40, rows => 5 %>
+                ><%= text_area 'feedback', cols => 40, rows => 5,
+                    class => 'form-control'  %>
             </li>
         </ul>
-        %= submit_button 'Send'
+        %= submit_button 'Send feedback', class => 'btn btn-primary'
     % end
 % }

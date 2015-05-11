@@ -30,6 +30,8 @@ sub startup {
         'app.css' => qw{
         /CSS/reset.scss
         http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css
+        /CSS/bs-callout.scss
+        /CSS/bootstrap-extras.scss
         /CSS/main.scss
         }
     );

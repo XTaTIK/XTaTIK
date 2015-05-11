@@ -3,163 +3,209 @@
 
 
 % if ( flash 'product_update_ok' ) {
-   <p class="message success">Products were successfully updated.</p>
+   <p class="alert alert-success">Products were successfully updated.</p>
 % }
 
 % if ( flash 'product_delete_ok' ) {
-   <p class="message success">Products were successfully deleted.</p>
+   <p class="alert alert-success">Products were successfully deleted.</p>
 % }
 
-<h3>Add Product</h3>
 
-% if ( stash 'product_add_ok' ) {
-    <p class="message succcess">Product was successfully added.
-        <a href="<%= url_for '/user/master-products-database' %>">Add
-            another one</a>.
-    </p>
-% } else {
-    %= form_for '/user/master-products-database' => (method => 'POST') => begin
-        %= csrf_field
-
-        % if ( stash 'already_have_this_product' ) {
-            <p class="message error">This product number is already
-                in the database. Aborting add.
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Add Product</h3>
+    </div>
+    <div class="panel-body">
+        % if ( stash 'product_add_ok' ) {
+            <p class="alert alert-success">Product was successfully added.
+                <a href="<%= url_for '/user/master-products-database' %>">Add
+                    another one</a>.
             </p>
-        %}
+        % } else {
+            %= form_for '/user/master-products-database' => (method => 'POST') => begin
+                %= csrf_field
 
-        <%== form_checker_error_wrapped %>
+                % if ( stash 'already_have_this_product' ) {
+                    <p class="alert alert-danger">This product number is already
+                        in the database. Aborting add.
+                    </p>
+                %}
 
-        %= hidden_field add_product => 1
+                <%== form_checker_error_wrapped %>
 
-        <small>Fields marked with an asterisk (*) are mandatory</small>
-        <small>Separate multiple images with a question mark (?).
-            If not specified, <samp>product_number.jpg</samp> will be used.
-        </small>
-        <small>
-            Category format: <samp>[cat1*::*cat2*::* ... *::*cat_n][cat1*::*cat2*::* ... *::*cat_n][cat3*::*NOCAT]</samp>
-        </small>
-        <small>Plural units are smart-deduced, but you can override
-            by giving plurals with a comma: e.g. <samp>each, eaches</samp>
-        </small>
+                %= hidden_field add_product => 1
 
-        <ul>
-            <li><label for="image">Image:</label
-                ><%= text_field 'image' => ( id => 'image' )
-            %></li>
-            <li><label for="number">Number:</label
-                ><%= text_field 'number' => ( id => 'number' )
-            %></li>
-            <li><label for="price">Price:</label
-                ><%= text_field 'price' => ( id => 'price' )
-            %></li>
-            <li><label for="title">Title:</label
-                ><%= text_field 'title' => ( id => 'title' )
-            %></li>
-            <li><label for="description">Description:</label
-                ><%= text_area 'description', cols => 40, rows => 5,
-                     => ( id => 'description' )
-            %></li>
-            <li><label for="tip_description">Tip description:</label
-                ><%= text_area 'tip_description', cols => 40, rows => 5,
-                     => ( id => 'tip_description' )
-            %></li>
-            <li><label for="quote_description">Quote description:</label
-                ><%= text_area 'quote_description', cols => 40, rows => 3,
-                     => ( id => 'quote_description' )
-            %></li>
-            <li><label for="category">Category:</label
-                ><%= text_field 'category' => ( id => 'category' )
-            %></li>
-            <li><label for="group_master">Group master:</label
-                ><%= text_field 'group_master' => ( id => 'group_master' )
-            %></li>
-            <li><label for="group_desc">Group description:</label
-                ><%= text_field 'group_desc' => ( id => 'group_desc' )
-            %></li>
-            <li><label for="recommended">Recommended products:</label
-                ><%= text_area 'recommended', cols => 40, rows => 3,
-                     => ( id => 'recommended' )
-            %></li>
-            <li><label for="unit">Unit:</label
-                ><%= text_field 'unit' => ( id => 'unit' )
-            %></li>
-        </ul>
-        %= submit_button 'Add product'
-    %= end
-% }
+                <div>
+                    <p class="bs-callout bs-callout-primary"><small>Separate multiple images with a question mark (<samp>?</samp>).
+                        If not specified, <samp><i>product_number</i>.jpg</samp> will be used.
+                    </small></p>
+                    <div class="row">
+                        <div class="form-group col-md-6"><label
+                            for="number">*Number:</label
+                            ><%= text_field 'number' => ( id => 'number' ),
+                                class => 'form-control' %></div>
+                        <div class="form-group col-md-6"><label
+                            for="image">Image:</label
+                            ><%= text_field 'image' => ( id => 'image' ),
+                                class => 'form-control' %></div>
+                    </div>
+                    <div class="form-group"><label for="price">Price:</label
+                        ><%= text_field 'price' => ( id => 'price' ),
+                            class => 'form-control' %></div>
+                    <div class="form-group"><label for="title">Title:</label
+                        ><%= text_field 'title' => ( id => 'title' ),
+                            class => 'form-control' %></div>
+                    <div class="form-group"><label
+                        for="description">Description:</label
+                        ><%= text_area 'description', cols => 40, rows => 5,
+                            id => 'description', class => 'form-control'
+                    %></div>
+                    <div class="row">
+                        <div class="form-group col-md-6"><label
+                            for="tip_description">Tip description:</label
+                            ><%= text_area 'tip_description', cols => 40, rows => 5,
+                                id => 'tip_description', class => 'form-control'
+                        %></div>
+                        <div class="form-group col-md-6"><label
+                            for="quote_description">Quote description:</label
+                            ><%= text_area 'quote_description', cols => 40,
+                                rows => 5,
+                                id => 'quote_description', class => 'form-control'
+                        %></div>
+                    </div>
+                    <p class="bs-callout bs-callout-primary"><small>
+                            Category format: <samp>[cat1*::*cat2*::* ... *::*cat_n][cat1*::*cat2*::* ... *::*cat_n][cat3*::*NOCAT]</samp>
+                        </small></p>
+                    <div class="form-group"><label for="category">Category:</label
+                        ><%= text_field 'category', id => 'category',
+                            class => 'form-control' %></div>
+                    <p class="bs-callout bs-callout-primary"><small>Plural units are smart-deduced, but you can override
+                            by giving plurals with a comma: e.g. <samp>each, eaches</samp>
+                        </small></p>
+                    <div class="row">
+                        <div class="form-group col-md-4"><label
+                            for="unit">Unit:</label><%= text_field 'unit',
+                                id => 'unit', class => 'form-control' %></div>
+                        <div class="form-group col-md-4"><label
+                            for="group_master">Group master:</label
+                            ><%= text_field 'group_master', id => 'group_master',
+                                class => 'form-control' %></div>
+                        <div class="form-group col-md-4"><label
+                            for="group_desc">Group description:</label
+                            ><%= text_field 'group_desc', id => 'group_desc',
+                                class => 'form-control' %></div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12"><label
+                            for="recommended">Recommended products:</label
+                            ><%= text_area 'recommended', cols => 40, rows => 2,
+                                id => 'recommended', class => 'form-control'
+                            %></div>
+                    </div>
+                </div>
+                %= submit_button 'Add product', class => 'btn btn-primary'
+            %= end
+        % }
+    </div>
+</div>
+
+<hr>
 
 % if ( @{stash('products') || []} ) {
-    <h3>Delete Products</h3>
+    <div class="panel panel-danger panel-extra-danger">
+        <div class="panel-heading">
+            <h3 class="panel-title">Delete Products</h3>
+        </div>
+        <div class="panel-body">
+            %= form_for '/user/master-products-database/delete' => ( method => 'POST' ) => begin
+                %= csrf_field
+                <div class="form-group">
+                    <label for="email">List of products to delete:</label>
+                    <%= text_area 'to_delete' => cols => 40, rows => 3,
+                        class => 'form-control' %>
+                </div>
+                <%= submit_button 'Delete products',
+                        class => 'btn btn-danger' %>
+            %= end
+        </div>
+    </div>
 
-    %= form_for '/user/master-products-database/delete' => ( method => 'POST' ) => begin
-        %= csrf_field
-        <%= text_area 'to_delete' => cols => 40, rows => 3 %>
-        %= submit_button 'Delete products'
-    %= end
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Update Products</h3>
+        </div>
+        <div class="panel-body">
+            %= form_for '/user/master-products-database/update' => ( method => 'POST' ) => begin
 
-    <h3>Update Products</h3>
+            %= csrf_field
 
-    %= form_for '/user/master-products-database/update' => ( method => 'POST' ) => begin
+            <div class="form-group">
+                %= submit_button 'Update products', class => 'btn btn-primary'
+            </div>
 
-    %= csrf_field
+            <ul id="edit_products_list">
+                % for my $p ( @{stash('products') || []}) {
+                    <li class="panel panel-primary">
+                    <div class="panel-body">
+                        %= hidden_field 'id_' . $p->{id} => $p->{id}
+                        <div class="row">
+                            <div class="form-group col-md-6"><label for="number">Number:</label
+                                ><%= text_field 'number_' . $p->{id} => $p->{number}, class => 'form-control'
+                            %></div>
+                            <div class="form-group col-md-6"><label for="image">Image:</label
+                                ><%= text_field 'image_' . $p->{id} => $p->{image}, class => 'form-control'
+                            %></div>
+                        </div>
 
-    %= submit_button 'Update products'
+                            <div class="form-group"><label for="price">Price:</label
+                                ><%= text_field 'price_' . $p->{id} => $p->{price}, class => 'form-control'
+                            %></div>
+                            <div class="form-group"><label for="title">Title:</label
+                                ><%= text_field 'title_' . $p->{id} => $p->{title}, class => 'form-control'
+                            %></div>
+                            <div class="form-group"><label for="description">Description:</label
+                                ><%= text_area 'description_' . $p->{id}
+                                    => $p->{description}, cols => 40, rows => 5, class => 'form-control'
+                            %></div>
+                        <div class="row">
+                            <div class="form-group col-md-6"><label for="tip_description">Tip description:</label
+                                ><%= text_area 'tip_description_' . $p->{id}
+                                    => $p->{tip_description}, cols => 40, rows => 3, class => 'form-control'
+                            %></div>
+                            <div class="form-group col-md-6"><label for="quote_description">Quote description:</label
+                                ><%= text_area 'quote_description_' . $p->{id}
+                                    => $p->{quote_description}, cols => 40, rows => 3, class => 'form-control'
+                            %></div>
+                        </div>
+                            <div class="form-group"><label for="category">Category:</label
+                                ><%= text_field 'category_' . $p->{id}
+                                    => $p->{category}, class => 'form-control'
+                            %></div>
+                        <div class="row">
+                            <div class="form-group col-md-4"><label for="group_master">Group master:</label
+                                ><%= text_field 'group_master_' . $p->{id}
+                                    => $p->{group_master}, class => 'form-control'
+                            %></div>
+                            <div class="form-group col-md-4"><label for="group_desc">Group description:</label
+                                ><%= text_field 'group_desc_' . $p->{id}
+                                     => $p->{group_desc}, class => 'form-control'
+                            %></div>
+                            <div class="form-group col-md-4"><label for="unit">Unit:</label
+                                ><%= text_field 'unit_' . $p->{id}  => $p->{unit}, class => 'form-control'
+                            %></div>
+                        </div>
+                            <div class="form-group"><label for="recommended">Recommended products:</label
+                                ><%= text_area 'recommended_' . $p->{id}
+                                    => $p->{recommended}, cols => 40, rows => 3, class => 'form-control'
+                            %></div>
+                    </div>
+                    </li>
+                % }
+            </ul>
 
-    <ul>
-        % for my $p ( @{stash('products') || []}) {
-            <li>
-                %= hidden_field 'id_' . $p->{id} => $p->{id}
-                <ul>
-                    <li><label for="image">Image:</label
-                        ><%= text_field 'image_' . $p->{id} => $p->{image}
-                    %></li>
-                    <li><label for="number">Number:</label
-                        ><%= text_field 'number_' . $p->{id} => $p->{number}
-                    %></li>
-                    <li><label for="price">Price:</label
-                        ><%= text_field 'price_' . $p->{id} => $p->{price}
-                    %></li>
-                    <li><label for="title">Title:</label
-                        ><%= text_field 'title_' . $p->{id} => $p->{title}
-                    %></li>
-                    <li><label for="description">Description:</label
-                        ><%= text_area 'description_' . $p->{id}
-                            => $p->{description}, cols => 40, rows => 5,
-                    %></li>
-                    <li><label for="tip_description">Tip description:</label
-                        ><%= text_area 'tip_description_' . $p->{id}
-                            => $p->{tip_description}, cols => 40, rows => 5,
-                    %></li>
-                    <li><label for="quote_description">Quote description:</label
-                        ><%= text_area 'quote_description_' . $p->{id}
-                            => $p->{quote_description}, cols => 40, rows => 3
-                    %></li>
-                    <li><label for="category">Category:</label
-                        ><%= text_field 'category_' . $p->{id}
-                            => $p->{category}
-                    %></li>
-                    <li><label for="group_master">Group master:</label
-                        ><%= text_field 'group_master_' . $p->{id}
-                            => $p->{group_master}
-                    %></li>
-                    <li><label for="group_desc">Group description:</label
-                        ><%= text_field 'group_desc_' . $p->{id}
-                             => $p->{group_desc}
-                    %></li>
-                    <li><label for="recommended">Recommended products:</label
-                        ><%= text_area 'recommended_' . $p->{id}
-                            => $p->{recommended}, cols => 40, rows => 3,
-                    %></li>
-                    <li><label for="unit">Unit:</label
-                        ><%= text_field 'unit_' . $p->{id}  => $p->{unit}
-                    %></li>
-                </ul>
-            </li>
-        % }
-    </ul>
-
-    %= submit_button 'Update products'
-
-    %= end
+            %= submit_button 'Update products', class => 'btn btn-primary'
+            %= end
+        </div>
+    </div>
 % }
 

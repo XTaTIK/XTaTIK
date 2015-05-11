@@ -38,7 +38,6 @@ sub master_products_database_post {
     my $self = shift;
 
     $self->form_checker(
-        error_class => 'message error',
         rules => {
             number => { max => 1000, },
             ( map +( $_ => { optional => 1, max => 1000 } ),

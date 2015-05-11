@@ -1,8 +1,12 @@
 % layout 'default';
 % title 'User Section';
 
-<ul class="link_button_list">
-    <li><a href="/user/master-products-database">Master products
+<ul class="btn-group-vertical list_button_group" role="group">
+    <li class="btn-group" role="group"><a
+        href="/user/master-products-database"
+        type="button" class="btn btn-default">Master products
         database</a></li>
-    <li><a href="/logout">Log out</a></li>
+    <li class="btn-group" role="group"><a href="/logout"
+        type="button" class="btn btn-danger"
+        >Log out</a></li>
 </ul>

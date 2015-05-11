@@ -7,18 +7,18 @@
 % } else {
     %= form_for contact => (method => 'POST') => begin
         %= csrf_field
-    <div class="form-group">
+    <ul>
         <%== form_checker_error_wrapped %>
 
-        <div class="form-group">
+        <li class="form-group">
             <label for="name">*Name:</label
             ><%= text_field 'name', class => 'form-control' %>
-        </div>
-        <div class="form-group">
+        </li>
+        <li class="form-group">
             <label for="email">*Email:</label
             ><%= text_field 'email', class => 'form-control' %>
-        </div>
-        <div class="form-group">
+        </li>
+        <li class="form-group">
             <label for="province">*Province:</label
                 ><%= select_field province => [
                     [ '--please select--' => 'none' ],
@@ -37,13 +37,13 @@
                     [ 'Yukon' => 'YT'],
                 ] , class => 'form-control'
             %>
-        </div>
-        <div class="form-group">
+        </li>
+        <li class="form-group">
             <label for="Message" class="textarea_label">*Message:</label
                 ><%= text_area 'message', cols => 40, rows => 5,
                     class => 'form-control' %>
-        </div>
-    </div>
+        </li>
+    </ul>
         %= submit_button 'Send message', class => 'btn btn-primary'
     % end
 % }

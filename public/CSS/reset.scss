@@ -10,6 +10,8 @@
     padding-left: 0;
 }
 
+form ul,
+.list_button_group,
 #article_list {
     @extend .unstyled_list;
 }
