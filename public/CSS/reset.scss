@@ -12,6 +12,8 @@
 
 form ul,
 .list_button_group,
-#article_list {
+#article_list,
+#product_list,
+#product_list > li > .row {
     @extend .unstyled_list;
 }

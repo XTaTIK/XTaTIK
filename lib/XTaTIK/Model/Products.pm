@@ -129,6 +129,8 @@ sub get_category {
         '\[' . quotemeta($cat_line),
     )->hashes;
 
+    $data = $self->_process_products($data);
+
     # Right now we might have products that should not show up, since
     # they are deeper than where we are right now. We need to
     # get just cat names that lead to them and we'll only show them
@@ -229,6 +231,14 @@ sub get_category {
 
     $category =~ s{(^|/)[^/]+}{};
 
+    my @top_no_cat = extract_by { $_->{display_product} } @return;
+
+    unshift @return, {
+        contents    => \@top_no_cat,
+        'is_subcat' => 1,
+        no_cat => 1,
+    };
+
     return ( \@return, $return_path, $return_name );
 }
 
@@ -295,7 +305,7 @@ sub _process_products {
         =~ s/\Q$unit_noun\E/$units{ $unit_noun }/gr;
 
         $product->{image} //= "$product->{number}.jpg";
-        $product->{image}   = 'nopic.jpg'
+        $product->{image}   = 'nopic.png'
             unless -e catfile 'product-pics', $product->{image};
     }
 
