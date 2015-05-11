@@ -8,6 +8,8 @@
             geoip_region() eq '00' ? '' : ', ' . geoip_region()
         %></title>
 
+    <link rel="shortcut icon" href="/favicon.ico">
+
     %= asset 'app.css';
 
     <!--[if lt IE 9]>
