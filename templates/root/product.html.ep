@@ -2,35 +2,52 @@
 % title stash('product')->{title};
 % stash active_page => 'products';
 
-<img src="/content-pics/products/<%= stash('product')->{image} %>" alt="">
+<div class="row">
+    <div class="col-md-4 col-md-push-8">
+        <img src="/content-pics/products/<%= stash('product')->{image} %>" alt="" class="img-responsive well thumbnail">
+    </div>
 
-<p>
-    <span class="number">#<%= stash('product')->{number} %></span>
-    % if ( stash('product')->{contact_for_pricing} ) {
-        <span class="contact_for_pricing">This product is not
-            available for purchase online. Please add it to a quote.</span>
-    % } else {
-        <span class="price_large">
-            <%= stash('product')->{price_dollars}
-                %><sup>.<%= stash('product')->{price_cents} %></sup>
-            <span class="sku">per <%= stash('product')->{unit} %></span>
-        </span>
-    % }
-</p>
+    <div class="col-md-8 col-md-pull-4">
+        <div class="panel panel-<%=
+            stash('product')->{contact_for_pricing} ? 'primary' : 'success'
+        %>">
+        <div class="row valign panel-body"
+            ><div class="col-md-3">
+                <span class="product_number">#<%= stash('product')->{number} %></span>
+            </div
+            ><div class="col-md-5">
+                % if ( stash('product')->{contact_for_pricing} ) {
+                    <p class="alert alert-warning text-center" style="margin-bottom: 0"><small><i class="glyphicon glyphicon-info-sign"></i> Not
+                        available for purchase online. You can request a quote, during checkout.</small></p>
+                % } else {
+                    <span class="price_large">
+                        $<%= stash('product')->{price_dollars}
+                            %><sup>.<%= stash('product')->{price_cents} %></sup>
+                        <span class="sku">per <%= stash('product')->{unit} %></span>
+                    </span>
+                % }
+            </div
+            ><div class="col-md-4">
+                %= form_for '/cart/add' => (method => 'POST') =>  class => "form-inline" => begin
+                    %= csrf_field
+                    %= hidden_field number => stash('product')->{number}
 
-%= form_for '/cart/add' => (method => 'POST') => begin
-    %= csrf_field
-    %= hidden_field number => stash('product')->{number}
+                    <div class="form-group">
+                        <%= text_field 'quantity', value => 1, class => 'form-control qty-input' %>
+                    </div>
 
-    <%= text_field 'quantity' => ( value => 1 ) %>
+                    % if ( stash('product')->{contact_for_pricing} ) {
+                        <%= submit_button 'Add to quote', class => 'btn btn-primary' %>
+                    % } else {
+                        <%= submit_button 'Add to cart', class => 'btn btn-success' %>
+                    % }
+                %= end
+            </div
+        ></div>
+        </div>
 
-    % if ( stash('product')->{contact_for_pricing} ) {
-        %= submit_button 'Add to quote'
-    % } else {
-        %= submit_button 'Add to cart'
-    % }
-%= end
-
-<div>
-    <%== stash('product')->{description} %>
+        <div>
+            <%== stash('product')->{description} %>
+        </div>
+    </div>
 </div>

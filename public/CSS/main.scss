@@ -1,5 +1,6 @@
 
 $lighter-border-color: #eee;
+$subdued-text: #999;
 
 h1 {
     margin: 0;
@@ -61,4 +62,21 @@ footer {
 
 #feedback_ideas_to_submit {
     margin-top: 20px;
+}
+
+.qty-input {
+    width: 4em!important;
+}
+
+.product_number {
+    color: $subdued-text;
+}
+
+.price_large {
+    font-size: 150%;
+    font-weight: bold;
+
+    .sku {
+        font-size: 70%;
+    }
 }
