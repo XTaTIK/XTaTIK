@@ -37,7 +37,7 @@ sub _perform_checks {
 
     %conf = (
         all_errors  => 1, # TODO: get rid of this and always do all_errors
-        error_class => 'alert alert-danger',
+        error_class => 'alert alert-extra-danger',
         %conf,
     );
 

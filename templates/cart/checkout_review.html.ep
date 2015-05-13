@@ -1,14 +1,12 @@
 % title 'Review Totals';
 % layout 'default';
 
-<ul class="checkout-crumbs">
-   <li>Review products</li>
-   <li>Enter contact information</li>
-    % if ( @{stash('cart')} ) {
-       <li class="active">Review Pricing</li>
-       <li>Pay for the order</li>
-    % }
-   <li>Receive confirmation</li>
+<ul class="checkout_crumbs progress">
+   <li class="progress-bar progress-bar-success" style="width: 20%">Review products</li>
+   <li class="progress-bar progress-bar-success" style="width: 20%">Enter contact information</li>
+   <li class="progress-bar progress-bar-primary" style="width: 20%">Review Pricing</li>
+   <li class="progress-bar progress-bar-info" style="width: 20%">Pay for the order</li>
+   <li class="progress-bar progress-bar-info" style="width: 20%">Receive confirmation</li>
 </ul>
 
 <%== stash('checkout_html') %>

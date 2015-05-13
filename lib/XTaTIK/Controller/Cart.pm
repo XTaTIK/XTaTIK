@@ -144,6 +144,7 @@ sub checkout_review {
         $self->flash(
             form_checker_error_wrapped => $self->form_checker_error_wrapped,
         );
+        $self->stash( cart => $cart );
         $self->render(template => 'cart/checkout');
         return;
     }

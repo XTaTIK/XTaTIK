@@ -1,6 +1,12 @@
 
+$x-primary: #337AB7;
+
 $lighter-border-color: #eee;
 $subdued-text: #999;
+
+body {
+    padding-top: 70px;
+}
 
 h1 {
     margin: 0;
@@ -11,8 +17,13 @@ h1 {
     }
 }
 
-.checkout-crumbs .active {
-    color: blue;
+.checkout_crumbs {
+    height: auto;
+    vertical-align: middle;
+    li {
+        padding-top: 1ex;
+        padding-bottom: 1.5ex;
+    }
 }
 
 footer {
@@ -79,4 +90,22 @@ footer {
     .sku {
         font-size: 70%;
     }
+}
+
+#cart {
+    margin-bottom: -6ex;
+}
+
+.hidden_checkout {
+    visibility: hidden;
+}
+
+#checkout_form td {
+    vertical-align: middle;
+}
+
+#checkout_totals .total {
+    font-size: 200%;
+    padding-top: 1ex;
+    font-weight: bold;
 }

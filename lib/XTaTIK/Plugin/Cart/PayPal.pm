@@ -124,10 +124,10 @@ sub __costs {
     }
 
     return (
-        gst             => $gst//0,
-        pst             => $pst//0,
-        hst             => $hst//0,
-        shipping        => $shipping,
+        gst             => __cur $gst//0,
+        pst             => __cur $pst//0,
+        hst             => __cur $hst//0,
+        shipping        => __cur $shipping,
         total_dollars   => $total_d,
         total_cents     => $total_c,
     );
@@ -145,56 +145,74 @@ END_HTML
 sub _template_thank_you {
     return <<'END_HTML';
 
-    <ul class="checkout-crumbs">
-       <li>Review products</li>
-       <li>Enter contact information</li>
-        % if ( @{stash('cart')} ) {
-           <li>Review Pricing</li>
-           <li>Pay for the order</li>
-        % }
-       <li class="active">Receive confirmation</li>
+% if ( @{stash('cart')} ) {
+    <ul class="checkout_crumbs progress">
+       <li class="progress-bar progress-bar-success" style="width: 20%">Review products</li>
+       <li class="progress-bar progress-bar-success" style="width: 20%">Enter contact information</li>
+       <li class="progress-bar progress-bar-success" style="width: 20%">Review Pricing</li>
+       <li class="progress-bar progress-bar-success" style="width: 20%">Pay for the order</li>
+       <li class="progress-bar progress-bar-primary" style="width: 20%">Receive confirmation</li>
     </ul>
+% } else {
+    <ul class="checkout_crumbs progress">
+       <li class="progress-bar progress-bar-success" style="width: 30%">Review products</li>
+       <li class="progress-bar progress-bar-success" style="width: 30%">Enter contact information</li>
+       <li class="progress-bar progress-bar-primary" style="width: 30%">Receive confirmation</li>
+    </ul>
+% }
 
+<div class="row">
+    <div class="col-md-6">
+        % if ( @{stash('quote')} ) {
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="glyphicon glyphicon-comment"></i> Your Quote Request</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Thank you for your interest in our products.
+                        A sales representative will contact you
+                        within 2 business days.
+                    </p>
 
-    % if ( @{stash('quote')} ) {
-        % if ( @{stash('quote')} and @{stash('cart')} ) {
-            <h3>Your Quote Request</h3>
+                    <p>Your quote number is
+                        <strong><%= stash 'quote_number' %></strong>.
+                        Have this number handy if you contact us with
+                        any questions about your quote request.
+                    </p>
+                </div>
+            </div>
         % }
-        <p>Thank you for your interest in our products.
-            A sales representative will contact you
-            within 2 business days.
-        </p>
+    </div>
+    <div class="col-md-6">
+        % if ( @{stash('cart')} ) {
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="glyphicon glyphicon-shopping-cart"></i> Your Purchase</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Thank you for your purchase!
+                        Your order will be shipped on the <strong>next
+                        business day</strong> and will arrive within
+                        <strong>5–7 business days</strong>.
+                    </p>
 
-        <p>Your quote number is
-            <strong><%= stash 'quote_number' %></strong>.
-            Have this number handy if you contact us with
-            any questions about your quote request.
-        </p>
-    % }
-
-    % if ( @{stash('cart')} ) {
-        % if ( @{stash('quote')} and @{stash('cart')} ) {
-            <h3>Your Purchase</h3>
+                    <p>Your order number is
+                        <strong><%= stash 'order_number' %></strong>.
+                        Have this number handy if you contact us with any
+                        questions about yourorder.
+                    </p>
+                </div>
+            </div>
         % }
-        <p>Thank you for your purchase!
-            Your order will be shipped on the <strong>next
-            business day</strong> and will arrive within
-            <strong>5–7 business days</strong>.
-        </p>
-
-        <p>Your order number is
-            <strong><%= stash 'order_number' %></strong>.
-            Have this number handy if you contact us with any
-            questions about yourorder.
-        </p>
-    % }
+    </div>
+</div>
 END_HTML
 }
 
 sub _template_checkout {
     return <<'END_HTML';
 
-<dl>
+<dl class="dl-horizontal" id="checkout_totals">
     <dt>Cost of products:</dt>
         <dd>$<%= cart->total %></dd>
 
@@ -216,8 +234,8 @@ sub _template_checkout {
     <dt>Shipping charge:</dt>
         <dd>$<%= stash 'shipping' %>
             <small>(includes applicable taxes)</small></dd>
-    <dt>Total:</dt>
-        <dd>$<%= stash 'total_dollars'
+    <dt class="total">Total:</dt>
+        <dd class="total">$<%= stash 'total_dollars'
             %><sup>.<%= stash 'total_cents' %></sup></dd>
 </dl>
 
@@ -250,7 +268,7 @@ sub _template_checkout {
         %= hidden_field 'quantity_'    . $_ => $p->{quantity}
     % }
 
-    %= submit_button 'Proceed to PayPal to complete this purchase'
+    %= submit_button 'Proceed to PayPal to complete this purchase', class => 'btn btn-lg btn-primary'
 </form>
 END_HTML
 }

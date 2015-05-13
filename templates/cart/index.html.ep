@@ -1,91 +1,118 @@
 % title 'Your Cart';
 % layout 'default';
 
-<ul class="checkout-crumbs">
-   <li class="active">Review products</li>
-   <li>Enter contact information</li>
-   <li>Review Pricing</li>
-   <li>Pay for the order</li>
-</ul>
+% if ( @{stash('cart')} ) {
+    <ul class="checkout_crumbs progress">
+       <li class="progress-bar progress-bar-primary" style="width: 20%">Review products</li>
+       <li class="progress-bar progress-bar-info" style="width: 20%">Enter contact information</li>
+       <li class="progress-bar progress-bar-info" style="width: 20%">Review Pricing</li>
+       <li class="progress-bar progress-bar-info" style="width: 20%">Pay for the order</li>
+       <li class="progress-bar progress-bar-info" style="width: 20%">Receive confirmation</li>
+    </ul>
+% } else {
+    <ul class="checkout_crumbs progress">
+       <li class="progress-bar progress-bar-primary" style="width: 30%">Review products</li>
+       <li class="progress-bar progress-bar-info" style="width: 30%">Enter contact information</li>
+       <li class="progress-bar progress-bar-info" style="width: 30%">Receive confirmation</li>
+    </ul>
+% }
 
-<p>To remove a product, set quantity to zero.</p>
-
-%= form_for '/cart/checkout' => (method => 'POST') => begin
+%= form_for '/cart/checkout' => (method => 'POST') => id => 'checkout_form' => begin
     %= csrf_field
 
-    % if ( @{stash('cart')} ) {
-        <h3>Purchase</h3>
-        <p>Here are the items you're purchasing.</p>
+    <div class="row">
+        <div class="col-md-6">
+            % if ( @{stash('cart')} ) {
+                <div class="table-responsive panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="glyphicon glyphicon-shopping-cart"></i> Purchase</h3>
+                    </div>
+                    <div class="panel-body">
+                    <p>Here are the items you're purchasing.</p>
+                    </div>
 
-        <table>
-        <thead>
-            <tr>
-                <th></th>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-            </tr>
-        </thead>
-        <tbody>
-            % for ( @{stash('cart')} ) {
-                <tr>
-                    <td><img src="/content-pics/products/<%=
-                        $_->{image} %>" width="50" height="50" alt=""></td>
-                    <td><a href="/product/<%= $_->{url} %>"
-                        ><%= $_->{title} %></a></td>
-                    <td>$<%= $_->{price_dollars}
-                        %><sup>.<%= $_->{price_cents} %></sup></td>
-                    <td>
-                        <%= hidden_field 'id_' . $_->{id} => $_->{id} %>
-                        <%= hidden_field 'number_' . $_->{id}
-                            => $_->{number} %>
-                        <%= text_field 'quantity_' . $_->{id}
-                            => ( value => $_->{quantity} )
-                        %>
-                        <%= $_->{quantity} > 1
-                            ? $_->{unit_multi} : $_->{unit} %>
-                    </td>
-                </tr>
+                    <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        % for ( @{stash('cart')} ) {
+                            <tr>
+                                <td><img src="/content-pics/products/<%=
+                                    $_->{image} %>" width="50" height="50" alt=""></td>
+                                <td><a href="/product/<%= $_->{url} %>"
+                                    ><%= $_->{title} %></a></td>
+                                <td>$<%= $_->{price_dollars}
+                                    %><sup>.<%= $_->{price_cents} %></sup></td>
+                                <td>
+                                    <%= hidden_field 'id_' . $_->{id} => $_->{id} %>
+                                    <%= hidden_field 'number_' . $_->{id}
+                                        => $_->{number} %>
+                                    <%= text_field 'quantity_' . $_->{id}
+                                        => value => $_->{quantity},
+                                        class => 'qty-input form-control'
+                                    %>
+                                </td>
+                                <td><%= $_->{quantity} > 1
+                                        ? $_->{unit_multi} : $_->{unit} %></td>
+                            </tr>
+                        % }
+                    </tbody>
+                    </table>
+                </div>
             % }
-        </tbody>
-        </table>
-    % }
-
-    % if ( @{stash('quote')} ) {
-        <h3>Quote Request</h3>
-        <p>These items are not avilable for purchase online, but you
-            can still submit a quote request:</p>
-            <table>
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                % for ( @{stash('quote')} ) {
-                    <tr>
-                        <td><img src="/product-pics/thumbs-tiny/<%=
-                            $_->{image} %>" alt=""></td>
-                        <td><a href="/product/<%= $_->{url} %>"
-                            ><%= $_->{title} %></a></td>
-                        <td>
-                            <%= hidden_field 'id_' . $_->{id} => $_->{id} %>
-                            <%= hidden_field 'number_' . $_->{id}
-                                => $_->{number} %>
-                            <%= text_field 'quantity_' . $_->{id}
-                                => ( value => $_->{quantity} )
-                            %>
-                            <%= $_->{quantity} > 1
-                                ? $_->{unit_multi} : $_->{unit} %>
-                        </td>
-                    </tr>
-                % }
-            </tbody>
-            </table>
-    % }
-    %= submit_button 'Proceed to the next step'
+        </div>
+        <div class="col-md-6">
+            % if ( @{stash('quote')} ) {
+                <div class="table-responsive panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="glyphicon glyphicon-comment"></i> Quote Request</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>A Sales Representative will respond to you with a quote.</p>
+                    </div>
+                        <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            % for ( @{stash('quote')} ) {
+                                <tr>
+                                    <td><img src="/content-pics/products/<%=
+                                    $_->{image} %>" width="50" height="50" alt=""></td>
+                                    <td><a href="/product/<%= $_->{url} %>"
+                                        ><%= $_->{title} %></a></td>
+                                    <td>
+                                        <%= hidden_field 'id_' . $_->{id} => $_->{id} %>
+                                        <%= hidden_field 'number_' . $_->{id}
+                                            => $_->{number} %>
+                                        <%= text_field 'quantity_' . $_->{id}
+                                            => value => $_->{quantity},
+                                            class => 'qty-input form-control'
+                                        %>
+                                    </td>
+                                    <td><%= $_->{quantity} > 1
+                                        ? $_->{unit_multi} : $_->{unit} %></td>
+                                </tr>
+                            % }
+                        </tbody>
+                        </table>
+                    </div>
+            % }
+        </div>
+    </div>
+    %= submit_button 'Proceed to the next step', class => 'btn btn-lg btn-primary'
 %= end
 
 % unless ( @{stash('cart')} or @{stash('quote')} ) {

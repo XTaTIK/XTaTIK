@@ -59,9 +59,12 @@
     </nav><!-- /.navbar -->
 
     <div class="container">
-        <p id="cart">
-            <a href="/cart/">Total: $<%= cart_dollars %><sup>.<%= cart_cents %></sup></a>
-            <br>Cart ID: <%= session('cart_id') %>
+        <p id="cart" class="text-right
+                <%= $c->url_for('current') =~ m{^/cart}
+                    ? 'hidden_checkout' : '' %>
+            ">
+            <span title="Total doesn't include shipping charges or taxes"><%= @{cart->contents||[]} %> ⇴ $<%= cart_dollars %><sup>.<%= cart_cents %></sup></span>
+            <a href="/cart/" class="btn btn-primary">Checkout</a>
         </p>
 
         % if ( title ) {
