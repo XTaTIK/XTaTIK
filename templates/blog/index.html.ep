@@ -4,12 +4,15 @@
 
 <ul id="article_list" class="row">
     % for my $post ( @$posts ) {
-        <li class="col-sm-6 col-md-4"><a href="/blog/<%= $post->{url} %>">
+        <li class="col-sm-6 col-md-4">
             <div class="well">
+                <a href="/blog/<%= $post->{url} %>">
                 <img src="/content-pics/blog/thumbs/<%= $post->{url} %>.jpg"
                 alt="" class="thumbnail img-responsive">
-                <%= $post->{title}%> <small><%= $post->{date} %></small></a
-            ></div>
+                <%= $post->{title}%></a>
+
+                <small>Posted on <%= $post->{date} %></small>
+            </div>
         </li>
     % }
 </ul>

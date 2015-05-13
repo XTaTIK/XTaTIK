@@ -4,6 +4,11 @@ $x-primary: #337AB7;
 $lighter-border-color: #eee;
 $subdued-text: #999;
 
+.muted {
+    opacity: .5;
+    font-size: 90%;
+}
+
 body {
     padding-top: 70px;
 }
@@ -34,11 +39,13 @@ footer {
     clear: both;
     list-style: none;
     overflow: hidden;
-    padding: .5em 0;
+    padding: .5em 1em;
+    border-radius: 4px;
     margin-top: 1em;
+    background: lighten($lighter-border-color, 5%);
     border: 1px dotted $lighter-border-color;
-    border-left: 0;
-    border-right: 0;
+    /*border-left: 0;*/
+    /*border-right: 0;*/
     font-size: 90%;
 
     .next {
@@ -48,6 +55,7 @@ footer {
     .next:after {
         content: "→";
         padding-left: .5em;
+        opacity: .5;
     }
 
     .prev {
@@ -57,7 +65,12 @@ footer {
     .prev:before {
         content: "←";
         padding-right: .5em;
+        opacity: .5;
     }
+}
+
+#blog_article_content {
+    padding: 20px 0 10px;
 }
 
 #navbar a {
@@ -108,4 +121,20 @@ footer {
     font-size: 200%;
     padding-top: 1ex;
     font-weight: bold;
+}
+
+#article_list {
+    .thumbnail {
+        margin-bottom: 10px;
+    }
+
+    a {
+        font-size: 130%;
+        display: block;
+    }
+
+    small {
+        @extend .muted;
+        display: block;
+    }
 }
