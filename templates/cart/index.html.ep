@@ -2,18 +2,18 @@
 % layout 'default';
 
 % if ( @{stash('cart')} ) {
-    <ul class="checkout_crumbs progress">
-       <li class="progress-bar progress-bar-primary" style="width: 20%">Review products</li>
-       <li class="progress-bar progress-bar-info" style="width: 20%">Enter contact information</li>
-       <li class="progress-bar progress-bar-info" style="width: 20%">Review Pricing</li>
-       <li class="progress-bar progress-bar-info" style="width: 20%">Pay for the order</li>
-       <li class="progress-bar progress-bar-info" style="width: 20%">Receive confirmation</li>
+    <ul class="checkout_crumbs text-center">
+       <li class="col-md-15 label-primary">Review products</li>
+       <li class="col-md-15 label-default">Enter contact information</li>
+       <li class="col-md-15 label-default">Review Pricing</li>
+       <li class="col-md-15 label-default">Pay for the order</li>
+       <li class="col-md-15 label-default">Receive confirmation</li>
     </ul>
 % } else {
-    <ul class="checkout_crumbs progress">
-       <li class="progress-bar progress-bar-primary" style="width: 30%">Review products</li>
-       <li class="progress-bar progress-bar-info" style="width: 30%">Enter contact information</li>
-       <li class="progress-bar progress-bar-info" style="width: 30%">Receive confirmation</li>
+    <ul class="checkout_crumbs text-center">
+       <li class="col-md-4 label-primary">Review products</li>
+       <li class="col-md-4 label-default">Enter contact information</li>
+       <li class="col-md-4 label-default">Receive confirmation</li>
     </ul>
 % }
 

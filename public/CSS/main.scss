@@ -1,8 +1,15 @@
 
 $x-primary: #337AB7;
-
+$light-on-dark-text: #fff;
 $lighter-border-color: #eee;
 $subdued-text: #999;
+
+.after_clear {
+    display: block;
+    content: '';
+    clear: both;
+    overflow: hidden;
+}
 
 .muted {
     opacity: .5;
@@ -23,11 +30,18 @@ h1 {
 }
 
 .checkout_crumbs {
-    height: auto;
     vertical-align: middle;
+    margin-bottom: 20px;
+    border-radius: 4px 5px 6px 5px;
+    overflow: hidden;
+    font-size: 90%;
+
     li {
-        padding-top: 1ex;
-        padding-bottom: 1.5ex;
+        padding: 1ex 0;
+        color: $light-on-dark-text;
+        border: 1px solid $lighter-border-color;
+        border-top: 0;
+        border-left: 0;
     }
 }
 
@@ -44,8 +58,6 @@ footer {
     margin-top: 1em;
     background: lighten($lighter-border-color, 5%);
     border: 1px dotted $lighter-border-color;
-    /*border-left: 0;*/
-    /*border-right: 0;*/
     font-size: 90%;
 
     .next {

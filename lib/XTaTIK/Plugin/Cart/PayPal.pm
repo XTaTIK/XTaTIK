@@ -146,18 +146,18 @@ sub _template_thank_you {
     return <<'END_HTML';
 
 % if ( @{stash('cart')} ) {
-    <ul class="checkout_crumbs progress">
-       <li class="progress-bar progress-bar-success" style="width: 20%">Review products</li>
-       <li class="progress-bar progress-bar-success" style="width: 20%">Enter contact information</li>
-       <li class="progress-bar progress-bar-success" style="width: 20%">Review Pricing</li>
-       <li class="progress-bar progress-bar-success" style="width: 20%">Pay for the order</li>
-       <li class="progress-bar progress-bar-primary" style="width: 20%">Receive confirmation</li>
+    <ul class="checkout_crumbs text-center">
+       <li class="col-md-15 label-success">Review products</li>
+       <li class="col-md-15 label-success">Enter contact information</li>
+       <li class="col-md-15 label-success">Review Pricing</li>
+       <li class="col-md-15 label-success">Pay for the order</li>
+       <li class="col-md-15 label-primary">Receive confirmation</li>
     </ul>
 % } else {
-    <ul class="checkout_crumbs progress">
-       <li class="progress-bar progress-bar-success" style="width: 30%">Review products</li>
-       <li class="progress-bar progress-bar-success" style="width: 30%">Enter contact information</li>
-       <li class="progress-bar progress-bar-primary" style="width: 30%">Receive confirmation</li>
+    <ul class="checkout_crumbs text-center">
+       <li class="col-md-4 label-success">Review products</li>
+       <li class="col-md-4 label-success">Enter contact information</li>
+       <li class="col-md-4 label-primary">Receive confirmation</li>
     </ul>
 % }
 
