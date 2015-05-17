@@ -21,9 +21,8 @@
           another one</a>.
       </p>
     % } else {
-      <%= form_for '/user/master-products-database'
-        => method => 'POST' => begin()
-      %>
+      <%= form_for '/user/master-products-database' =>
+        method => 'POST' => begin %>
         %= csrf_field
 
         % if ( stash 'already_have_this_product' ) {
@@ -149,8 +148,7 @@
     </div>
     <div class="panel-body">
       <%= form_for '/user/master-products-database/delete'
-        => method => 'POST' => begin()
-      %>
+        => method => 'POST' => begin %>
         %= csrf_field
         <div class="form-group">
           <label for="email">List of products to delete:</label>
@@ -169,8 +167,7 @@
     </div>
     <div class="panel-body">
       <%= form_for '/user/master-products-database/update'
-        => method => 'POST' => begin()
-      %>
+        => method => 'POST' => begin %>
 
       %= csrf_field
 
