@@ -112,7 +112,7 @@ sub master_products_database_delete {
     return $self->redirect_to('/user/master-products-database');
 }
 
-sub users {
+sub manage_users {
     my $self = shift;
     $self->stash(
         valid_roles => join(', ', @VALID_ROLES),

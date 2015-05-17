@@ -121,7 +121,7 @@ sub startup {
             ->to('user#master_products_database_update');
         $ru->post('/master-products-database/delete')
             ->to('user#master_products_database_delete');
-        $ru->get('/users')->to('user#users');
+        $ru->get('/manage-users')->to('user#manage_users');
     }
 }
 
