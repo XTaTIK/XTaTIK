@@ -9,11 +9,6 @@ my @VALID_ROLES = sort qw/
 
 sub index {}
 
-sub users {
-    my $self = shift;
-    $self->stash( valid_roles => join ', ', @VALID_ROLES );
-}
-
 sub login {
     my $self = shift;
 
@@ -115,6 +110,13 @@ sub master_products_database_delete {
 
     $self->flash( product_delete_ok => 1 );
     return $self->redirect_to('/user/master-products-database');
+}
+
+sub users {
+    my $self = shift;
+    $self->stash(
+        valid_roles => join(', ', @VALID_ROLES),
+    );
 }
 
 1;
