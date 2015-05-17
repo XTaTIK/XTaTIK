@@ -149,54 +149,54 @@
                     <div class="panel-body">
                         %= hidden_field 'id_' . $p->{id} => $p->{id}
                         <div class="row">
-                            <div class="form-group col-md-6"><label for="number">Number:</label
-                                ><%= text_field 'number_' . $p->{id} => $p->{number}, class => 'form-control'
+                            <div class="form-group col-md-6"><label for="number_<%= $u->{id} %>">Number:</label
+                                ><%= text_field 'number_' . $p->{id} => $p->{number}, id => 'number_' . $p->{id} =>class => 'form-control'
                             %></div>
-                            <div class="form-group col-md-6"><label for="image">Image:</label
-                                ><%= text_field 'image_' . $p->{id} => $p->{image}, class => 'form-control'
+                            <div class="form-group col-md-6"><label for="image_<%= $u->{id} %>">Image:</label
+                                ><%= text_field 'image_' . $p->{id} => $p->{image}, id => 'image_' . $p->{id} =>class => 'form-control'
                             %></div>
                         </div>
 
-                            <div class="form-group"><label for="price">Price:</label
-                                ><%= text_field 'price_' . $p->{id} => $p->{price}, class => 'form-control'
+                            <div class="form-group"><label for="price_<%= $u->{id} %>">Price:</label
+                                ><%= text_field 'price_' . $p->{id} => $p->{price}, id => 'price_' . $p->{id} =>class => 'form-control'
                             %></div>
-                            <div class="form-group"><label for="title">Title:</label
-                                ><%= text_field 'title_' . $p->{id} => $p->{title}, class => 'form-control'
+                            <div class="form-group"><label for="title_<%= $u->{id} %>">Title:</label
+                                ><%= text_field 'title_' . $p->{id} => $p->{title}, id => 'title_' . $p->{id} =>class => 'form-control'
                             %></div>
-                            <div class="form-group"><label for="description">Description:</label
+                            <div class="form-group"><label for="description_<%= $u->{id} %>">Description:</label
                                 ><%= text_area 'description_' . $p->{id}
-                                    => $p->{description}, cols => 40, rows => 5, class => 'form-control'
+                                    => $p->{description}, cols => 40, rows => 5, id => 'description_' . $p->{id} => class => 'form-control'
                             %></div>
                         <div class="row">
-                            <div class="form-group col-md-6"><label for="tip_description">Tip description:</label
+                            <div class="form-group col-md-6"><label for="tip_description_<%= $u->{id} %>">Tip description:</label
                                 ><%= text_area 'tip_description_' . $p->{id}
-                                    => $p->{tip_description}, cols => 40, rows => 3, class => 'form-control'
+                                    => $p->{tip_description}, cols => 40, rows => 3, id => 'tip_description_' . $p->{id} => class => 'form-control'
                             %></div>
-                            <div class="form-group col-md-6"><label for="quote_description">Quote description:</label
+                            <div class="form-group col-md-6"><label for="quote_description_<%= $u->{id} %>">Quote description:</label
                                 ><%= text_area 'quote_description_' . $p->{id}
-                                    => $p->{quote_description}, cols => 40, rows => 3, class => 'form-control'
+                                    => $p->{quote_description}, cols => 40, rows => 3, id => 'quote_description_' . $p->{id}, class => 'form-control'
                             %></div>
                         </div>
-                            <div class="form-group"><label for="category">Category:</label
+                            <div class="form-group"><label for="category_<%= $u->{id} %>">Category:</label
                                 ><%= text_field 'category_' . $p->{id}
-                                    => $p->{category}, class => 'form-control'
+                                    => $p->{category}, id => 'category_' . $p->{id}, class => 'form-control'
                             %></div>
                         <div class="row">
-                            <div class="form-group col-md-4"><label for="group_master">Group master:</label
+                            <div class="form-group col-md-4"><label for="group_master_<%= $u->{id} %>">Group master:</label
                                 ><%= text_field 'group_master_' . $p->{id}
-                                    => $p->{group_master}, class => 'form-control'
+                                    => $p->{group_master}, id => 'group_master_' . $p->{id}, class => 'form-control'
                             %></div>
-                            <div class="form-group col-md-4"><label for="group_desc">Group description:</label
+                            <div class="form-group col-md-4"><label for="group_desc_<%= $u->{id} %>">Group description:</label
                                 ><%= text_field 'group_desc_' . $p->{id}
-                                     => $p->{group_desc}, class => 'form-control'
+                                     => $p->{group_desc}, id => 'group_desc_' . $p->{id}, class => 'form-control'
                             %></div>
-                            <div class="form-group col-md-4"><label for="unit">Unit:</label
-                                ><%= text_field 'unit_' . $p->{id}  => $p->{unit}, class => 'form-control'
+                            <div class="form-group col-md-4"><label for="unit_<%= $u->{id} %>">Unit:</label
+                                ><%= text_field 'unit_' . $p->{id} => $p->{unit}, id => 'unit_' . $p->{id}, class => 'form-control'
                             %></div>
                         </div>
-                            <div class="form-group"><label for="recommended">Recommended products:</label
+                            <div class="form-group"><label for="recommended_<%= $u->{id} %>">Recommended products:</label
                                 ><%= text_area 'recommended_' . $p->{id}
-                                    => $p->{recommended}, cols => 40, rows => 3, class => 'form-control'
+                                    => $p->{recommended}, cols => 40, rows => 3, id => 'recommended_' . $p->{id}, class => 'form-control'
                             %></div>
                     </div>
                     </li>
