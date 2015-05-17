@@ -3,99 +3,99 @@
 <h3>Customer Data</h3>
 
 <ul>
-    <li><strong>First name:</strong> <%= stash 'cust_name' %></li>
-    <li><strong>Last name:</strong> <%= stash 'cust_lname' %></li>
-    <li><strong>Email:</strong> <a href="mailto:<%= stash 'cust_email' %>"
-        ><%= stash 'cust_email' %></a></li>
-    <li><strong>Address:</strong> <%= stash 'cust_address1' %>
-        <br> <%= stash 'cust_address2' %>
-    </li>
-    <li><strong>City:</strong> <%= stash 'cust_city' %></li>
-    <li><strong>Phone:</strong> <%= stash 'cust_phone' %></li>
-    <li><strong>Province:</strong> <%= stash 'cust_province' %></li>
-    <li><strong>Postal code:</strong> <%= stash 'cust_zip' %></li>
+  <li><strong>First name:</strong> <%= stash 'cust_name' %></li>
+  <li><strong>Last name:</strong> <%= stash 'cust_lname' %></li>
+  <li><strong>Email:</strong> <a href="mailto:<%= stash 'cust_email' %>"
+    ><%= stash 'cust_email' %></a></li>
+  <li><strong>Address:</strong> <%= stash 'cust_address1' %>
+    <br> <%= stash 'cust_address2' %>
+  </li>
+  <li><strong>City:</strong> <%= stash 'cust_city' %></li>
+  <li><strong>Phone:</strong> <%= stash 'cust_phone' %></li>
+  <li><strong>Province:</strong> <%= stash 'cust_province' %></li>
+  <li><strong>Postal code:</strong> <%= stash 'cust_zip' %></li>
 </ul>
 
 
 % if ( @{stash('cart')} ) {
-    <h3>Order Summary</h3>
+  <h3>Order Summary</h3>
 
-    <dl>
-        <dt>Promo code used:</dt>
-            <dd><%= stash 'promo_code' %></dd>
-        <dt>Cost of products:</dt>
-            <dd>$<%= cart->total %></dd>
-        % if ( stash 'hst' ) {
-            <dt><abbr title="Harmonized Sales Tax">HST</abbr>:</dt>
-                <dd><strong>$<%= stash 'hst' %></strong></dd>
-        % }
+  <dl>
+    <dt>Promo code used:</dt>
+      <dd><%= stash 'promo_code' %></dd>
+    <dt>Cost of products:</dt>
+      <dd>$<%= cart->total %></dd>
+    % if ( stash 'hst' ) {
+      <dt><abbr title="Harmonized Sales Tax">HST</abbr>:</dt>
+        <dd><strong>$<%= stash 'hst' %></strong></dd>
+    % }
 
-        % if ( stash 'gst' ) {
-            <dt><abbr title="Goods and Services Tax">GST</abbr>:</dt>
-                <dd><strong>$<%= stash 'gst' %></strong></dd>
-        % }
+    % if ( stash 'gst' ) {
+      <dt><abbr title="Goods and Services Tax">GST</abbr>:</dt>
+        <dd><strong>$<%= stash 'gst' %></strong></dd>
+    % }
 
-        % if ( stash 'pst' ) {
-            <dt><abbr title="Provincial Sales Tax">PST</abbr>:</dt>
-                <dd><strong>$<%= stash 'pst' %></strong></dd>
-        % }
-        <dt>Shipping charge:</dt>
-            <dd>$<%= stash 'shipping' %>
-                <small>(includes applicable taxes)</small></dd>
-        <dt>Total:</dt>
-            <dd>$<%= stash 'total_dollars'
-                %><sup>.<%= stash 'total_cents' %></sup></dd>
-    </dl>
+    % if ( stash 'pst' ) {
+      <dt><abbr title="Provincial Sales Tax">PST</abbr>:</dt>
+        <dd><strong>$<%= stash 'pst' %></strong></dd>
+    % }
+    <dt>Shipping charge:</dt>
+      <dd>$<%= stash 'shipping' %>
+        <small>(includes applicable taxes)</small></dd>
+    <dt>Total:</dt>
+      <dd>$<%= stash 'total_dollars'
+        %><sup>.<%= stash 'total_cents' %></sup></dd>
+  </dl>
 
-    <h3>Products on Order</h3>
+  <h3>Products on Order</h3>
 
-    <table>
-    <thead>
-        <tr>
-            <th>Number</th>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th>Price per unit</th>
-            <th><abbr title="Unit of Measure">UoM</abbr></th>
-        </tr>
-    </thead>
-    <tbody>
-        % for ( 1 .. @{stash('cart')||[]} ) {
-            % my $p = stash('cart')->[$_-1];
-            <tr>
-                <td><%= $p->{number} %></td>
-                <td><%= $p->{title} %></td>
-                <td><%= $p->{quantity} %></td>
-                <td><%= $p->{price} %></td>
-                <td><%= $p->{unit} %></td>
-            </tr>
-        % }
-    </tbody>
-    </table>
+  <table>
+  <thead>
+    <tr>
+      <th>Number</th>
+      <th>Name</th>
+      <th>Quantity</th>
+      <th>Price per unit</th>
+      <th><abbr title="Unit of Measure">UoM</abbr></th>
+    </tr>
+  </thead>
+  <tbody>
+    % for ( 1 .. @{stash('cart')||[]} ) {
+      % my $p = stash('cart')->[$_-1];
+      <tr>
+        <td><%= $p->{number} %></td>
+        <td><%= $p->{title} %></td>
+        <td><%= $p->{quantity} %></td>
+        <td><%= $p->{price} %></td>
+        <td><%= $p->{unit} %></td>
+      </tr>
+    % }
+  </tbody>
+  </table>
 % }
 
 % if ( @{stash('quote')} ) {
-    <h3>Quote Request</h3>
+  <h3>Quote Request</h3>
 
-    <table>
-    <thead>
-        <tr>
-            <th>Number</th>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th><abbr title="Unit of Measure">UoM</abbr></th>
-        </tr>
-    </thead>
-    <tbody>
-        % for ( 1 .. @{stash('quote')} ) {
-            % my $p = stash('quote')->[$_-1];
-            <tr>
-                <td><%= $p->{number} %></td>
-                <td><%= $p->{title} %></td>
-                <td><%= $p->{quantity} %></td>
-                <td><%= $p->{unit} %></td>
-            </tr>
-        % }
-    </tbody>
-    </table>
+  <table>
+  <thead>
+    <tr>
+      <th>Number</th>
+      <th>Name</th>
+      <th>Quantity</th>
+      <th><abbr title="Unit of Measure">UoM</abbr></th>
+    </tr>
+  </thead>
+  <tbody>
+    % for ( 1 .. @{stash('quote')} ) {
+      % my $p = stash('quote')->[$_-1];
+      <tr>
+        <td><%= $p->{number} %></td>
+        <td><%= $p->{title} %></td>
+        <td><%= $p->{quantity} %></td>
+        <td><%= $p->{unit} %></td>
+      </tr>
+    % }
+  </tbody>
+  </table>
 % }

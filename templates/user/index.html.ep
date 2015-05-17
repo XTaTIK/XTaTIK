@@ -2,17 +2,17 @@
 % title 'User Section';
 
 <ul class="btn-group-vertical list_button_group" role="group">
-    %# if ( stash('user')->{role}{users} ) {
-        <li class="btn-group" role="group"><a
-            href="/user/users"
-            type="button" class="btn btn-default">User management</a></li>
-    %# }
-    %# if ( stash('user')->{role}{products} ) {
-        <li class="btn-group" role="group"><a
-            href="/user/master-products-database"
-            type="button" class="btn btn-default">Master products
-            database</a></li>
-    %# }
+  %# if ( stash('user')->{role}{users} ) {
+    <li class="btn-group" role="group"><a
+      href="/user/users"
+      type="button" class="btn btn-default">User management</a></li>
+  %# }
+  %# if ( stash('user')->{role}{products} ) {
+    <li class="btn-group" role="group"><a
+      href="/user/master-products-database"
+      type="button" class="btn btn-default">Master products
+      database</a></li>
+  %# }
 </ul>
 
 <p><a href="/logout" type="button" class="btn btn-danger">Log out</a></p>

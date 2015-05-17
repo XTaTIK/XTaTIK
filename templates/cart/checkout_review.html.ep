@@ -2,11 +2,11 @@
 % layout 'default';
 
 <ul class="checkout_crumbs text-center">
-   <li class="col-md-15 label-success">Review products</li>
-   <li class="col-md-15 label-success">Enter contact information</li>
-   <li class="col-md-15 label-primary">Review Pricing</li>
-   <li class="col-md-15 label-default">Pay for the order</li>
-   <li class="col-md-15 label-default">Receive confirmation</li>
+  <li class="col-md-15 label-success">Review products</li>
+  <li class="col-md-15 label-success">Enter contact information</li>
+  <li class="col-md-15 label-primary">Review Pricing</li>
+  <li class="col-md-15 label-default">Pay for the order</li>
+  <li class="col-md-15 label-default">Receive confirmation</li>
 </ul>
 
 <%== stash('checkout_html') %>
