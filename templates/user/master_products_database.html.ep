@@ -22,7 +22,7 @@
       </p>
     % } else {
       <%= form_for '/user/master-products-database'
-        => method => 'POST' => begin
+        => method => 'POST' => begin()
       %>
         %= csrf_field
 
@@ -149,7 +149,7 @@
     </div>
     <div class="panel-body">
       <%= form_for '/user/master-products-database/delete'
-        => method => 'POST' => begin
+        => method => 'POST' => begin()
       %>
         %= csrf_field
         <div class="form-group">
@@ -169,7 +169,7 @@
     </div>
     <div class="panel-body">
       <%= form_for '/user/master-products-database/update'
-        => method => 'POST' => begin
+        => method => 'POST' => begin()
       %>
 
       %= csrf_field
@@ -185,32 +185,32 @@
               %= hidden_field 'id_' . $p->{id} => $p->{id}
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="number_<%= $u->{id} %>">Number:</label
+                  <label for="number_<%= $p->{id} %>">Number:</label
                   ><%= text_field 'number_' . $p->{id} => $p->{number},
                     id => 'number_' . $p->{id}, class => 'form-control'
                   %>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="image_<%= $u->{id} %>">Image:</label
+                  <label for="image_<%= $p->{id} %>">Image:</label
                   ><%= text_field 'image_' . $p->{id} => $p->{image},
                     id => 'image_' . $p->{id}, class => 'form-control'
                   %>
                 </div>
               </div>
               <div class="form-group">
-                <label for="price_<%= $u->{id} %>">Price:</label
+                <label for="price_<%= $p->{id} %>">Price:</label
                 ><%= text_field 'price_' . $p->{id} => $p->{price},
                   id => 'price_' . $p->{id}, class => 'form-control'
                 %>
               </div>
               <div class="form-group">
-                <label for="title_<%= $u->{id} %>">Title:</label
+                <label for="title_<%= $p->{id} %>">Title:</label
                 ><%= text_field 'title_' . $p->{id} => $p->{title},
                   id => 'title_' . $p->{id}, class => 'form-control'
                 %>
               </div>
               <div class="form-group">
-                <label for="description_<%= $u->{id} %>">Description:</label
+                <label for="description_<%= $p->{id} %>">Description:</label
                 ><%= text_area 'description_' . $p->{id}
                   => $p->{description}, cols => 40, rows => 5,
                   id => 'description_' . $p->{id}, class => 'form-control'
@@ -218,7 +218,7 @@
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="tip_description_<%= $u->{id} %>">Tip
+                  <label for="tip_description_<%= $p->{id} %>">Tip
                     description:</label
                   ><%= text_area
                     'tip_description_' . $p->{id} => $p->{tip_description},
@@ -228,7 +228,7 @@
                   %>
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="quote_description_<%= $u->{id} %>">Quote
+                  <label for="quote_description_<%= $p->{id} %>">Quote
                     description:</label
                   ><%= text_area 'quote_description_' . $p->{id}
                     => $p->{quote_description}, cols => 40, rows => 3,
@@ -238,14 +238,14 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="category_<%= $u->{id} %>">Category:</label
+                <label for="category_<%= $p->{id} %>">Category:</label
                 ><%= text_field 'category_' . $p->{id} => $p->{category},
                   id => 'category_' . $p->{id}, class => 'form-control'
                 %>
               </div>
               <div class="row">
                 <div class="form-group col-md-4">
-                  <label for="group_master_<%= $u->{id} %>">Group
+                  <label for="group_master_<%= $p->{id} %>">Group
                     master:</label
                   ><%= text_field 'group_master_' . $p->{id}
                     => $p->{group_master},
@@ -254,7 +254,7 @@
                   %>
                 </div>
                 <div class="form-group col-md-4">
-                  <label for="group_desc_<%= $u->{id} %>">Group
+                  <label for="group_desc_<%= $p->{id} %>">Group
                     description:</label
                   ><%= text_field 'group_desc_' . $p->{id}
                     => $p->{group_desc},
@@ -262,14 +262,14 @@
                   %>
                 </div>
                 <div class="form-group col-md-4">
-                  <label for="unit_<%= $u->{id} %>">Unit:</label
+                  <label for="unit_<%= $p->{id} %>">Unit:</label
                   ><%= text_field 'unit_' . $p->{id} => $p->{unit},
                     id => 'unit_' . $p->{id}, class => 'form-control'
                   %>
                 </div>
               </div>
               <div class="form-group">
-                <label for="recommended_<%= $u->{id} %>">Recommended
+                <label for="recommended_<%= $p->{id} %>">Recommended
                   products:</label
                 ><%= text_area 'recommended_' . $p->{id}
                   => $p->{recommended}, cols => 40, rows => 3,
