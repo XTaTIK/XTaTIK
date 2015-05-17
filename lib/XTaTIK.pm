@@ -122,6 +122,7 @@ sub startup {
         $ru->post('/master-products-database/delete')
             ->to('user#master_products_database_delete');
         $ru->get('/manage-users')->to('user#manage_users');
+        $ru->post('/manage-users/add')->to('user#add_user');
     }
 }
 
@@ -133,7 +134,9 @@ sub _helper_xtext {
 }
 
 sub _helper_users {
-    state $users = XTaTIK::Model::Users->new;
+    state $users = XTaTIK::Model::Users->new(
+        pg => $PG,
+    );
 };
 
 sub _helper_products {

@@ -2,11 +2,6 @@ package XTaTIK::Controller::User;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-my @VALID_ROLES = sort qw/
-    users
-    products
-/;
-
 sub index {}
 
 sub login {
@@ -112,11 +107,49 @@ sub master_products_database_delete {
     return $self->redirect_to('/user/master-products-database');
 }
 
-sub manage_users {
+sub manage_users {}
+
+sub add_user {
     my $self = shift;
-    $self->stash(
-        valid_roles => join(', ', @VALID_ROLES),
+
+    $self->form_checker(
+        rules => {
+            login => {
+                max => 3000,
+                code => sub {
+                    return $self->users->get_user(shift) ? 0 : 1;
+                },
+                code_error => 'User with this login already exists',
+            },
+            name  => { max => 3000 },
+            email => { max => 3000 },
+            phone => { max => 3000 },
+            roles => {
+                max => 10_000,
+                code => sub {
+                    my $v = shift =~ s/^\s+|\s+$//gr;
+                    for my $role ( split /\s*,\s*/, $v ) {
+                        return 0
+                            unless grep $role eq $_,
+                                $self->users->valid_roles;
+                    }
+                    return 1;
+                },
+                code_error => 'One of the roles you provided is not valid',
+            },
+        },
     );
+
+    return $self->render( template => 'user/manage_users' )
+        unless $self->form_checker_ok;
+
+    $self->users->add_user(
+        map +( $_ => $self->param($_) ),
+            qw/login  name  email  phone  roles/,
+    );
+
+    $self->flash( add_success => 1, );
+    $self->redirect_to('/user/manage-users');
 }
 
 1;

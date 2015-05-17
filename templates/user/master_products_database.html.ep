@@ -1,6 +1,10 @@
 % layout 'default';
 % title 'Master Products Database';
 
+<ol class="breadcrumb">
+  <li><a href="/user/">User Main</a></li>
+  <li class="active">Master Products Database</li>
+</ol>
 
 % if ( flash 'product_update_ok' ) {
   <p class="alert alert-success">Products were successfully updated.</p>

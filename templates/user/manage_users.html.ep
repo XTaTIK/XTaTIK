@@ -6,51 +6,55 @@
     <h3 class="panel-title">Add New User</h3>
   </div>
   <div class="panel-body">
-    %= form_for '/user/users' => (method => 'POST') => begin
-      <%== form_checker_error_wrapped %>
-      <div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label for="c_login">*Login:</label
-            ><%= text_field 'login' => id => 'c_login',
-              class => 'form-control' %>
+    % if ( flash 'add_success' ) {
+      <p class="alert alert-success">User was successfully added.
+        <a href="/user/manage-users">Add another one.</a>
+      </p>
+    % } else {
+      %= form_for '/user/manage-users/add' => (method => 'POST') => begin
+        <%== form_checker_error_wrapped %>
+        <div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="c_login">*Login:</label
+              ><%= text_field 'login' => id => 'c_login',
+                class => 'form-control' %>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="c_name">*Name:</label
+              ><%= text_field 'name' => id => 'c_name',
+                class => 'form-control' %>
+            </div>
           </div>
-          <div class="form-group col-md-6">
-            <label for="c_name">*Name:</label
-            ><%= text_field 'name' => id => 'c_name',
-              class => 'form-control' %>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="c_email">*Email:</label
+              ><%= text_field 'email' => id => 'c_email',
+                class => 'form-control' %>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="c_phone">*Phone:</label
+              ><%= text_field 'phone' => id => 'c_phone',
+                class => 'form-control' %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="c_roles">*Roles:</label
+              ><%= text_field 'roles' => id => 'c_roles',
+                class => 'form-control' %>
+            </div>
+            <div class="col-md-6">
+              <label>&nbsp;</label><br><!-- Bad programmer! No cookie! -->
+              <small class="alert alert-success">Valid roles are:
+                <samp><%= join(', ', $c->users->valid_roles) %></samp>
+              </small>
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label for="c_email">*Email:</label
-            ><%= text_field 'email' => id => 'c_email',
-              class => 'form-control' %>
-          </div>
-          <div class="form-group col-md-6">
-            <label for="c_phone">*Phone:</label
-            ><%= text_field 'phone' => id => 'c_phone',
-              class => 'form-control' %>
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label for="c_roles">*Roles:</label
-            ><%= text_field 'roles' => id => 'c_roles',
-              class => 'form-control' %>
-          </div>
-          <div class="col-md-6">
-            <label>&nbsp;</label><br><!-- Bad programmer! No cookie! -->
-            <small class="alert alert-success">Valid roles are:
-              <samp><%= stash('valid_roles') %></samp>
-            </small>
-          </div>
-        </div>
-      </div>
-
-      %= submit_button 'Add new user', class => 'btn btn-primary'
-
-    %= end
+        %= submit_button 'Add new user', class => 'btn btn-primary'
+      %= end
+    % }
   </div>
 </div>
 

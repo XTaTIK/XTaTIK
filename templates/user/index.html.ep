@@ -4,7 +4,7 @@
 <ul class="btn-group-vertical list_button_group" role="group">
   %# if ( stash('user')->{role}{users} ) {
     <li class="btn-group" role="group"><a
-      href="/user/users"
+      href="/user/manage-users"
       type="button" class="btn btn-default">User management</a></li>
   %# }
   %# if ( stash('user')->{role}{products} ) {
