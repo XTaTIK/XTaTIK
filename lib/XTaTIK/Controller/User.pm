@@ -2,7 +2,17 @@ package XTaTIK::Controller::User;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+my @VALID_ROLES = sort qw/
+    users
+    products
+/;
+
 sub index {}
+
+sub users {
+    my $self = shift;
+    $self->stash( valid_roles => join ', ', @VALID_ROLES );
+}
 
 sub login {
     my $self = shift;
