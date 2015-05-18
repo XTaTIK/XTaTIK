@@ -32,7 +32,7 @@ sub checkout {
 sub thank_you {
     my ( $self, $c ) = @_;
 
-    $c->redirect_to('/cart/')
+    return $c->redirect_to('/cart/')
         unless @{$c->cart->all_items};
 
     my $order_num = sprintf $c->xtext('order_number'), $c->cart->id;
