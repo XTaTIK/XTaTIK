@@ -1,5 +1,7 @@
 package XTaTIK::Controller::Root;
 
+# VERSION
+
 use Mojo::Base 'Mojolicious::Controller';
 use XTaTIK::Common qw/n_to_br/;
 

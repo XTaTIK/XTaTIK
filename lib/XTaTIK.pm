@@ -1,5 +1,7 @@
 package XTaTIK;
 
+# VERSION
+
 use Mojo::Base 'Mojolicious';
 
 use XTaTIK::Model::Cart;
@@ -193,5 +195,32 @@ sub _helper_cart_cents {
     return $cents;
 };
 
-
 1;
+
+__END__
+
+=encoding utf8
+
+=for stopwords eCommerce
+
+=head1 NAME
+
+XTaTIK - Rapidly deployable, simple eCommerce website base
+
+=head1 AUTHOR
+
+=for pod_spiffy start author section
+
+=for pod_spiffy author ZOFFIX
+
+=for text Zoffix Znet <zoffix at cpan.org>
+
+=for pod_spiffy end author section
+
+=head1 LICENSE
+
+You can use and distribute this module under the same terms as Perl itself.
+See the C<LICENSE> file included in this distribution for complete
+details.
+
+=cut

@@ -1,5 +1,7 @@
 package Mojolicious::Plugin::IP2Location;
 
+# VERSION
+
 use Mojo::Base 'Mojolicious::Plugin';
 # TODO: use IP2Location reader from CPAN
 use lib 'ip2location/ip2location-perl-7.0.0/lib';

@@ -1,5 +1,7 @@
 package XTaTIK::Model::Products;
 
+# VERSION
+
 use Mojo::Base -base;
 use Mojo::Pg;
 use File::Spec::Functions qw/catfile/;
@@ -145,7 +147,6 @@ sub get_category {
 
     my @cat_bits = split /\Q*::*\E/, $cat_line;
     splice @cat_bits, -2 if @cat_bits > 2;
-    my $unwanted_cat = join '*::*', @cat_bits;
 
     my $current_level_re = qr/\Q[$cat_line]\E/;
 

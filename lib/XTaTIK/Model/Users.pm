@@ -1,5 +1,7 @@
 package XTaTIK::Model::Users;
 
+# VERSION
+
 use Mojo::Base -base;
 use Digest;
 use MIME::Base64;

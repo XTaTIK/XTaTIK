@@ -71,6 +71,9 @@ sub load_test_products {
     $p->pg->db->query(
         'drop table if exists products'
     );
+    $p->pg->db->query(
+        'drop table if exists users'
+    );
 
     $p->pg->db->query(
         'CREATE TABLE carts (
@@ -90,6 +93,13 @@ sub load_test_products {
             phone   TEXT,
             roles   TEXT
         )'
+    );
+    $p->pg->db->query(
+        q{INSERT INTO users (login, pass, salt, name, email, phone, roles)
+            VALUES('admin',
+                '9c0b8b6275baaa1abe5492fcb83bf06e380f7219e82aa0',
+                'rw1Gl1p/4Sn540Is+o9wpw==', 'Zoffix Znet',
+                'zoffix@zoffix.com', '416-402-9999', 'products,users')}
     );
     $p->pg->db->query(
         'CREATE TABLE products (

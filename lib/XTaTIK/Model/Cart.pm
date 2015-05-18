@@ -1,5 +1,7 @@
 package XTaTIK::Model::Cart;
 
+# VERSION
+
 use Mojo::Base -base;
 use XTaTIK::Model::Products;
 use Mojo::Pg;

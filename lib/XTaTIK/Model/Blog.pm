@@ -1,5 +1,6 @@
-
 package XTaTIK::Model::Blog;
+
+# VERSION
 
 use Mojo::Base -base;
 

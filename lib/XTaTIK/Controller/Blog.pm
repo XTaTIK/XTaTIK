@@ -1,5 +1,7 @@
 package XTaTIK::Controller::Blog;
 
+# VERSION
+
 use Mojo::Base 'Mojolicious::Controller';
 
 sub index {

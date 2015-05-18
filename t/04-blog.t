@@ -24,15 +24,15 @@ dircopy 't/blog_src', 'blog_src';
         ->dive_in(' > li:first-child')
 
         ->dived_text_is(' a', 'Test Post 3')
-        ->dived_text_is(' a small', '2015-05-14')
+        ->dived_text_is(' a + small', 'Posted on 2015-05-14')
         ->element_exists(' a[href="/blog/2015-05-14-Test-Post-3"]')
 
         ->dived_text_is(' + li a', 'Test Post 2')
-        ->dived_text_is(' + li a small', '2015-05-12')
+        ->dived_text_is(' + li a + small', 'Posted on 2015-05-12')
         ->element_exists(' a[href="/blog/2015-05-12-Test-Post-2"]')
 
         ->dived_text_is(' + li + li a', 'Test Post')
-        ->dived_text_is(' + li + li a small', '2015-05-10')
+        ->dived_text_is(' + li + li a + small', 'Posted on 2015-05-10')
         ->element_exists(' a[href="/blog/2015-05-10-Test-Post"]')
 }
 

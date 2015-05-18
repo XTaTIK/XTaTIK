@@ -1,8 +1,8 @@
 package Mojolicious::Plugin::FormChecker;
 
-use Mojo::Base 'Mojolicious::Plugin';
+# VERSION
 
-our $VERSION = '1.001001'; # VERSION
+use Mojo::Base 'Mojolicious::Plugin';
 
 sub register {
     my ($self, $app) = @_;

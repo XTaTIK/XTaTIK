@@ -1,6 +1,9 @@
 package XTaTIK::Plugin::Cart::PayPal;
 
+# VERSION
+
 use Mojo::Base -base;
+use utf8;
 
 sub __cur($) {
     return sprintf '%.02f', shift;

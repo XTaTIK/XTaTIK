@@ -1,5 +1,6 @@
 package XTaTIK::Common;
 
+# VERSION
 
 require Exporter;
 @ISA = qw(Exporter);

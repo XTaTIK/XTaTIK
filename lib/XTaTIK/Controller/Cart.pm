@@ -1,5 +1,7 @@
 package XTaTIK::Controller::Cart;
 
+# VERSION
+
 use Mojo::Base 'Mojolicious::Controller';
 
 use experimental 'postderef';
