@@ -1,6 +1,19 @@
 % layout 'default';
 % title 'User Management';
 
+<ol class="breadcrumb">
+  <li><a href="/user/">User Main</a></li>
+  <li class="active">User Management</li>
+</ol>
+
+% if ( flash 'users_update_ok' ) {
+  <p class="alert alert-success">User update was successfully saved.</p>
+% }
+% if ( flash 'users_delete_ok' ) {
+  <p class="alert alert-success">Provided users were
+      successfully deleted.</p>
+% }
+
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Add New User</h3>
@@ -21,8 +34,8 @@
                 class => 'form-control' %>
             </div>
             <div class="form-group col-md-6">
-              <label for="c_name">*Name:</label
-              ><%= text_field 'name' => id => 'c_name',
+              <label for="c_pass">*Password:</label
+              ><%= password_field 'pass' => id => 'c_pass',
                 class => 'form-control' %>
             </div>
           </div>
@@ -39,16 +52,23 @@
             </div>
           </div>
           <div class="row">
+            <div class="col-md-12">
+              <p class="alert alert-success">
+                Valid roles are:
+                <samp><%= join(', ', $c->users->valid_roles) %></samp>
+              </p>
+            </div>
+          </div>
+          <div class="row">
             <div class="form-group col-md-6">
               <label for="c_roles">*Roles:</label
               ><%= text_field 'roles' => id => 'c_roles',
                 class => 'form-control' %>
             </div>
-            <div class="col-md-6">
-              <label>&nbsp;</label><br><!-- Bad programmer! No cookie! -->
-              <small class="alert alert-success">Valid roles are:
-                <samp><%= join(', ', $c->users->valid_roles) %></samp>
-              </small>
+            <div class="form-group col-md-6">
+              <label for="c_name">*Name:</label
+              ><%= text_field 'name' => id => 'c_name',
+                class => 'form-control' %>
             </div>
           </div>
         </div>
@@ -66,7 +86,7 @@
       <h3 class="panel-title">Delete Users</h3>
     </div>
     <div class="panel-body">
-      %= form_for '/user/users/delete' => ( method => 'POST' ) => begin
+      %= form_for '/user/manage-users/delete' => method => 'POST' => begin
         %= csrf_field
         <div class="form-group">
           <label for="email">List of users delete:</label>
@@ -84,7 +104,7 @@
       <h3 class="panel-title">Update Users</h3>
     </div>
     <div class="panel-body">
-      %= form_for '/user/users/update' => ( method => 'POST' ) => begin
+      %= form_for '/user/manage-users/update' => method => 'POST' => begin
 
       %= csrf_field
 

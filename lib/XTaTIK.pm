@@ -123,6 +123,8 @@ sub startup {
             ->to('user#master_products_database_delete');
         $ru->get('/manage-users')->to('user#manage_users');
         $ru->post('/manage-users/add')->to('user#add_user');
+        $ru->post('/manage-users/update')->to('user#update_users');
+        $ru->post('/manage-users/delete')->to('user#delete_users');
     }
 }
 

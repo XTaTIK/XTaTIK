@@ -12,7 +12,8 @@ sub login {
         $self->redirect_to('user/index');
     }
     else {
-        $self->stash( is_login_failed => 1 );
+        $self->flash( is_login_failed => 1 );
+        $self->redirect_to('/login');
     }
 }
 
@@ -107,7 +108,13 @@ sub master_products_database_delete {
     return $self->redirect_to('/user/master-products-database');
 }
 
-sub manage_users {}
+sub manage_users {
+    my $self = shift;
+
+    $self->stash(
+        users => $self->users->get_all,
+    );
+}
 
 sub add_user {
     my $self = shift;
@@ -117,7 +124,7 @@ sub add_user {
             login => {
                 max => 3000,
                 code => sub {
-                    return $self->users->get_user(shift) ? 0 : 1;
+                    return $self->users->get(shift) ? 0 : 1;
                 },
                 code_error => 'User with this login already exists',
             },
@@ -143,13 +150,40 @@ sub add_user {
     return $self->render( template => 'user/manage_users' )
         unless $self->form_checker_ok;
 
-    $self->users->add_user(
+    $self->users->add(
         map +( $_ => $self->param($_) ),
             qw/login  name  email  phone  roles/,
     );
 
     $self->flash( add_success => 1, );
     $self->redirect_to('/user/manage-users');
+}
+
+sub update_users {
+    my $self = shift;
+
+    # TODO: implement parameter checking for each user we're updating
+
+    my @ids = map /\d+/g, grep /^id/, @{$self->req->body_params->names};
+
+    for my $id ( @ids ) {
+        $self->users->update(
+            $id,
+            map +( $_ => $self->param( $_ . '_' . $id ) ),
+                qw/login  name  email  phone  roles/,
+        );
+    }
+
+    $self->flash( users_update_ok => 1 );
+    return $self->redirect_to('/user/manage-users');
+}
+
+sub delete_users {
+    my $self = shift;
+    $self->users->delete( $_ ) for split ' ', $self->param('to_delete');
+
+    $self->flash( users_delete_ok => 1 );
+    return $self->redirect_to('/user/manage-users');
 }
 
 1;

@@ -83,13 +83,14 @@ sub load_test_products {
         'CREATE TABLE users (
             id      SERIAL PRIMARY KEY,
             login   TEXT,
+            pass    TEXT,
+            salt    TEXT,
             name    TEXT,
             email   TEXT,
             phone   TEXT,
             roles   TEXT
         )'
     );
-    $p->pg
     $p->pg->db->query(
         'CREATE TABLE products (
             id            SERIAL PRIMARY KEY,
