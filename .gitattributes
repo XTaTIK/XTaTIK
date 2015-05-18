@@ -1,2 +1,3 @@
 *.pm linguist-language=Perl
+*.ep linguist-language=HTML
 *.scss linguist-language=SCSS
