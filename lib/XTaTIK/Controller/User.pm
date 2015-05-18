@@ -7,8 +7,15 @@ sub index {}
 sub login {
     my $self = shift;
 
-    if ( $self->users->check( $self->param('login'), $self->param('pass') ) ) {
-        $self->session( is_logged_in => 1 );
+    my $user = $self->users->check(
+        $self->param('login'), $self->param('pass')
+    );
+
+    if ( $user ) {
+        $self->session(
+            is_logged_in => 1,
+            user         => $user,
+        );
         $self->redirect_to('user/index');
     }
     else {
@@ -152,7 +159,7 @@ sub add_user {
 
     $self->users->add(
         map +( $_ => $self->param($_) ),
-            qw/login  name  email  phone  roles/,
+            qw/login  pass  name  email  phone  roles/,
     );
 
     $self->flash( add_success => 1, );

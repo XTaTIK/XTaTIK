@@ -160,7 +160,7 @@
                 <div class="col-md-6">
                   <label>&nbsp;</label><br><!-- Bad programmer! No cookie! -->
                   <small class="alert alert-success">Valid roles are:
-                    <samp><%= stash('valid_roles') %></samp>
+                    <samp><%= join(', ', $c->users->valid_roles) %></samp>
                   </small>
                 </div>
               </div>
