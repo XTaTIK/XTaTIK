@@ -9,6 +9,9 @@
   % }
   % if ( session('user')->{roles}{products} ) {
     <li class="btn-group" role="group"><a
+      href="/user/hot-products"
+      type="button" class="btn btn-default">Hot products</a></li>
+    <li class="btn-group" role="group"><a
       href="/user/master-products-database"
       type="button" class="btn btn-default">Master products
       database</a></li>

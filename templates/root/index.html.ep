@@ -1,2 +1,20 @@
 % layout 'default';
 % stash active_page => 'home';
+
+
+% if ( @{stash('hot_products')} ) {
+  <h3>Hot Products</h3>
+  <ul id="hot_products" class="clearfix">
+    % for ( @{stash('hot_products')} ) {
+        <li class="col-md-3">
+          <div class="well well-sm">
+            <a href="/product/<%= $_->{url} %>"><img src="/content-pics/products/<%= $_->{image} %>" alt="" class="thumbnail img-responsive"></a>
+
+            <a href="/product/<%= $_->{url} %>">
+              <%= $_->{title} %>
+            </a>
+          </div>
+        </li>
+    % }
+  </ul>
+% }

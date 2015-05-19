@@ -5,12 +5,23 @@ package XTaTIK::Controller::Root;
 use Mojo::Base 'Mojolicious::Controller';
 use XTaTIK::Common qw/n_to_br/;
 
-sub index   {}
 sub about   {}
 sub history {}
 sub login   {}
 sub contact {}
 sub feedback{}
+
+sub index   {
+    my $self = shift;
+
+    $self->stash(
+        hot_products => [
+            $self->products->get_by_number(
+                split /\n/, $self->xvar('hot_products')
+            )
+        ],
+    );
+}
 
 sub products_category {
     my $self = shift;

@@ -84,7 +84,9 @@ sub load_test_products {
         )'
     );
     $p->pg->db->query(
-        'INSERT INTO xvars (name, value) VALUES ("hot_products", "")'
+        'INSERT INTO xvars (name, value) VALUES (?, ?)',
+        'hot_products',
+        "001-TEST1\n001-TEST3\n001-TEST6",
     );
     $p->pg->db->query(
         'CREATE TABLE carts (

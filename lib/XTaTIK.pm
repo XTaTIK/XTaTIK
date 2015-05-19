@@ -8,6 +8,7 @@ use XTaTIK::Model::Cart;
 use XTaTIK::Model::Products;
 use XTaTIK::Model::Users;
 use XTaTIK::Model::Blog;
+use XTaTIK::Model::XVars;
 
 use HTML::Entities;
 use Mojo::Pg;
@@ -129,6 +130,7 @@ sub startup {
         $ru->post('/manage-users/update')->to('user#update_users');
         $ru->post('/manage-users/delete')->to('user#delete_users');
         $ru->get('/hot-products')->to('user#hot_products');
+        $ru->post('/hot-products')->to('user#hot_products_post');
     }
 }
 

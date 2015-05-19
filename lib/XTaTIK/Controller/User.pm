@@ -195,4 +195,17 @@ sub delete_users {
     return $self->redirect_to('/user/manage-users');
 }
 
+sub hot_products {
+    my $self = shift;
+    $self->param( hot_products => $self->xvar('hot_products') );
+}
+
+sub hot_products_post {
+    my $self = shift;
+
+    $self->xvar('hot_products', $self->param('hot_products'));
+    $self->stash( update_success => 1, );
+    $self->render('user/hot_products');
+}
+
 1;

@@ -29,17 +29,17 @@ sub _generic {
     my ( $self, $var, $value ) = @_;
 
     if ( defined $value ) {
-        return $db->query(
+        return $self->pg->db->query(
             'UPDATE xvars SET value = ? WHERE name = ?',
             $value,
             $var,
         );
     }
 
-    return $db->query(
+    return $self->pg->db->query(
         'SELECT value FROM xvars WHERE name = ?',
         $var,
-    );
+    )->hash->{value};
 }
 
 1;
