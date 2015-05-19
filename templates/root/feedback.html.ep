@@ -1,4 +1,4 @@
-v% layout 'default';
+% layout 'default';
 % title 'Site Feedback';
 % stash active_page => 'feedback';
 
