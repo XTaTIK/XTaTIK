@@ -59,7 +59,7 @@ sub thank_you {
     eval { # eval, since we don't know what address we're trying to send to
         $c->mail(
             test     => $c->config('mail')->{test},
-            to       => $c->config('mail')->{to}{order},
+            to       => $c->session('customer_data')->{email},
             from     => $c->config('mail')->{from}{order},
             subject  => $c->stash('title'),
             type     => 'text/html',
