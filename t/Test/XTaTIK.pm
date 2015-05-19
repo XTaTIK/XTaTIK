@@ -74,7 +74,18 @@ sub load_test_products {
     $p->pg->db->query(
         'drop table if exists users'
     );
-
+    $p->pg->db->query(
+        'drop table if exists xvars'
+    );
+    $p->pg->db->query(
+        'CREATE TABLE xvars (
+            name TEXT,
+            value TEXT
+        )'
+    );
+    $p->pg->db->query(
+        'INSERT INTO xvars (name, value) VALUES ("hot_products", "")'
+    );
     $p->pg->db->query(
         'CREATE TABLE carts (
             id            SERIAL PRIMARY KEY,

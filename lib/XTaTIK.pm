@@ -64,6 +64,7 @@ sub startup {
     $self->session( expiration => 60*60*24*7 );
 
     $self->helper( xtext        => \&_helper_xtext        );
+    $self->helper( xvar         => \&_helper_xvar         );
     $self->helper( users        => \&_helper_users        );
     $self->helper( products     => \&_helper_products     );
     $self->helper( cart         => \&_helper_cart         );
@@ -127,6 +128,7 @@ sub startup {
         $ru->post('/manage-users/add')->to('user#add_user');
         $ru->post('/manage-users/update')->to('user#update_users');
         $ru->post('/manage-users/delete')->to('user#delete_users');
+        $ru->get('/hot-products')->to('user#hot_products');
     }
 }
 
@@ -136,6 +138,18 @@ sub _helper_xtext {
     my ( $c, $var ) = @_;
     return $c->config('text')->{ $var };
 }
+
+sub _helper_xvar {
+    my ( $c, $var, $value ) = @_;
+    state $xvars = XTaTIK::Model::XVars->new(pg => $PG);
+
+    if ( defined $value ) {
+        $xvars->set($var, $value);
+    }
+    else {
+        return $xvars->get($var);
+    }
+};
 
 sub _helper_users {
     state $users = XTaTIK::Model::Users->new(
