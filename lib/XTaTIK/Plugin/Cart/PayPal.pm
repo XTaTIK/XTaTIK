@@ -136,15 +136,6 @@ sub __costs {
     );
 }
 
-sub _template_email {
-    return <<'END_HTML';
-% layout 'email';
-% title 'Quicknote Message';
-
-<p></p>
-END_HTML
-}
-
 sub _template_thank_you {
     return <<'END_HTML';
 
