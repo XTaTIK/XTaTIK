@@ -208,4 +208,9 @@ sub hot_products_post {
     $self->render('user/hot_products');
 }
 
+sub quotes {
+    my $self = shift;
+    $self->stash( quotes => $self->quotes->all );
+}
+
 1;

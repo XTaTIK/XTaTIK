@@ -20,14 +20,6 @@ sub checkout {
         custom        => $custom,
         __costs($c),
     );
-    $c->session(
-        customer_data => {
-            map +( $_ => $c->param($_) ), qw/
-                address1  address2  city  email
-                lname  name  phone  promo_code  province  zip
-            /
-        },
-    );
 
     return $c->render_to_string( inline => $self->_template_checkout );
 }
@@ -42,6 +34,12 @@ sub thank_you {
     my $quote_num = sprintf $c->xtext('quote_number'), $c->cart->id;
 
     my ( $cart, $quote ) = $c->cart->all_items_cart_quote;
+    $c->cart->submit(
+        map +( $_ => $c->session('customer_data')->{$_} ),
+            qw/address1  address2  city  email  lname  name  phone
+                province  zip/
+    );
+
     my $cart_title  = @$cart  ? "Order #$order_num " : '';
     my $quote_title = @$quote ? "Quote #$quote_num " : '';
     $c->stash(
@@ -86,7 +84,8 @@ sub thank_you {
         data    => $c->render_to_string('email-templates/order-to-company'),
     );
 
-    # TODO: there's gotta be a nicer way of doing this:
+    # TODO: there's gotta be a nicer way of doing this...
+    # ... maybe stuff it into ->submit()
     $c->stash(__cart => undef);
     $c->session(cart_id => undef);
     $c->cart;

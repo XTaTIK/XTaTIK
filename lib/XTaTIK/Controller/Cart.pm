@@ -76,6 +76,15 @@ sub checkout {
 sub checkout_review {
     my $self = shift;
 
+    $self->session(
+        customer_data => {
+            map +( $_ => $self->param($_) ), qw/
+                address1  address2  city  email
+                lname  name  phone  promo_code  province  zip
+            /
+        },
+    );
+
     my ( $cart ) = $self->cart->all_items_cart_quote;
     @$cart or $self->redirect_to('/cart/thank-you');
 

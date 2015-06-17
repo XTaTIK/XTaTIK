@@ -5,6 +5,7 @@ package XTaTIK;
 use Mojo::Base 'Mojolicious';
 
 use XTaTIK::Model::Cart;
+use XTaTIK::Model::Quotes;
 use XTaTIK::Model::Products;
 use XTaTIK::Model::Users;
 use XTaTIK::Model::Blog;
@@ -68,6 +69,7 @@ sub startup {
     $self->helper( xvar         => \&_helper_xvar         );
     $self->helper( users        => \&_helper_users        );
     $self->helper( products     => \&_helper_products     );
+    $self->helper( quotes       => \&_helper_quotes       );
     $self->helper( cart         => \&_helper_cart         );
     $self->helper( cart_dollars => \&_helper_cart_dollars );
     $self->helper( cart_cents   => \&_helper_cart_cents   );
@@ -131,6 +133,7 @@ sub startup {
         $ru->post('/manage-users/delete')->to('user#delete_users');
         $ru->get('/hot-products')->to('user#hot_products');
         $ru->post('/hot-products')->to('user#hot_products_post');
+        $ru->get('/quotes')->to('user#quotes');
     }
 }
 
@@ -166,6 +169,13 @@ sub _helper_products {
         pg => $PG,
         custom_cat_sorting => $c->config('custom_cat_sorting'),
     );
+};
+
+sub _helper_quotes {
+    my $c = shift;
+
+    state $quotes = XTaTIK::Model::Quotes->new( pg => $PG );
+    return $quotes;
 };
 
 sub _helper_cart {

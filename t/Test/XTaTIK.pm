@@ -69,6 +69,9 @@ sub load_test_products {
         'drop table if exists carts'
     );
     $p->pg->db->query(
+        'drop table if exists quotes'
+    );
+    $p->pg->db->query(
         'drop table if exists products'
     );
     $p->pg->db->query(
@@ -90,9 +93,25 @@ sub load_test_products {
     );
     $p->pg->db->query(
         'CREATE TABLE carts (
-            id            SERIAL PRIMARY KEY,
-            created_on INT,
-            data TEXT
+            id          SERIAL PRIMARY KEY,
+            created_on  INT,
+            data        TEXT
+        )'
+    );
+    $p->pg->db->query(
+        'CREATE TABLE quotes (
+            id          TEXT,
+            created_on  INT,
+            contents    TEXT,
+            name        TEXT,
+            lname       TEXT,
+            email       TEXT,
+            phone       TEXT,
+            address1    TEXT,
+            address2    TEXT,
+            city        TEXT,
+            province    TEXT,
+            zip         TEXT
         )'
     );
     $p->pg->db->query(
@@ -112,7 +131,8 @@ sub load_test_products {
             VALUES('admin',
                 '9c0b8b6275baaa1abe5492fcb83bf06e380f7219e82aa0',
                 'rw1Gl1p/4Sn540Is+o9wpw==', 'Zoffix Znet',
-                'zoffix@zoffix.com', '416-402-9999', 'products,users')}
+                'zoffix@zoffix.com', '416-402-9999',
+                'products,users,quotes')}
     );
     $p->pg->db->query(
         'CREATE TABLE products (

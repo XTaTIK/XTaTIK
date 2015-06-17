@@ -2,6 +2,11 @@
 % title 'User Section';
 
 <ul class="btn-group-vertical list_button_group" role="group">
+  % if ( session('user')->{roles}{quotes} ) {
+    <li class="btn-group" role="group"><a
+      href="/user/quotes"
+      type="button" class="btn btn-default">Quotes</a></li>
+  % }
   % if ( session('user')->{roles}{users} ) {
     <li class="btn-group" role="group"><a
       href="/user/manage-users"

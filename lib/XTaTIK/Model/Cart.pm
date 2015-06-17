@@ -4,6 +4,7 @@ package XTaTIK::Model::Cart;
 
 use Mojo::Base -base;
 use XTaTIK::Model::Products;
+use XTaTIK::Model::Quote;
 use Mojo::Pg;
 use JSON::Meth;
 
@@ -24,7 +25,8 @@ sub new_cart {
 
     $self->id(
         $self->pg->db->query(
-            'INSERT INTO carts (created_on, data) VALUES (?, ?)
+            'INSERT INTO carts (created_on, data)
+                    VALUES (?, ?)
                 RETURNING id',
             time(),
             $Blank_Cart_Data->$j,
@@ -131,13 +133,31 @@ sub load {
     return 1;
 }
 
+sub submit {
+    my $self = shift;
+    my %customer_data = @_;
+
+    my $id = $self->id or die "MISSING CART ID on submit";
+
+    my @quote_products = map +{ q => $_->{q}, n => $_->{n}, },
+        grep $_->{price} == 0, $self->contents->@*;
+    return unless @quote_products;
+
+    $quote_products[$_]{o} = $_ for 0 .. $#quote_products;
+
+    my $quote = XTaTIK::Model::Quote->new( pg => $self->pg );
+    $quote->new_quote( $id )->contents(\@quote_products);
+    $quote->$_( $customer_data{$_} ) for keys %customer_data;
+    $quote->save;
+    return 1;
+}
+
 sub save {
     my $self = shift;
 
     return unless $self->_is_modified;
 
-    my $id = $self->id
-        or die "MISSING CART ID on save";
+    my $id = $self->id or die "MISSING CART ID on save";
 
     $self->pg->db->query(
         'UPDATE "carts" SET "data" = ? WHERE "id" = ?',
