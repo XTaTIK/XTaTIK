@@ -19,13 +19,17 @@ sub all {
 
     my $db_data = $self->pg->db->query('SELECT * FROM quotes')->hashes;
     my @quotes;
+
     for my $row ( @$db_data ) {
         my $q = XTaTIK::Model::Quote->new;
         $q->$_( $row->{$_} ) for $q->accessors;
-        $q->contents( $row->{contents}->$j );
+        $q->contents( ($row->{contents}//'[]')->$j );
+        push @quotes, $q;
     }
 
     return \@quotes;
 }
+
+1;
 
 __END__

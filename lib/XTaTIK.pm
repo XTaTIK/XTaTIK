@@ -133,7 +133,7 @@ sub startup {
         $ru->post('/manage-users/delete')->to('user#delete_users');
         $ru->get('/hot-products')->to('user#hot_products');
         $ru->post('/hot-products')->to('user#hot_products_post');
-        $ru->get('/quotes')->to('user#quotes');
+        $ru->get('/quotes')->to('user#quotes_handler');
     }
 }
 
