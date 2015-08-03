@@ -170,7 +170,7 @@ sub load_test_products {
             group_master  url  id
         /};
         $_->{category} =~ s/\W/ /g;
-        $s->add( $id, join ' ', grep length, values $_ );
+        $s->add( $id, join ' ', grep length, values %$_ );
     }
 }
 

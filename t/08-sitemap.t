@@ -24,4 +24,5 @@ use Mojo::DOM;
             'content is sane',
         );
 }
+
 done_testing();
