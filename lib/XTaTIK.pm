@@ -143,7 +143,10 @@ sub startup {
 #### HELPERS
 
 sub _helper_xtext {
-    my ( $c, $var ) = @_;
+    my ( $c, $var, $v ) = @_;
+    $c->config('text')->{ $var } = $v
+        if @_ == 3;
+
     return $c->config('text')->{ $var };
 }
 
