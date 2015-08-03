@@ -116,4 +116,30 @@ sub feedback_post {
     return $self->render( template => 'root/feedback' );
 }
 
+sub sitemap {
+    my $self = shift;
+
+    $self->stash(
+        urls => [
+            map +{
+                freq => 'weekly',
+                priority => '0.9',
+                url => $self->xtext('website_proto')
+                    . '://'
+                    . $self->xtext('website_domain')
+                    . $_,
+            }, qw{
+                /
+                /blog
+                /history
+                /about
+                /contact
+            },
+            ( map '/blog/' . $_->{url}, @{$self->blog->brief_list   ||[]}),
+            map '/product/' . $_->{url}, @{ $self->products->get_all||[] },
+        ],
+    );
+}
+
 1;
+
