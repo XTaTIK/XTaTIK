@@ -72,10 +72,18 @@ sub master_products_database_post {
     }
 
     $self->stash( product_add_ok => 1 );
-    $self->products->add(
+    my $id = $self->products->add(
         map +( $_ => $self->param( $_ ) ),
             qw/number  image  title  category  group_master
                     group_desc unit description  tip_description  quote_description recommended/,
+    );
+
+    $self->product_search->add(
+        $id,
+        join ' ', grep length, $self->param('category') =~ s/\W/ /gr,
+            map $self->param( $_ ),
+            qw/number group_desc  title description
+                tip_description quote_description/
     );
 
     $self->render( template => 'user/master_products_database');
@@ -97,6 +105,16 @@ sub master_products_database_update {
             qw/number  image  title  category  group_master
                     group_desc unit description  tip_description  quote_description recommended  price/,
         );
+
+        # Update search index
+        $self->product_search->delete( $id );
+        $self->product_search->add(
+            $id,
+            join ' ', grep length, $self->param('category') =~ s/\W/ /gr,
+                map $self->param( $_ ),
+                qw/number group_desc  title category description
+                    tip_description quote_description/
+        );
     }
 
     $self->flash( product_update_ok => 1 );
@@ -111,7 +129,8 @@ sub master_products_database_delete {
     return $self->render(text => 'Bad CSRF token!', status => 403)
         if $self->validation->csrf_protect->has_error('csrf_token');
 
-    $self->products->delete( split ' ', $self->param('to_delete') );
+    $self->product_search->delete( $_ )
+        for $self->products->delete( split ' ', $self->param('to_delete') );
 
     $self->flash( product_delete_ok => 1 );
     return $self->redirect_to('/user/master-products-database');

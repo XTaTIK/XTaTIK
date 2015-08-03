@@ -5,6 +5,7 @@ use Carp;
 use File::Copy;
 use Mojo::Pg;
 use XTaTIK::Model::Products;
+use XTaTIK::Model::ProductSearch;
 
 my $secret = do 'secret.txt' or die "Failed to load secret.txt: $! $@";
 my $PG_URL = $secret->{pg_url};
@@ -38,6 +39,12 @@ sub load_test_products {
     my ( $self, $products_to_load ) = @_;
     $products_to_load
         or croak 'Must provide test products';
+
+    unlink qw{
+        search_index/ixd.bdb
+        search_index/ixp.bdb
+        search_index/ixw.bdb
+    };
 
     for my $idx ( 0..$#$products_to_load ) {
         my $p = $products_to_load->[$idx];
@@ -154,7 +161,17 @@ sub load_test_products {
         );'
     );
     $p->pg->db->query('DELETE FROM "products"');
-    $p->add( %$_ ) for @$products_to_load;
+
+    my $s = XTaTIK::Model::ProductSearch->new;
+    for ( @$products_to_load ) {
+        my $id = $p->add( %$_ );
+
+        delete @$_{qw/price  onprice  unit  recommended  image
+            group_master  url  id
+        /};
+        $_->{category} =~ s/\W/ /g;
+        $s->add( $id, join ' ', grep length, values $_ );
+    }
 }
 
 

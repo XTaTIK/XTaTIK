@@ -9,6 +9,7 @@ use XTaTIK::Model::Quotes;
 use XTaTIK::Model::Products;
 use XTaTIK::Model::Users;
 use XTaTIK::Model::Blog;
+use XTaTIK::Model::ProductSearch;
 use XTaTIK::Model::XVars;
 
 use HTML::Entities;
@@ -65,14 +66,15 @@ sub startup {
 
     $self->session( expiration => 60*60*24*7 );
 
-    $self->helper( xtext        => \&_helper_xtext        );
-    $self->helper( xvar         => \&_helper_xvar         );
-    $self->helper( users        => \&_helper_users        );
-    $self->helper( products     => \&_helper_products     );
-    $self->helper( quotes       => \&_helper_quotes       );
-    $self->helper( cart         => \&_helper_cart         );
-    $self->helper( cart_dollars => \&_helper_cart_dollars );
-    $self->helper( cart_cents   => \&_helper_cart_cents   );
+    $self->helper( xtext          => \&_helper_xtext          );
+    $self->helper( xvar           => \&_helper_xvar           );
+    $self->helper( users          => \&_helper_users          );
+    $self->helper( products       => \&_helper_products       );
+    $self->helper( quotes         => \&_helper_quotes         );
+    $self->helper( cart           => \&_helper_cart           );
+    $self->helper( cart_dollars   => \&_helper_cart_dollars   );
+    $self->helper( cart_cents     => \&_helper_cart_cents     );
+    $self->helper( product_search => \&_helper_product_search );
     $self->helper(
         blog => sub { state $blog = XTaTIK::Model::Blog->new; }
     );
@@ -87,6 +89,7 @@ sub startup {
         $r->get('/'        )->to('root#index'        );
         $r->get('/contact' )->to('root#contact'      );
         $r->get('/about'   )->to('root#about'        );
+        $r->get('/search'  )->to('search#search'     );
         $r->get('/history' )->to('root#history'      );
         $r->get('/login'   )->to('root#login'        );
         $r->post('/contact')->to('root#contact_post' );
@@ -160,6 +163,10 @@ sub _helper_users {
     state $users = XTaTIK::Model::Users->new(
         pg => $PG,
     );
+};
+
+sub _helper_product_search {
+    state $search = XTaTIK::Model::ProductSearch->new;
 };
 
 sub _helper_products {

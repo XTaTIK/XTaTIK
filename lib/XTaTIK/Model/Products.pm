@@ -34,6 +34,23 @@ sub get_by_number {
     return wantarray ? @$result : $result->[0];
 }
 
+sub get_by_id {
+    my $self = shift;
+    my @ids = @_;
+
+    return unless @ids;
+
+    my $result = $self->pg->db->query(
+        'SELECT * FROM products WHERE id IN (' .
+                ( join ',', ('?')x@ids )
+            . ')',
+        @ids,
+    )->hashes;
+
+    $result = $self->_process_products( $result );
+    return wantarray ? @$result : $result->[0];
+}
+
 sub get_by_url {
     my $self = shift;
     my $url  = shift;
@@ -53,20 +70,19 @@ sub add {
 
     for ( keys %values ) { length $values{$_} or delete $values{$_} }
 
-    $self->pg->db->query(
+    return $self->pg->db->query(
         'INSERT INTO "products" ("number", "image", "title",
                 "category", "group_master", "group_desc",
                 "unit", "description", "tip_description",
                 "quote_description", "recommended", "price",
                 "onprice", "url")
-            VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?, ?, ?)',
+            VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?, ?, ?)
+                RETURNING id',
         @values{qw/number  image  title  category  group_master
                     group_desc unit description  tip_description  quote_description recommended  price
                         ONprice/},
         $url,
-    );
-
-    return 1;
+    )->hash->{id};
 }
 
 sub delete {
@@ -75,14 +91,12 @@ sub delete {
 
     s/^\s+|\s+$//g for @to_delete;
 
-    $self->pg->db->query(
+    return $self->pg->db->query(
         'DELETE FROM "products" WHERE "number" IN(' .
                 (join ',', ('?')x@to_delete )
-            .');',
+            .') RETURNING id',
         @to_delete,
-    );
-
-    return 1;
+    )->hashes->map(sub { $_->{id} });
 }
 
 sub update {
