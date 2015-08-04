@@ -1,7 +1,6 @@
 % layout 'default';
 % stash active_page => 'home';
 
-<%= config('site') %>
 % if ( @{stash('hot_products')} ) {
   <h3>Hot Products</h3>
   <ul id="hot_products" class="clearfix">

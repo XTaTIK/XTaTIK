@@ -11,6 +11,8 @@ use XTaTIK::Model::Users;
 use XTaTIK::Model::Blog;
 use XTaTIK::Model::ProductSearch;
 use XTaTIK::Model::XVars;
+use File::Find::Rule;
+use File::Spec::Functions qw/catfile/;
 
 use HTML::Entities;
 use Mojo::Pg;
@@ -31,6 +33,8 @@ sub startup {
     $self->plugin('IP2Location');
     $self->plugin('AssetPack');
 
+    my $silo_path = catfile 'silo', $self->config('site');
+
     $self->asset(
         'app.css' => qw{
         /CSS/reset.scss
@@ -38,7 +42,9 @@ sub startup {
         /CSS/bs-callout.scss
         /CSS/bootstrap-extras.scss
         /CSS/main.scss
-        }
+        },
+        map catfile('..', $_), File::Find::Rule->name('*.css', '*.scss')
+            ->in( catfile($silo_path, 'CSS') ),
     );
 
     $self->asset(
@@ -47,6 +53,7 @@ sub startup {
         http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js
         /JS/ie10-viewport-bug-workaround.js
         },
+        File::Find::Rule->name('*.js')->in( catfile($silo_path, 'JS') ),
     );
 
     my $mconf = {
