@@ -5,6 +5,7 @@ package XTaTIK::Model::Products;
 use Mojo::Base -base;
 use Mojo::Pg;
 use Carp;
+$Carp::CarpLevel = 1;
 use File::Spec::Functions qw/catfile/;
 use List::AllUtils qw/uniq/;
 use List::UtilsBy qw/sort_by  extract_by/;
@@ -131,11 +132,15 @@ sub update {
 
 sub get_all {
     my $self = shift;
+    my $site = shift;
 
     return $self->_process_products(
         $self->pg->db->query(
-            'SELECT * FROM "products" WHERE sites ~ ? ORDER BY "number"',
-            '(^|,)' . quotemeta($self->site) . '(,|$)',
+            $site eq '*' ? 'SELECT * FROM "products" ORDER BY "number"'
+            : (
+               'SELECT * FROM "products" WHERE sites ~ ? ORDER BY "number"',
+               '(^|,)' . quotemeta($self->site) . '(,|$)',
+            )
         )->hashes
     );
 }

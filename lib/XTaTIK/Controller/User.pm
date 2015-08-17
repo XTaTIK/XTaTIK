@@ -41,7 +41,8 @@ sub is_logged_in {
 
 sub master_products_database {
     my $self = shift;
-    $self->stash( products => $self->products->get_all );
+
+    $self->stash( products => $self->products->get_all('*') );
 }
 
 sub master_products_database_post {
