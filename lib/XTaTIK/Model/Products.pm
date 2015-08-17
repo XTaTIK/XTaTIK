@@ -4,12 +4,13 @@ package XTaTIK::Model::Products;
 
 use Mojo::Base -base;
 use Mojo::Pg;
+use Carp;
 use File::Spec::Functions qw/catfile/;
 use List::AllUtils qw/uniq/;
 use List::UtilsBy qw/sort_by  extract_by/;
 use Scalar::Util qw/blessed/;
 
-has [qw/pg  pricing_region  custom_cat_sorting/];
+has [qw/pg  pricing_region  custom_cat_sorting  site/];
 
 sub exists {
     my $self    = shift;
@@ -24,9 +25,10 @@ sub get_by_number {
     return unless @numbers;
 
     my $result = $self->pg->db->query(
-        'SELECT * FROM "products" WHERE "number" IN (' .
+        'SELECT * FROM "products" WHERE sites ~ ? AND "number" IN (' .
                 ( join ',', ('?')x@numbers )
             . ')',
+        '(^|,)' . quotemeta($self->site) . '(,|$)',
         @numbers,
     )->hashes;
 
@@ -41,9 +43,10 @@ sub get_by_id {
     return unless @ids;
 
     my $result = $self->pg->db->query(
-        'SELECT * FROM products WHERE id IN (' .
+        'SELECT * FROM products WHERE sites ~ ? AND id IN (' .
                 ( join ',', ('?')x@ids )
             . ')',
+        '(^|,)' . quotemeta($self->site) . '(,|$)',
         @ids,
     )->hashes;
 
@@ -56,7 +59,8 @@ sub get_by_url {
     my $url  = shift;
 
     my $product = $self->pg->db->query(
-            'SELECT * FROM "products" WHERE "url" = ?',
+            'SELECT * FROM "products" WHERE sites ~ ? AND "url" = ?',
+            '(^|,)' . quotemeta($self->site) . '(,|$)',
             $url,
         )->hash;
 
@@ -70,16 +74,18 @@ sub add {
 
     for ( keys %values ) { length $values{$_} or delete $values{$_} }
 
+    $values{sites} //= 'default';
+
     return $self->pg->db->query(
         'INSERT INTO "products" ("number", "image", "title",
                 "category", "group_master", "group_desc",
-                "unit", "description", "tip_description",
+                "unit", "description", "sites", "tip_description",
                 "quote_description", "recommended", "price",
                 "onprice", "url")
-            VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?, ?,  ?, ?)
                 RETURNING id',
         @values{qw/number  image  title  category  group_master
-                    group_desc unit description  tip_description  quote_description recommended  price
+                    group_desc unit description  sites  tip_description  quote_description recommended  price
                         ONprice/},
         $url,
     )->hash->{id};
@@ -128,7 +134,8 @@ sub get_all {
 
     return $self->_process_products(
         $self->pg->db->query(
-            'SELECT * FROM "products" ORDER BY "number"',
+            'SELECT * FROM "products" WHERE sites ~ ? ORDER BY "number"',
+            '(^|,)' . quotemeta($self->site) . '(,|$)',
         )->hashes
     );
 }
@@ -141,7 +148,8 @@ sub get_category {
     my $cat_line = $category =~ s{/}{*::*}gr;
 
     my $data = $self->pg->db->query(
-        'SELECT * FROM "products" WHERE "category" ~ ?',
+        'SELECT * FROM "products" WHERE sites ~ ? AND "category" ~ ?',
+        '(^|,)' . quotemeta($self->site) . '(,|$)',
         '\[' . quotemeta($cat_line),
     )->hashes;
 

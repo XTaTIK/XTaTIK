@@ -186,6 +186,7 @@ sub _helper_products {
         pricing_region => $c->geoip_region,
         pg => $PG,
         custom_cat_sorting => $c->config('custom_cat_sorting'),
+        site => $c->config('site'),
     );
 };
 

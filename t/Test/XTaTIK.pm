@@ -155,6 +155,7 @@ sub load_test_products {
             onprice       TEXT,
             unit          TEXT,
             description   TEXT,
+            sites         TEXT,
             tip_description   TEXT,
             quote_description TEXT,
             recommended       TEXT
