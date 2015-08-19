@@ -1,6 +1,7 @@
 package XTaTIK::Utilities::ToadFarmer;
 
 use Toadfarm -init;
+use XTaTIK::Utilities::Misc qw/merge_conf/;
 use File::Find::Rule;
 use experimental 'autoderef';
 
@@ -18,26 +19,13 @@ sub farm {
             Host       => qr{^\Q$site\E(:3000)?$},
             local_port => 3000,
             config     => {
-                _merge_conf( $main_conf, $site_conf ),
+                merge_conf( $main_conf, $site_conf ),
                 site => $site,
             },
         };
     }
 
     start;
-}
-
-sub _merge_conf {
-    my ( $main_conf, $site_conf ) = @_;
-    my $conf = { %$main_conf, %$site_conf };
-
-    if ( $site_conf->{text} ) {
-        $conf->{text}{$_} = exists $site_conf->{text}{$_}
-            ? $site_conf->{text}{$_} : $main_conf->{text}{$_}
-                for keys $site_conf->{text}, keys $main_conf->{text};
-    }
-
-    return %$conf;
 }
 
 1;
