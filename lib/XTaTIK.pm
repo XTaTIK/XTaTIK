@@ -33,7 +33,7 @@ sub startup {
     $self->plugin('IP2Location');
     $self->plugin('AssetPack');
 
-    my $silo_path = $ENV{XTATIK_SITE} ? $ENV{XTATIK_SITE}
+    my $silo_path = $ENV{XTATIK_SITE_ROOT} ? $ENV{XTATIK_SITE_ROOT}
         : catfile 'silo', $self->config('site');
 
     $self->asset(
