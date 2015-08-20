@@ -32,30 +32,31 @@ sub startup {
     $self->plugin('FormChecker' => error_class => 'foo');
     $self->plugin('IP2Location');
     $self->plugin('AssetPack');
+    $self->plugin('bootstrap3');
 
     my $silo_path = $ENV{XTATIK_SITE_ROOT} ? $ENV{XTATIK_SITE_ROOT}
         : catfile 'silo', $self->config('site');
 
-    $self->asset(
-        'app.css' => qw{
-        /CSS/reset.scss
-        http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css
-        /CSS/bs-callout.scss
-        /CSS/bootstrap-extras.scss
-        /CSS/main.scss
-        },
-        map catfile('..', $_), File::Find::Rule->name('*.css', '*.scss')
-            ->in( catfile($silo_path, 'CSS') ),
-    );
+    # $self->asset(
+    #     'app.css' => qw{
+    #     /CSS/reset.scss
+    #     http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css
+    #     /CSS/bs-callout.scss
+    #     /CSS/bootstrap-extras.scss
+    #     /CSS/main.scss
+    #     },
+    #     map catfile('..', $_), File::Find::Rule->name('*.css', '*.scss')
+    #         ->in( catfile($silo_path, 'CSS') ),
+    # );
 
-    $self->asset(
-        'app.js' => qw{
-        http://code.jquery.com/jquery-1.11.3.min.js
-        http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js
-        /JS/ie10-viewport-bug-workaround.js
-        },
-        File::Find::Rule->name('*.js')->in( catfile($silo_path, 'JS') ),
-    );
+    # $self->asset(
+    #     'app.js' => qw{
+    #     http://code.jquery.com/jquery-1.11.3.min.js
+    #     http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js
+    #     /JS/ie10-viewport-bug-workaround.js
+    #     },
+    #     File::Find::Rule->name('*.js')->in( catfile($silo_path, 'JS') ),
+    # );
 
     my $mconf = {
         how     => $self->config('mail')->{how},
