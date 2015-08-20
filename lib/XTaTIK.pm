@@ -32,7 +32,7 @@ sub startup {
     $self->plugin('FormChecker' => error_class => 'foo');
     $self->plugin('IP2Location');
     $self->plugin('AssetPack');
-    $self->plugin('bootstrap3');
+    $self->plugin('bootstrap3', { custom => 1});
 
     my $silo_path = $ENV{XTATIK_SITE_ROOT} ? $ENV{XTATIK_SITE_ROOT}
         : catfile 'silo', $self->config('site');
