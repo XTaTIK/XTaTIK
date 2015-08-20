@@ -34,8 +34,8 @@ sub startup {
     $self->plugin('AssetPack');
     $self->plugin('bootstrap3', { custom => 1});
 
-    my $silo_path = $ENV{XTATIK_SITE_ROOT} ? $ENV{XTATIK_SITE_ROOT}
-        : catfile 'silo', $self->config('site');
+    my $silo_path = $ENV{XTATIK_SITE_ROOT}
+        || catfile 'silo', $self->config('site');
 
     # $self->asset(
     #     'app.css' => qw{

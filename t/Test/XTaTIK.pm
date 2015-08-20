@@ -8,7 +8,7 @@ use XTaTIK::Model::Products;
 use XTaTIK::Model::ProductSearch;
 
 my $secret = do 'secret.txt' or die "Failed to load secret.txt: $! $@";
-my $PG_URL = $secret->{pg_url};
+my $PG_URL = $ENV{XTATIK_PG_URL} || $secret->{pg_url};
 my $DB_FILE_NAME = 'NOOP';
 my $BACKUP_DB_FILE_NAME = "backup_$DB_FILE_NAME";
 
