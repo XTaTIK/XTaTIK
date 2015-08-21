@@ -49,7 +49,7 @@ sub startup {
     $self->plugin('FormChecker' => error_class => 'foo');
     $self->plugin('IP2Location');
     $self->plugin('AssetPack');
-    $self->plugin('bootstrap3', { custom => 1});
+    $self->plugin('bootstrap3');
 
     $self->asset(
         'app.css' => qw{
@@ -58,8 +58,19 @@ sub startup {
             /CSS/bootstrap-extras.scss
             /CSS/main.scss
         },
-        map catfile('..', $_), File::Find::Rule->name('*.css', '*.scss')
-            ->in( catfile($silo_path, 'CSS') ),
+        (
+            map s{^\Q$silo_path\E[\\/]public[\\/]}{}r,
+                File::Find::Rule->name('*.css', '*.scss')
+                ->in( catfile($silo_path, 'public', 'CSS') ),
+        ),
+        (
+            $ENV{XTATIK_COMPANY}
+            ? (
+                map s{^\Q$ENV{XTATIK_COMPANY}\Epublic[\\/]}{}r,
+                    File::Find::Rule->name('*.css', '*.scss')
+                    ->in( catfile($ENV{XTATIK_COMPANY}, 'public', 'CSS') )
+            ) : ()
+        )
     );
 
     $self->asset(
@@ -67,7 +78,19 @@ sub startup {
             /JS/ie10-viewport-bug-workaround.js
             /JS/main.js
         },
-        File::Find::Rule->name('*.js')->in( catfile($silo_path, 'JS') ),
+        (
+            map s{^\Q$silo_path\E[\\/]public[\\/]}{}r,
+                File::Find::Rule->name('*.js')
+                ->in( catfile($silo_path, 'public', 'JS') ),
+        ),
+        (
+            $ENV{XTATIK_COMPANY}
+            ? (
+                map s{^\Q$ENV{XTATIK_COMPANY}\Epublic[\\/]}{}r,
+                    File::Find::Rule->name('*.js')
+                    ->in( catfile($ENV{XTATIK_COMPANY}, 'public', 'JS') )
+            ) : ()
+        )
     );
 
     my $mconf = {
