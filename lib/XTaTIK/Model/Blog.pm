@@ -6,19 +6,22 @@ use Mojo::Base -base;
 
 use Text::Markdown 'markdown';
 use File::Glob qw/bsd_glob/;
+use File::Spec::Functions qw/catfile/;
 use File::Slurp::Tiny 'read_file';
 use List::UtilsBy qw/sort_by/;
 use Encode;
 
 use experimental 'postderef';
 
+has 'blog_root';
+
 sub brief_list {
     my $self = shift;
 
-    my @posts= bsd_glob 'blog_src/*';
+    my @posts= bsd_glob $self->blog_root . '/*';
 
     for ( @posts ) {
-        s{^blog_src/}{};
+        s{^${\ $self->blog_root}/}{};
         my ( $date, $title ) = /(\d{4}-\d{2}-\d{2})-(.+)\.md/;
         $title =~ tr/-/ /;
         $_ = {
@@ -39,7 +42,7 @@ sub post {
     my ( $date, $title ) = $post =~ /(\d{4}-\d{2}-\d{2})-(.+)/;
     $title =~ tr/-/ /;
 
-    my $post_src = 'blog_src/' . $post =~ s/[^\w-]//rg . '.md';
+    my $post_src = catfile $self->blog_root, $post =~ s/[^\w-]//rg . '.md';
 
     return unless -e $post_src;
 
@@ -60,7 +63,7 @@ sub post {
 
     for ( $next, $prev ) {
         defined or next;
-        my $post_src = 'blog_src/' .
+        my $post_src = catfile $self->blog_root,
             $_->{url} =~ s/[^\w-]//rg . '.md';
         my $content = decode 'utf8', read_file $post_src;
         my %metas;

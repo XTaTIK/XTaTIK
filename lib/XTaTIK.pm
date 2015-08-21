@@ -114,7 +114,11 @@ sub startup {
     $self->helper( cart_cents     => \&_helper_cart_cents     );
     $self->helper( product_search => \&_helper_product_search );
     $self->helper(
-        blog => sub { state $blog = XTaTIK::Model::Blog->new; }
+        blog => sub {
+            state $blog = XTaTIK::Model::Blog->new(
+                blog_root => catfile $silo_path, 'blog_src'
+            );
+        }
     );
     $self->helper( active_page => sub {
         my ( $c, $name ) = @_;
