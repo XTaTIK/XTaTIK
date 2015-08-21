@@ -24,16 +24,6 @@ sub startup {
     $self->moniker('XTaTIK');
     $self->plugin('Config');
 
-    $self->secrets([ $self->config('mojo_secrets') ]);
-
-    $self->config( hypnotoad => {listen => ['http://*:3005'], proxy => 1} );
-
-    $self->plugin('AntiSpamMailTo');
-    $self->plugin('FormChecker' => error_class => 'foo');
-    $self->plugin('IP2Location');
-    $self->plugin('AssetPack');
-    $self->plugin('bootstrap3', { custom => 1});
-
     if ( $ENV{XTATIK_COMPANY} ) {
         unshift @{ $self->renderer->paths },
             catfile $ENV{XTATIK_COMPANY}, 'templates';
@@ -50,6 +40,16 @@ sub startup {
 
     unshift @{ $self->static->paths },
         catfile $silo_path, 'public';
+
+    $self->secrets([ $self->config('mojo_secrets') ]);
+
+    $self->config( hypnotoad => {listen => ['http://*:3005'], proxy => 1} );
+
+    $self->plugin('AntiSpamMailTo');
+    $self->plugin('FormChecker' => error_class => 'foo');
+    $self->plugin('IP2Location');
+    $self->plugin('AssetPack');
+    $self->plugin('bootstrap3', { custom => 1});
 
     $self->asset(
         'app.css' => qw{
