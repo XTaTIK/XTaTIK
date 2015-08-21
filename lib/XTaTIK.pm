@@ -51,17 +51,16 @@ sub startup {
     unshift @{ $self->static->paths },
         catfile $silo_path, 'public';
 
-    # $self->asset(
-    #     'app.css' => qw{
-    #     /CSS/reset.scss
-    #     http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css
-    #     /CSS/bs-callout.scss
-    #     /CSS/bootstrap-extras.scss
-    #     /CSS/main.scss
-    #     },
-    #     map catfile('..', $_), File::Find::Rule->name('*.css', '*.scss')
-    #         ->in( catfile($silo_path, 'CSS') ),
-    # );
+    $self->asset(
+        'app.css' => qw{
+            /CSS/reset.scss
+            /CSS/bs-callout.scss
+            /CSS/bootstrap-extras.scss
+            /CSS/main.scss
+        },
+        map catfile('..', $_), File::Find::Rule->name('*.css', '*.scss')
+            ->in( catfile($silo_path, 'CSS') ),
+    );
 
     $self->asset(
         'app.js' => qw{
