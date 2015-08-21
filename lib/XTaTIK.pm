@@ -76,12 +76,6 @@ sub startup {
     };
     $self->plugin(mail => $mconf);
 
-    my $locations = $self->config('text')->{locations};
-    for ( @$locations ) {
-        $_->{address} = join "<br>\n", map encode_entities($_),
-            split /\n/, $_->{address};
-    }
-
     # Initialize globals (this is probably a stupid way to do things)
     $PG = Mojo::Pg->new( $self->config('pg_url') );
 
