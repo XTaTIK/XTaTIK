@@ -24,6 +24,11 @@ sub startup {
     $self->moniker('XTaTIK');
     $self->plugin('Config');
 
+    if ( $ENV{XTATIK_COMPANY} ) {
+        unshift @{ $self->renderer->paths },
+            catfile $ENV{XTATIK_COMPANY}, 'templates';
+    }
+
     $self->secrets([ $self->config('mojo_secrets') ]);
 
     $self->config( hypnotoad => {listen => ['http://*:3005'], proxy => 1} );
