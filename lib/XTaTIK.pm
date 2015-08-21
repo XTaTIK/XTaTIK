@@ -54,14 +54,13 @@ sub startup {
     #         ->in( catfile($silo_path, 'CSS') ),
     # );
 
-    # $self->asset(
-    #     'app.js' => qw{
-    #     http://code.jquery.com/jquery-1.11.3.min.js
-    #     http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js
-    #     /JS/ie10-viewport-bug-workaround.js
-    #     },
-    #     File::Find::Rule->name('*.js')->in( catfile($silo_path, 'JS') ),
-    # );
+    $self->asset(
+        'app.js' => qw{
+            /JS/ie10-viewport-bug-workaround.js
+            /JS/main.js
+        },
+        File::Find::Rule->name('*.js')->in( catfile($silo_path, 'JS') ),
+    );
 
     my $mconf = {
         how     => $self->config('mail')->{how},
