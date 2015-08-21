@@ -24,11 +24,6 @@ sub startup {
     $self->moniker('XTaTIK');
     $self->plugin('Config');
 
-    if ( $ENV{XTATIK_COMPANY} ) {
-        unshift @{ $self->renderer->paths },
-            catfile $ENV{XTATIK_COMPANY}, 'templates';
-    }
-
     $self->secrets([ $self->config('mojo_secrets') ]);
 
     $self->config( hypnotoad => {listen => ['http://*:3005'], proxy => 1} );
@@ -39,8 +34,22 @@ sub startup {
     $self->plugin('AssetPack');
     $self->plugin('bootstrap3', { custom => 1});
 
+    if ( $ENV{XTATIK_COMPANY} ) {
+        unshift @{ $self->renderer->paths },
+            catfile $ENV{XTATIK_COMPANY}, 'templates';
+
+        unshift @{ $self->static->paths },
+            catfile $ENV{XTATIK_COMPANY}, 'public';
+    }
+
     my $silo_path = $ENV{XTATIK_SITE_ROOT}
         // catfile 'silo', $self->config('site');
+
+    unshift @{ $self->renderer->paths },
+            catfile $silo_path, 'templates';
+
+    unshift @{ $self->static->paths },
+        catfile $silo_path, 'public';
 
     # $self->asset(
     #     'app.css' => qw{
