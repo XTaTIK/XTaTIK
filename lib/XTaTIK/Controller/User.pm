@@ -4,8 +4,6 @@ package XTaTIK::Controller::User;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-sub index {}
-
 sub login {
     my $self = shift;
 

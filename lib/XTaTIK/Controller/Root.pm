@@ -5,12 +5,6 @@ package XTaTIK::Controller::Root;
 use Mojo::Base 'Mojolicious::Controller';
 use XTaTIK::Common qw/n_to_br/;
 
-sub about   {}
-sub history {}
-sub login   {}
-sub contact {}
-sub feedback{}
-
 sub index   {
     my $self = shift;
 
