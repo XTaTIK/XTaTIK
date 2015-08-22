@@ -126,6 +126,13 @@ sub startup {
         return $active eq $name ? ' class="active"' : '';
     });
 
+
+    # use Acme::Dump::And::Dumper;
+    # die DnD [ grep -e catfile($_, 'content-pics', 'nav-logo.png'),
+            # @{ $self->static->paths } ];
+    $self->config('text')->{show_nav_logo}
+        //= $self->static->file('content-pics/nav-logo.png');
+
     my $r = $self->routes;
     { # Root routes
         $r->get('/'        )->to('root#index'        );

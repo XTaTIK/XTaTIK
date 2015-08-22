@@ -31,7 +31,19 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
       </button>
-      <h1 class="navbar-brand"><a href="/"><%= xtext 'market' %> <small>/ <%= xtext 'company_name' %></small></a></h1>
+      <h1 class="navbar-brand">
+        % if ( xtext('show_nav_logo') ) {
+          <a href="/"
+            ><img src="/content-pics/nav-logo.png"
+              alt="<%= xtext 'market' %>
+                &mdash; <%= xtext 'company_name' %>"
+            ></a>
+        % } else {
+          <a href="/"
+            ><%= xtext 'market' %> <small>/
+            <%= xtext 'company_name' %></small></a>
+        % }
+      </h1>
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
