@@ -144,6 +144,7 @@ sub startup {
         $r->post('/contact')->to('root#contact_post' );
         $r->get('/feedback')->to('root#feedback'     );
         $r->get('/sitemap' )->to('root#sitemap'      );
+        $r->get('/robots'  )->to('root#robots'       );
         $r->post('/feedback')->to('root#feedback_post');
         $r->get('/product/(*url)')->to('root#product');
         $r->get('/products(*category)')
