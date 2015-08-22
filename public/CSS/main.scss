@@ -4,6 +4,10 @@ $light-on-dark-text: #fff;
 $lighter-border-color: #eee;
 $subdued-text: #999;
 
+html {
+    overflow-y: scroll;
+}
+
 .after_clear {
     display: block;
     content: '';
