@@ -1,10 +1,15 @@
 jQuery(function ($) {
-    $('body').css('padding-top',
-        ($('.navbar-fixed-top').outerHeight() + 19) + 'px'
-    );
+    fix_nav_padding_top();
+    $( window ).resize(function() { fix_nav_padding_top(); });
 
     setup_feedback_button();
 });
+
+function fix_nav_padding_top() {
+    $('body').css('padding-top',
+        ($('.navbar-fixed-top').outerHeight() + 19) + 'px'
+    );
+}
 
 function setup_feedback_button() {
     if ( $('form[action="/feedback"]').length )  {
