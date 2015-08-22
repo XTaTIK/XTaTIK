@@ -24,12 +24,17 @@ sub startup {
     $self->moniker('XTaTIK');
     $self->plugin('Config');
 
+    my @sass_path = split /:/, $ENV{SASS_PATH}//'';
+
     if ( $ENV{XTATIK_COMPANY} ) {
         unshift @{ $self->renderer->paths },
             catfile $ENV{XTATIK_COMPANY}, 'templates';
 
         unshift @{ $self->static->paths },
             catfile $ENV{XTATIK_COMPANY}, 'public';
+
+        unshift @sass_path,
+            catfile $ENV{XTATIK_COMPANY}, 'public', 'sass';
     }
 
     my $silo_path = $ENV{XTATIK_SITE_ROOT}
@@ -40,6 +45,11 @@ sub startup {
 
     unshift @{ $self->static->paths },
         catfile $silo_path, 'public';
+
+    unshift @sass_path,
+        catfile $silo_path, 'public', 'sass';
+
+    $ENV{SASS_PATH} = join ':', @sass_path;
 
     $self->secrets([ $self->config('mojo_secrets') ]);
 
