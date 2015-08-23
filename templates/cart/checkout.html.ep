@@ -1,7 +1,7 @@
 % title 'Enter Your Information';
 % layout 'default';
 
-% if ( @{stash('cart')} ) {
+% if ( items_in 'cart' ) {
   <ul class="checkout_crumbs text-center">
     <li class="col-md-15 label-success">Review products</li>
     <li class="col-md-15 label-primary">Enter contact information</li>
@@ -105,7 +105,7 @@
       %>*I have read and agree with <a target="_blank" href="/terms">Terms and Conditions</a> and <a target="_blank" href="/privacy-policy">Privacy Policy</a></label>
     </div>
   </ul>
-  % if ( @{stash('cart')} ) {
+  % if ( items_in 'cart' ) {
     %= submit_button 'Calculate taxes and shipping charge', class => 'btn btn-lg btn-primary'
 
   % } else {

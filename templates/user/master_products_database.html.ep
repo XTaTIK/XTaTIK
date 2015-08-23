@@ -145,7 +145,7 @@
 
 <hr>
 
-% if ( @{stash('products') || []} ) {
+% if ( items_in 'products' ) {
   <div class="panel panel-danger panel-extra-danger">
     <div class="panel-heading">
       <h3 class="panel-title">Delete Products</h3>
@@ -180,7 +180,7 @@
       </div>
 
       <ul id="edit_products_list">
-        % for my $p ( @{stash('products') || []}) {
+        % for my $p ( items_in 'products' ) {
           <li class="panel panel-primary">
             <div class="panel-body">
               %= hidden_field 'id_' . $p->{id} => $p->{id}

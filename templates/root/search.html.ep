@@ -2,9 +2,9 @@
 % title 'Search Results';
 % stash active_page => 'search';
 
-% if ( @{ stash('products') || [] } ) {
+% if ( items_in 'products' ) {
     <ul id="product_list">
-        % for ( @{ stash('products') || [] } ) {
+        % for ( items_in 'products' ) {
             <li class="col-md-4 col-sm-6">
               <div class="well">
               % if ( $_->{is_subsub_cat} ) {

@@ -1,7 +1,7 @@
 % layout 'email';
 
-% if ( @{stash('quote')} ) {
-  % if ( @{stash('quote')} and @{stash('cart')} ) {
+% if ( items_in 'quote' ) {
+  % if ( items_in 'quote' and items_in 'cart' ) {
     <h2>Your Quote Request</h2>
   % }
   <p>Thank you for interest in our products. A sales representative
@@ -25,7 +25,7 @@
     </tr>
   </thead>
   <tbody>
-    % for ( 1 .. @{stash('quote')} ) {
+    % for ( 1 .. items_in 'quote' ) {
       % my $p = stash('quote')->[$_-1];
       <tr>
         <td><%= $p->{number} %></td>
@@ -38,8 +38,8 @@
   </table>
 % }
 
-% if ( @{stash('cart')} ) {
-  % if ( @{stash('quote')} and @{stash('cart')} ) {
+% if ( items_in 'cart' ) {
+  % if ( items_in 'quote' and items_in 'cart' ) {
     <h2>Your Purchase</h2>
   % }
   <p>Thank you for your purchase! Your order will be shipped on
@@ -92,7 +92,7 @@
     </tr>
   </thead>
   <tbody>
-    % for ( 1 .. @{stash('cart')||[]} ) {
+    % for ( 1 .. items_in 'cart' ) {
       % my $p = stash('cart')->[$_-1];
       <tr>
         <td><%= $p->{number} %></td>

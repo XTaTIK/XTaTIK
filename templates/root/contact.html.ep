@@ -58,7 +58,7 @@
 <hr>
 
 <div id="locations" class="row">
-  % for my $loc ( @{xtext('locations')} ) {
+  % for my $loc ( items_in xtext('locations') ) {
     <div class="col-sm-6 col-md-4">
       <div class="panel panel-default">
         <div class="panel-heading">

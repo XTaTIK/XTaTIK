@@ -70,10 +70,11 @@
   <div class="container">
     <p id="cart" class="text-right
         <%= ( $c->url_for('current') =~ m{^/cart}  )
-          || ( ! scalar( @{cart->contents||[]} ) )
+          || ( ! scalar( items_in cart->contents ) )
           ? 'hidden_checkout' : '' %>
       ">
-      <span title="Total doesn't include shipping charges or taxes"><%= @{cart->contents||[]} %> ⇴ $<%= cart_dollars %><sup>.<%= cart_cents %></sup></span>
+      <span title="Total doesn't include shipping charges or taxes"
+        ><%= items_in cart->contents %> ⇴ $<%= cart_dollars %><sup>.<%= cart_cents %></sup></span>
       <a href="/cart/" class="btn btn-primary">Checkout</a>
     </p>
 

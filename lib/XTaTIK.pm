@@ -135,6 +135,12 @@ sub startup {
         my $active = $c->stash('active_page') // '';
         return $active eq $name ? ' class="active"' : '';
     });
+    $self->helper( items_in => sub {
+        my ( $c, $what ) = @_;
+        return unless defined $what;
+        $what = $c->stash($what) // [] unless ref $what;
+        return @$what;
+    });
 
 
     # use Acme::Dump::And::Dumper;

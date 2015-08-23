@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        % for ( @{ stash('quotes')||[] } ) {
+        % for ( items_in 'quotes' ) {
           <tr>
             <td><%= $_->number   %></td>
             <td><%= $_->name     %></td>

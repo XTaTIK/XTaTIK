@@ -1,8 +1,8 @@
 % title 'Your Cart';
 % layout 'default';
 
-% if ( @{stash('cart')} or @{stash('quote')} ) {
-  % if ( @{stash('cart')} ) {
+% if ( items_in 'cart' or items_in 'quote' ) {
+  % if ( items_in 'cart' ) {
     <ul class="checkout_crumbs text-center">
        <li class="col-md-15 label-primary">Review products</li>
        <li class="col-md-15 label-default">Enter contact information</li>
@@ -23,7 +23,7 @@
 
     <div class="row">
       <div class="col-md-6">
-        % if ( @{stash('cart')} ) {
+        % if ( items_in 'cart' ) {
           <div class="table-responsive panel panel-primary">
             <div class="panel-heading">
               <h3 class="panel-title"><i class="glyphicon glyphicon-shopping-cart"></i> Purchase</h3>
@@ -43,7 +43,7 @@
               </tr>
             </thead>
             <tbody>
-              % for ( @{stash('cart')} ) {
+              % for ( items_in 'cart' ) {
                 <tr>
                   <td><img src="/content-pics/products/<%=
                     $_->{image} %>" width="50" height="50" alt=""></td>
@@ -70,7 +70,7 @@
         % }
       </div>
       <div class="col-md-6">
-        % if ( @{stash('quote')} ) {
+        % if ( items_in 'quote' ) {
           <div class="table-responsive panel panel-primary">
             <div class="panel-heading">
               <h3 class="panel-title"><i class="glyphicon glyphicon-comment"></i> Quote Request</h3>
@@ -88,7 +88,7 @@
                 </tr>
               </thead>
               <tbody>
-                % for ( @{stash('quote')} ) {
+                % for ( items_in 'quote' ) {
                   <tr>
                     <td><img src="/content-pics/products/<%=
                     $_->{image} %>" width="50" height="50" alt=""></td>
