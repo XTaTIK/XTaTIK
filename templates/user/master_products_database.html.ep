@@ -39,101 +39,84 @@
 
         %= hidden_field add_product => 1
 
-        <p class="bs-callout bs-callout-primary">
-          <small>
-            Separate multiple images with a question mark (<samp>?</samp>).
-            If not specified, <samp><i>product_number</i>.jpg</samp>
-            will be used.
-          </small>
-        </p>
         <div class="row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-5">
             <label for="number">*Number:</label
             ><%= text_field 'number'
               => id => 'number', class => 'form-control'
             %>
           </div>
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-5">
             <label for="image">Image:</label
             ><%= text_field 'image'
               => id => 'image', class => 'form-control'
             %>
           </div>
-        </div>
-        <div class="form-group">
-          <label for="price">Price:</label
-          ><%= text_field 'price'
-            => id => 'price', class => 'form-control'
-          %>
-        </div>
-        <div class="form-group">
-          <label for="title">Title:</label
-          ><%= text_field 'title'
-            => id => 'title', class => 'form-control'
-          %>
-        </div>
-        <div class="form-group">
-          <label for="description">Description:</label
-          ><%= text_area 'description', cols => 40, rows => 5,
-            id => 'description', class => 'form-control'
-          %>
+          <div class="form-group col-md-2">
+            <label for="price">Price:</label
+            ><%= text_field 'price'
+              => id => 'price', class => 'form-control'
+            %>
+          </div>
         </div>
         <div class="row">
           <div class="form-group col-md-6">
-            <label for="tip_description">Tip description:</label
-            ><%= text_area 'tip_description', cols => 40, rows => 5,
-              id => 'tip_description', class => 'form-control'
+            <label for="title">Title:</label
+            ><%= text_field 'title'
+              => id => 'title', class => 'form-control'
             %>
           </div>
           <div class="form-group col-md-6">
             <label for="quote_description">Quote description:</label
-            ><%= text_area 'quote_description', cols => 40, rows => 5,
-              id => 'quote_description', class => 'form-control'
+            ><%= text_field 'quote_description'
+              => id => 'quote_description', class => 'form-control'
             %>
           </div>
         </div>
-
-        <p class="bs-callout bs-callout-primary">
-          <small>
-            Category format: <samp>[cat1*::*cat2*::* ...
-            *::*cat_n][cat1*::*cat2*::* ... *::*cat_n][cat3*::*NOCAT]</samp>
-          </small>
-        </p>
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="description">Description:</label
+            ><%= text_area 'description', cols => 40, rows => 3,
+              id => 'description', class => 'form-control'
+            %>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="tip_description">Tip description:</label
+            ><%= text_area 'tip_description', cols => 40, rows => 3,
+              id => 'tip_description', class => 'form-control'
+            %>
+          </div>
+        </div>
         <div class="form-group">
-          <label for="category">Category:</label
+          <label for="category">Category <small style="color: #7A7FBD;">
+            (Category format: <samp>[cat1*::*cat2*::* ...
+            *::*cat_n][cat1*::*cat2*::* ... *::*cat_n][cat3*::*NOCAT]</samp>
+          )</small>:</label
           ><%= text_field 'category',
             id => 'category', class => 'form-control'
           %>
         </div>
-
-        <p class="bs-callout bs-callout-primary">
-          <small>Plural units are smart-deduced, but you can override
-            by giving plurals with a comma: e.g. <samp>each, eaches</samp>
-          </small>
-        </p>
         <div class="row">
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
             <label for="unit">Unit:</label
             ><%= text_field 'unit', id => 'unit', class => 'form-control' %>
           </div>
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
             <label for="group_master">Group master:</label
             ><%= text_field 'group_master', id => 'group_master',
               class => 'form-control'
             %>
           </div>
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
             <label for="group_desc">Group description:</label
             ><%= text_field 'group_desc', id => 'group_desc',
               class => 'form-control'
             %>
           </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-12">
+          <div class="form-group col-md-3">
             <label for="recommended">Recommended products:</label
-            ><%= text_area 'recommended', cols => 40, rows => 2,
-              id => 'recommended', class => 'form-control'
+            ><%= text_field 'recommended', id => 'recommended',
+              class => 'form-control'
             %>
           </div>
         </div>
