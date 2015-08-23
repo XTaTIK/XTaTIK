@@ -74,22 +74,22 @@ sub startup {
 
     $self->asset(
         'app.css' => qw{
-            /CSS/reset.scss
-            /CSS/bs-callout.scss
-            /CSS/bootstrap-extras.scss
-            /CSS/main.scss
+            /sass/reset.scss
+            /sass/bs-callout.scss
+            /sass/bootstrap-extras.scss
+            /sass/main.scss
         },
         (
             map s{^\Q$silo_path\E[\\/]public[\\/]}{}r,
-                File::Find::Rule->name('*.css', '*.scss')
-                ->in( catfile($silo_path, 'public', 'CSS') ),
+                File::Find::Rule->name('*.scss')
+                ->in( catfile($silo_path, 'public', 'sass') ),
         ),
         (
             $ENV{XTATIK_COMPANY}
             ? (
                 map s{^\Q$ENV{XTATIK_COMPANY}\Epublic[\\/]}{}r,
-                    File::Find::Rule->name('*.css', '*.scss')
-                    ->in( catfile($ENV{XTATIK_COMPANY}, 'public', 'CSS') )
+                    File::Find::Rule->name('*.scss')
+                    ->in( catdir $ENV{XTATIK_COMPANY}, qw/public sass/ )
             ) : ()
         )
     );
