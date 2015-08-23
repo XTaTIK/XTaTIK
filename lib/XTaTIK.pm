@@ -82,14 +82,14 @@ sub startup {
         (
             map s{^\Q$silo_path\E[\\/]public[\\/]}{}r,
                 File::Find::Rule->name('*.scss')
-                ->in( catfile($silo_path, 'public', 'sass') ),
+                ->in( catdir $silo_path, qw/public sass user/),
         ),
         (
             $ENV{XTATIK_COMPANY}
             ? (
                 map s{^\Q$ENV{XTATIK_COMPANY}\Epublic[\\/]}{}r,
-                    File::Find::Rule->name('*.scss')
-                    ->in( catdir $ENV{XTATIK_COMPANY}, qw/public sass/ )
+                  File::Find::Rule->name('*.scss')
+                  ->in( catdir $ENV{XTATIK_COMPANY}, qw/public sass user/ )
             ) : ()
         )
     );
