@@ -12,7 +12,7 @@ use XTaTIK::Model::Blog;
 use XTaTIK::Model::ProductSearch;
 use XTaTIK::Model::XVars;
 use File::Find::Rule;
-use File::Spec::Functions qw/catfile/;
+use File::Spec::Functions qw/catfile  curdir  catdir  rel2abs/;
 
 use HTML::Entities;
 use Mojo::Pg;
@@ -37,6 +37,12 @@ sub startup {
             catfile $ENV{XTATIK_COMPANY}, 'public', 'sass';
     }
 
+    unshift @sass_path,
+            catdir rel2abs(curdir), qw/public  sass  fake-company/
+        unless $ENV{XTATIK_COMPANY}
+            and -r catfile $ENV{XTATIK_COMPANY},
+                qw/public  sass  bootstrap  company-variables.scss/;
+
     my $silo_path = $ENV{XTATIK_SITE_ROOT}
         // catfile 'silo', $self->config('site');
 
@@ -48,6 +54,11 @@ sub startup {
 
     unshift @sass_path,
         catfile $silo_path, 'public', 'sass';
+
+    unshift @sass_path,
+            catdir rel2abs(curdir), qw/public  sass  fake-site/
+        unless -r catfile $silo_path,
+                qw/public  sass  bootstrap  site-variables.scss/;
 
     $ENV{SASS_PATH} = join ':', @sass_path;
 
