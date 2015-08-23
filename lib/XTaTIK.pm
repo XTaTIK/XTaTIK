@@ -187,10 +187,12 @@ sub startup {
         $rc->post('/checkout-review')->to('cart#checkout_review');
     }
 
-    { # Blog routes
-        my $rb = $r->under('/blog');
-        $rb->get('/'     )->to('blog#index');
-        $rb->get('/*post')->to('blog#read');
+    unless ( $self->config('no_blog') ) {
+        { # Blog routes
+            my $rb = $r->under('/blog');
+            $rb->get('/'     )->to('blog#index');
+            $rb->get('/*post')->to('blog#read');
+        }
     }
 
     { # User section routes

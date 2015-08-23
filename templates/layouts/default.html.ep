@@ -51,7 +51,10 @@
       <li<%== active_page 'products' %>><a href="/products"><%=
           xtext 'products_nav_name'
         %></a></li>
-      <li<%== active_page 'blog' %>><a href="/blog">Blog</a></li>
+      % unless ( config 'no_blog' ) {
+        <li<%== active_page 'blog' %>><a href="/blog">Blog</a></li>
+      % }
+
       <li<%== active_page 'history' %>><a href="/history">Our History</a></li>
       <li<%== active_page 'about' %>><a href="/about">About</a></li>
       <li<%== active_page 'contact' %>><a href="/contact">Contact</a></li>
