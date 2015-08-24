@@ -2,7 +2,7 @@
 @import "bootstrap/company-variables.scss";
 @import "bootstrap/site-variables.scss";
 
-$x-primary: #337AB7;
+$primary1: #FF6600 !default;
 $light-on-dark-text: #fff;
 $lighter-border-color: #eee;
 $subdued-text: #999;
@@ -194,3 +194,29 @@ footer {
 #feedback_b:active {
     color: $navbar-inverse-link-active-color;
 }
+
+#index_shoutout {
+    .thumbnail {
+        border: 0;
+    }
+
+    .market_tag {
+        display: block;
+        margin-top: 20px;
+        font-size: 300%;
+        letter-spacing: -2px;
+        text-align: center;
+        color: darken($primary1, 10%);
+        transition: transform 3s;
+        transform: scale(1);
+    }
+
+    a {
+        outline: 0;
+    }
+
+    img {
+        max-height: 544px;
+    }
+}
+
