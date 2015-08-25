@@ -31,7 +31,7 @@
 
         % if ( stash 'already_have_this_product' ) {
           <p class="alert alert-danger">This product number is already
-            in the database. Aborting add.
+            in the database. Aborting addition.
           </p>
         %}
 
