@@ -1,7 +1,6 @@
 % layout 'default';
 % stash active_page => 'home';
 
-% include 'index_shoutout';
 <div id="index_shoutout">
   <h2 class="row">
     <span class="col-sm-12">
