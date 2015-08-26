@@ -3,6 +3,7 @@ package XTaTIK::Controller::User;
 # VERSION
 
 use Mojo::Base 'Mojolicious::Controller';
+use experimental 'postderef';
 
 sub login {
     my $self = shift;
@@ -35,6 +36,29 @@ sub is_logged_in {
 
     return 1 if $self->session('is_logged_in');
     return $self->redirect_to('/login');
+}
+
+sub site_products {
+    my $self = shift;
+
+    if ( $self->param('save') ) {
+        my @lines;
+        for ( split /\n/, $self->param('products') ) {
+            /^\s*#?(\S+)(?:\s+(\S+))?/ or next;
+            push @lines, { num => $1, price => $2 };
+        }
+
+        $self->products
+        ->set_site( $self->config('site'), [ map $_->{num}, @lines ], );
+
+        $self->products->set_pricing( \@lines );
+    }
+
+    $self->stash(
+        products => join "\n",
+            map "$_->{number}\t$_->{price}",
+                $self->products->get_all( $self->config('site') )->@*
+    );
 }
 
 sub master_products_database {

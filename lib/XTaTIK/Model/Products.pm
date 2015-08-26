@@ -301,6 +301,54 @@ sub _custom_sort {
     return $order{$a} <=> $order{$b}
 }
 
+sub unset_site {
+    my ( $self, $site, $products ) = @_;
+    return unless length $site;
+
+    $self->pg->db->query(
+        q{UPDATE products SET sites = regexp_replace(sites, ?, '', 'g')}
+            . ( $products and scalar(@$products)
+            ? ' WHERE number = ANY (?)'
+            : ''
+        ),
+        '(^|,)' . quotemeta($site) . '(,|$)',
+        $products ? $products : (),
+    );
+}
+
+sub set_site {
+    my ( $self, $site, $products ) = @_;
+    return unless length $site;
+
+    $self->unset_site( $site, $products );
+    return unless $products and @$products;
+
+    $self->pg->db->query(
+        'UPDATE products SET sites = sites || ?
+            WHERE number = ANY (?)',
+        ",$site",
+        $products,
+    );
+
+    # TODO: get rid of this stupid hack
+    $self->pg->db->query( q{UPDATE products SET sites
+        = regexp_replace(sites, '(^,)|(,,)|(,$)', '', 'g')},
+    );
+}
+
+sub set_pricing {
+    my ( $self, $prods ) = @_;
+    return unless $prods and @$prods;
+
+    for my $prod ( @$prods ) {
+        $self->pg->db->query(
+            'UPDATE products SET price = ? WHERE number = ?',
+            $prod->{price} || '0.00',
+            $prod->{num},
+        );
+    }
+}
+
 sub _process_products {
     my ( $self, $data ) = @_;
 

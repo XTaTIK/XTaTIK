@@ -201,6 +201,8 @@ sub startup {
 
         my $ru = $r->under('/user')->to('user#is_logged_in');
         $ru->get('/')->to('user#index')->name('user/index');
+        $ru->get('/site-products')->to('user#site_products');
+        $ru->post('/site-products')->to('user#site_products');
         $ru->get('/master-products-database')
             ->to('user#master_products_database')
             ->name('user/master_products_database');

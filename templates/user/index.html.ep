@@ -14,6 +14,11 @@
   % }
   % if ( session('user')->{roles}{products} ) {
     <li class="btn-group" role="group"><a
+      href="/user/site-products"
+      type="button" class="btn btn-default">Site products</a></li>
+  % }
+  % if ( session('user')->{roles}{products} ) {
+    <li class="btn-group" role="group"><a
       href="/user/hot-products"
       type="button" class="btn btn-default">Hot products</a></li>
     <li class="btn-group" role="group"><a
