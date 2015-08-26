@@ -131,15 +131,15 @@ sub get_all {
     my $self = shift;
     my $site = shift;
 
-    return $self->_process_products(
-        $self->pg->db->query(
-            $site eq '*' ? 'SELECT * FROM products ORDER BY number'
-            : (
-               'SELECT * FROM products WHERE sites ~ ? ORDER BY number',
-               '(^|,)' . quotemeta($self->site) . '(,|$)',
-            )
-        )->hashes
-    );
+    my $prods = $self->pg->db->query(
+        $site eq '*' ? 'SELECT * FROM products ORDER BY number'
+        : (
+           'SELECT * FROM products WHERE sites ~ ? ORDER BY number',
+           '(^|,)' . quotemeta($self->site) . '(,|$)',
+        )
+    )->hashes;
+
+    return $site eq '*' ? $prods : $self->_process_products($prods);
 }
 
 sub get_category {
