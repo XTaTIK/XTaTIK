@@ -209,6 +209,7 @@ sub get_category {
         }
         elsif ( $_->{category} =~ /$sub_only_re/ ) {
             $_->{display_sub_only} = $1;
+            $cats{ (split /\*::\*/, $_->{display_sub_only})[0] }++;
         }
     }
 
