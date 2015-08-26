@@ -45,7 +45,7 @@
             <tbody>
               % for ( items_in 'cart' ) {
                 <tr>
-                  <td><img src="/content-pics/products/<%=
+                  <td><img src="/product-pics/<%=
                     $_->{image} %>" width="50" height="50" alt=""></td>
                   <td><a href="/product/<%= $_->{url} %>"
                     ><%= $_->{title} %></a></td>
@@ -90,7 +90,7 @@
               <tbody>
                 % for ( items_in 'quote' ) {
                   <tr>
-                    <td><img src="/content-pics/products/<%=
+                    <td><img src="/product-pics/<%=
                     $_->{image} %>" width="50" height="50" alt=""></td>
                     <td><a href="/product/<%= $_->{url} %>"
                       ><%= $_->{title} %></a></td>
