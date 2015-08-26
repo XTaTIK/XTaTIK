@@ -115,6 +115,13 @@ footer {
     color: $subdued-text;
 }
 
+#product_list {
+    a[href^="/product/"] {
+        display: block;
+        text-align: center;
+    }
+}
+
 #product_list:after {
     @extend .after_clear;
 }

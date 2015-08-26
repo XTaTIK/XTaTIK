@@ -11,6 +11,7 @@ jQuery(function ($) {
 
     fix_nav_padding_top();
     $( window ).resize(function() { fix_nav_padding_top(); });
+    $('#product_list .well').sameHeight();
 
     setup_feedback_button();
     setup_index_shoutout();
