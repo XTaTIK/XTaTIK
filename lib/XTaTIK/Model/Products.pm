@@ -24,7 +24,7 @@ sub get_by_number {
     return unless @numbers;
 
     my $result = $self->pg->db->query(
-        'SELECT * FROM "products" WHERE sites ~ ? AND "number" IN (' .
+        'SELECT * FROM products WHERE sites ~ ? AND number IN (' .
                 ( join ',', ('?')x@numbers )
             . ')',
         '(^|,)' . quotemeta($self->site) . '(,|$)',
@@ -58,7 +58,7 @@ sub get_by_url {
     my $url  = shift;
 
     my $product = $self->pg->db->query(
-            'SELECT * FROM "products" WHERE sites ~ ? AND "url" = ?',
+            'SELECT * FROM products WHERE sites ~ ? AND url = ?',
             '(^|,)' . quotemeta($self->site) . '(,|$)',
             $url,
         )->hash;
@@ -76,11 +76,11 @@ sub add {
     $values{sites} //= 'default';
 
     return $self->pg->db->query(
-        'INSERT INTO "products" ("number", "image", "title",
-                "category", "group_master", "group_desc",
-                "unit", "description", "sites", "tip_description",
-                "quote_description", "recommended", "price",
-                "onprice", "url")
+        'INSERT INTO products (number, image, title,
+                category, group_master, group_desc,
+                unit, description, sites, tip_description,
+                quote_description, recommended, price,
+                onprice, url)
             VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?, ?,  ?, ?)
                 RETURNING id',
         @values{qw/number  image  title  category  group_master
@@ -97,7 +97,7 @@ sub delete {
     s/^\s+|\s+$//g for @to_delete;
 
     return $self->pg->db->query(
-        'DELETE FROM "products" WHERE "number" IN(' .
+        'DELETE FROM products WHERE number IN(' .
                 (join ',', ('?')x@to_delete )
             .') RETURNING id',
         @to_delete,
@@ -111,14 +111,13 @@ sub update {
     my $url = "$values{title} $values{number}" =~ s/\W+/-/gr;
 
     $self->pg->db->query(
-        'UPDATE "products"
-            SET "number" = ?, "image" = ?, "title" = ?,
-                "category" = ?, "group_master" = ?, "group_desc" = ?,
-                "unit" = ?, "description" = ?, "tip_description" = ?,
-                "quote_description" = ?, "recommended" = ?, "price" = ?,
-                "url" = ?
-
-            WHERE "id" = ?',
+        'UPDATE products
+            SET number = ?, image = ?, title = ?,
+                category = ?, group_master = ?, group_desc = ?,
+                unit = ?, description = ?, tip_description = ?,
+                quote_description = ?, recommended = ?, price = ?,
+                url = ?
+            WHERE id = ?',
         @values{qw/number  image  title  category  group_master
                     group_desc unit description  tip_description  quote_description recommended  price/},
         $url,
@@ -134,9 +133,9 @@ sub get_all {
 
     return $self->_process_products(
         $self->pg->db->query(
-            $site eq '*' ? 'SELECT * FROM "products" ORDER BY "number"'
+            $site eq '*' ? 'SELECT * FROM products ORDER BY number'
             : (
-               'SELECT * FROM "products" WHERE sites ~ ? ORDER BY "number"',
+               'SELECT * FROM products WHERE sites ~ ? ORDER BY number',
                '(^|,)' . quotemeta($self->site) . '(,|$)',
             )
         )->hashes
@@ -151,7 +150,7 @@ sub get_category {
     my $cat_line = $category =~ s{/}{*::*}gr;
 
     my $data = $self->pg->db->query(
-        'SELECT * FROM "products" WHERE sites ~ ? AND "category" ~ ?',
+        'SELECT * FROM products WHERE sites ~ ? AND category ~ ?',
         '(^|,)' . quotemeta($self->site) . '(,|$)',
         '\[' . quotemeta($cat_line),
     )->hashes;
