@@ -1,4 +1,14 @@
 jQuery(function ($) {
+    $.fn.sameHeight = function() {
+        var max = 0;
+        $(this).each(function(){
+            var h = $(this).outerHeight();
+            if ( h > max ) { max = h }
+        });
+
+        $(this).css('min-height', max + 'px')
+    }
+
     fix_nav_padding_top();
     $( window ).resize(function() { fix_nav_padding_top(); });
 
