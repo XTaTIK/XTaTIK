@@ -225,7 +225,7 @@ sub get_category {
                 length $category ? "$category/$cat" : $cat
             ),
             contents  => [
-                extract_by {
+                sort_by { $_->{title} } extract_by {
                     ($_->{display_sub_cat}//'') eq $cat
                     or ($_->{display_sub_only}//'') =~ /^\Q$cat\E/
                 } @$data
