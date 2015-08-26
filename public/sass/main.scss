@@ -120,6 +120,13 @@ footer {
         display: block;
         text-align: center;
     }
+
+    .thumbnail {
+        img {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
 }
 
 #product_list:after {

@@ -4,9 +4,6 @@ package XTaTIK::Model::Products;
 
 use Mojo::Base -base;
 use Mojo::Pg;
-use Carp;
-$Carp::CarpLevel = 1;
-use File::Spec::Functions qw/catfile/;
 use List::AllUtils qw/uniq/;
 use List::UtilsBy qw/sort_by  extract_by/;
 use Scalar::Util qw/blessed/;
@@ -380,9 +377,9 @@ sub _process_products {
         $product->{unit_multi} = $product->{unit}
         =~ s/\Q$unit_noun\E/$units{ $unit_noun }/gr;
 
-        $product->{image} //= "$product->{number}.jpg";
-        $product->{image}   = 'nopic.png'
-            unless -e catfile 'product-pics', $product->{image};
+        unless ( length $product->{image} ) {
+            $product->{image} = "$product->{number}.jpg" =~ tr{/}{_}r;
+        }
     }
 
     return $data;

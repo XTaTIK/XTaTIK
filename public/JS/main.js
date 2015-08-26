@@ -11,11 +11,21 @@ jQuery(function ($) {
 
     fix_nav_padding_top();
     $( window ).resize(function() { fix_nav_padding_top(); });
-    $('#product_list .well').sameHeight();
 
+    setup_product_list();
     setup_feedback_button();
     setup_index_shoutout();
 });
+
+function setup_product_list() {
+    if ( ! $('#product_list').length ) { return; }
+
+    var thumb = $('#product_list .thumbnail');
+    thumb.sameHeight();
+    thumb.css({'line-height': thumb.eq(0).outerHeight() + 'px'});
+
+    $('#product_list .well').sameHeight();
+}
 
 function setup_index_shoutout() {
     if ( ! $('#index_shoutout').length ) { return; }

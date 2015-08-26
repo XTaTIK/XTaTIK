@@ -33,7 +33,8 @@
             </a></h4>
           % } else {
 
-            <a href="/product/<%= $_->{url} %>"><img src="/content-pics/products/<%= $_->{image} %>" alt="" class="thumbnail img-responsive"></a>
+            <a href="/product/<%= $_->{url} %>"
+                class="thumbnail"><img src="/product-pics/<%= $_->{image} %>" alt=""></a>
 
             <a href="/product/<%= $_->{url} %>">
               <%= $_->{title} %>

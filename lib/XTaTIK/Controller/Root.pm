@@ -4,6 +4,7 @@ package XTaTIK::Controller::Root;
 
 use Mojo::Base 'Mojolicious::Controller';
 use XTaTIK::Common qw/n_to_br/;
+use File::Spec::Functions qw/catfile/;
 
 sub index   {
     my $self = shift;
@@ -22,6 +23,12 @@ sub products_category {
 
     my ( $products, $return_path, $return_name )
     = $self->products->get_category( $self->stash('category') );
+
+    for ( @$products ) {
+        # $_->{image} = 'nopic.png'
+        #     unless $self->app
+        #         ->static->file(catfile 'product-pics', $_->{image});
+    }
 
     $self->stash(
         products    => $products,
