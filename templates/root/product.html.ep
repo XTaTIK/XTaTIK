@@ -4,7 +4,9 @@
 
 <div class="row">
   <div class="col-md-4 col-md-push-8">
-    <img src="/content-pics/products/<%= stash('product')->{image} %>" alt="" class="img-responsive well thumbnail">
+    <div class="well thumbnail">
+      <img src="/product-pics/<%= stash('product')->{image} %>" alt="" class="img-responsive">
+    </div>
   </div>
 
   <div class="col-md-8 col-md-pull-4">

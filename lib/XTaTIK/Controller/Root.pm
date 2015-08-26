@@ -24,11 +24,7 @@ sub products_category {
     my ( $products, $return_path, $return_name )
     = $self->products->get_category( $self->stash('category') );
 
-    for ( @$products ) {
-        # $_->{image} = 'nopic.png'
-        #     unless $self->app
-        #         ->static->file(catfile 'product-pics', $_->{image});
-    }
+    $self->_find_product_pic( $_->{image} ) for @$products;
 
     $self->stash(
         products    => $products,
@@ -37,10 +33,20 @@ sub products_category {
     );
 }
 
+sub _find_product_pic {
+    my $self = shift;
+
+    $_[0] = 'nopic.png'
+        unless $self->app->static->file( catfile 'product-pics', $_[0] );
+}
+
 sub product {
     my $self = shift;
     my ( $product ) = $self->products->get_by_url( $self->stash('url') );
     $product or $self->reply->not_found;
+
+    $self->_find_product_pic( $product->{image} );
+
     $self->stash( product => $product );
 };
 
