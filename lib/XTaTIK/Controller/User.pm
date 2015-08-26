@@ -54,7 +54,7 @@ sub site_products {
         $self->products->set_pricing( \@lines );
     }
 
-    $self->stash(
+    $self->param(
         products => join "\n",
             map "$_->{number}\t$_->{price}",
                 $self->products->get_all( $self->config('site') )->@*
