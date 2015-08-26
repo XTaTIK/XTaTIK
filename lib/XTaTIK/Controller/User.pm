@@ -133,8 +133,9 @@ sub master_products_database_update {
         $self->product_search->delete( $id );
         $self->product_search->add(
             $id,
-            join ' ', grep length, $self->param('category') =~ s/\W/ /gr,
-                map $self->param( $_ ),
+            join ' ', grep length,
+                ($self->param('category_' . $id)//'') =~ s/\W/ /gr,
+                map $self->param( $_ . '_' . $id ),
                 qw/number group_desc  title category description
                     tip_description quote_description/
         );
