@@ -48,8 +48,10 @@
     ></div>
     </div>
 
-    <div>
-      <%== stash('product')->{description} %>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <%== stash('product')->{description} %>
+      </div>
     </div>
   </div>
 </div>

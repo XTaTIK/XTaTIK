@@ -4,6 +4,7 @@ package XTaTIK::Model::Products;
 
 use Mojo::Base -base;
 use Mojo::Pg;
+use Text::Markdown 'markdown';
 use List::AllUtils qw/uniq/;
 use List::UtilsBy qw/sort_by  extract_by/;
 use Scalar::Util qw/blessed/;
@@ -358,6 +359,8 @@ sub _process_products {
     );
 
     for my $product ( blessed($data) ? @$data : $data ) {
+        $_ = markdown $_ for $product->{description};
+
         $product->{price}
         = $product->{ lc($self->pricing_region) . 'price' }
         // $product->{price} // 0;
