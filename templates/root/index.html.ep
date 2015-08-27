@@ -19,7 +19,7 @@
     <hr>
 
     <h3>Hot Products</h3>
-    <ul id="hot_products" class="clearfix">
+    <ul id="hot_products" class="row">
       % for ( items_in 'hot_products' ) {
           <li class="col-md-3">
             <div class="well">

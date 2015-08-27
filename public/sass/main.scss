@@ -167,6 +167,10 @@ footer {
         border-bottom: 1px solid $well-border;
         padding: $padding-large-vertical 0 2*($padding-large-vertical);
     }
+
+    > li:last-child {
+        border-bottom: 0;
+    }
 }
 
 #product_list:after {

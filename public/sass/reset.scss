@@ -9,8 +9,12 @@
 form ul,
 .list_button_group,
 #article_list,
-#hot_products,
-#product_list,
-#product_list > li > .row {
+#product_list {
     @extend .unstyled_list;
+}
+
+#hot_products,
+#product_list > li > .row {
+    list-style: none;
+    padding: 0;
 }
