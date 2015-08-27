@@ -184,6 +184,8 @@ footer {
 
 #cart {
     margin-bottom: -6ex;
+    position: relative;
+    z-index: 200;
 }
 
 .hidden_checkout {
