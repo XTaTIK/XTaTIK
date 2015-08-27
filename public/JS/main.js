@@ -15,7 +15,34 @@ jQuery(function ($) {
     setup_product_list_and_hot_products();
     setup_feedback_button();
     setup_index_shoutout();
+    setup_master_db_filter();
 });
+
+function setup_master_db_filter() {
+    if ( ! $('#master_db_update_form').length ) { return; }
+
+    $('#filter').change(function(){
+        var re;
+        try { re = new RegExp($(this).val()) }
+        catch (e) {
+            alert('Regex error: ' + e);
+        }
+
+        $('#master_db_update_form [name^=number_]')
+            .each(function() {
+                if ( ! $(this).val().match(re) ) {
+                    $(this).parents('li').eq(0).addClass('hidden')
+                }
+                else {
+                    $(this).parents('li').eq(0).removeClass('hidden')
+                }
+            });
+    })
+
+    $('#master_db_update_form').submit(function(){
+        $(this).find('.hidden').remove();
+    });
+}
 
 function setup_product_list_and_hot_products() {
     var el = $('#product_list, #hot_products');

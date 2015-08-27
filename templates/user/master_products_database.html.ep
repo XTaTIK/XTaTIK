@@ -154,7 +154,13 @@
     </div>
     <div class="panel-body">
       <%= form_for '/user/master-products-database/update'
-        => method => 'POST' => begin %>
+        => method => 'POST', id => 'master_db_update_form' => begin %>
+
+      <div class="form-group">
+        <%= text_field 'filter', id => 'filter',
+          class => 'form-control',
+            placeholder => 'Filter numbers (regex)' %>
+      </div>
 
       %= csrf_field
 
