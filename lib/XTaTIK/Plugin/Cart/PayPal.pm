@@ -12,7 +12,7 @@ sub __cur($) {
 sub checkout {
     my ( $self, $c ) = @_;
 
-    my $custom = $c->xtext('paypal')->{custom};
+    my $custom = $c->xtext('paypal_custom');
     $custom =~ s/\$promo_code/$c->param('promo_code')/ge;
 
     $c->stash(
@@ -237,10 +237,10 @@ sub _template_checkout {
     %= hidden_field 'upload'            => 1
     %= hidden_field 'cmd'               => '_cart'
     %= hidden_field 'custom'            => stash 'custom'
-    %= hidden_field 'business'          => xtext('paypal')->{email}
+    %= hidden_field 'business'          => xtext('paypal')
     %= hidden_field 'currency_code'     => xtext 'currency'
-    %= hidden_field 'cancel_return'     => xtext('current_site') . 'cart/'
-    %= hidden_field 'return' => xtext('current_site') . 'cart/thank-you'
+    %= hidden_field 'cancel_return'     => url_for('/cart/')->to_abs
+    %= hidden_field 'return'           => url_for('/cart/thank-you')->to_abs
     %= hidden_field 'tax_cart'          => (stash('pst')+stash('gst')+stash('hst'))
     %= hidden_field 'handling_cart'     => stash 'shipping'
     %= hidden_field 'address_override'  => 1
