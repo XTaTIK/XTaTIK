@@ -155,8 +155,8 @@ sub _template_thank_you {
 % }
 
 <div class="row">
-    <div class="col-md-6">
-        % if ( @{stash('quote')} ) {
+    % if ( items_in 'quote' ) {
+        <div class="col-md-<%= scalar(items_in 'cart') ? 6 : 12 %>">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h3 class="panel-title"><i class="glyphicon glyphicon-comment"></i> Your Quote Request</h3>
@@ -174,10 +174,10 @@ sub _template_thank_you {
                     </p>
                 </div>
             </div>
-        % }
-    </div>
-    <div class="col-md-6">
-        % if ( @{stash('cart')} ) {
+        </div>
+    % }
+    % if ( items_in 'cart' ) {
+        <div class="col-md-<%= scalar(items_in 'quote') ? 6 : 12 %>">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h3 class="panel-title"><i class="glyphicon glyphicon-shopping-cart"></i> Your Purchase</h3>
@@ -196,8 +196,8 @@ sub _template_thank_you {
                     </p>
                 </div>
             </div>
-        % }
-    </div>
+        </div>
+    % }
 </div>
 END_HTML
 }
