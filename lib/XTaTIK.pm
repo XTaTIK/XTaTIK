@@ -69,7 +69,6 @@ sub startup {
     $self->plugin('AntiSpamMailTo');
     $self->plugin('FormChecker' => error_class => 'foo');
     $self->plugin('IP2Location');
-    $self->plugin('AssetPack');
     $self->plugin('bootstrap3');
 
     $self->asset(
