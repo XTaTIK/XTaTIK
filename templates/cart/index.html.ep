@@ -22,16 +22,15 @@
     %= csrf_field
 
     <div class="row">
-      <div class="col-md-6">
-        % if ( items_in 'cart' ) {
+      % if ( items_in 'cart' ) {
+        <div class="col-md-<%= scalar(items_in 'quote') ? 6 : 12 %>">
           <div class="table-responsive panel panel-primary">
             <div class="panel-heading">
               <h3 class="panel-title"><i class="glyphicon glyphicon-shopping-cart"></i> Purchase</h3>
             </div>
             <div class="panel-body">
-            <p>Here are the items you're purchasing.</p>
+              <p>Here are the items you're purchasing.</p>
             </div>
-
             <table class="table table-striped">
             <thead>
               <tr>
@@ -67,10 +66,10 @@
             </tbody>
             </table>
           </div>
-        % }
-      </div>
-      <div class="col-md-6">
-        % if ( items_in 'quote' ) {
+        </div>
+      % }
+      % if ( items_in 'quote' ) {
+        <div class="col-md-<%= scalar(items_in 'cart') ? 6 : 12 %>">
           <div class="table-responsive panel panel-primary">
             <div class="panel-heading">
               <h3 class="panel-title"><i class="glyphicon glyphicon-comment"></i> Quote Request</h3>
@@ -109,9 +108,9 @@
                 % }
               </tbody>
               </table>
-            </div>
-        % }
-      </div>
+          </div>
+        </div>
+      % }
     </div>
     %= submit_button 'Proceed to the next step', class => 'btn btn-lg btn-primary'
   %= end
