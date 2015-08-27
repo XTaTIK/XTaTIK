@@ -12,7 +12,7 @@ jQuery(function ($) {
     fix_nav_padding_top();
     $( window ).resize(function() { fix_nav_padding_top(); });
 
-    setup_product_list_and_hot_products();
+    setup_product_lists();
     setup_feedback_button();
     setup_index_shoutout();
     setup_master_db_filter();
@@ -44,8 +44,8 @@ function setup_master_db_filter() {
     });
 }
 
-function setup_product_list_and_hot_products() {
-    var el = $('#product_list, #hot_products');
+function setup_product_lists() {
+    var el = $('#product_list, #hot_products, #search_results');
     if ( ! el.length ) { return; }
 
     var thumb = el.find('.thumbnail');

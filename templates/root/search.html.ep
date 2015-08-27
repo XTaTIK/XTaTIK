@@ -3,24 +3,18 @@
 % stash active_page => 'search';
 
 % if ( items_in 'products' ) {
-    <ul id="product_list">
+    <ul id="search_results" class="row">
         % for ( items_in 'products' ) {
-            <li class="col-md-4 col-sm-6">
-              <div class="well">
-              % if ( $_->{is_subsub_cat} ) {
-                <h4><a href="/products/<%= $_->{cat_url} %>"><i class="glyphicon glyphicon-chevron-right"></i>
-                  <%= $_->{title} %>
-                </a></h4>
-              % } else {
+          <li class="col-md-4">
+            <div class="well">
+              <a href="/product/<%= $_->{url} %>" class="h4">
+                <%= $_->{title} %>
+              </a>
 
-                <a href="/product/<%= $_->{url} %>"><img src="/content-pics/products/<%= $_->{image} %>" alt="" class="thumbnail img-responsive"></a>
-
-                <a href="/product/<%= $_->{url} %>">
-                  <%= $_->{title} %>
-                </a>
-              % }
-              </div>
-            </li>
+              <a href="/product/<%= $_->{url} %>"
+                  class="thumbnail"><img src="/product-pics/<%= $_->{image} %>" alt=""></a>
+            </div>
+          </li>
         % }
     </ul>
 % } else {
