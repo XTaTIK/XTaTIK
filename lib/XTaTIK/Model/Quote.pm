@@ -22,26 +22,26 @@ sub new_quote {
     my $self = shift;
     my $id   = shift;
 
-    $self->pg->db->query(
-        'INSERT INTO quotes (id, created_on) VALUES (?, ?)',
-        $id,
-        time(),
-    );
+    # $self->pg->db->query(
+    #     'INSERT INTO quotes (id, created_on) VALUES (?, ?)',
+    #     $id,
+    #     time(),
+    # );
     return $self;
 }
 
 sub save {
     my $self = shift;
 
-    $self->pg->db->query(
-        'UPDATE quotes SET contents = ?, address1 = ?, address2 = ?,
-                city = ?, email = ?, lname = ?, name = ?, phone = ?,
-                province = ?, zip = ?
-            WHERE id = ?',
-        $self->contents->$j,
-        map $self->$_, qw/address1  address2  city  email  lname  name
-            phone  province  zip  id/,
-    );
+    # $self->pg->db->query(
+    #     'UPDATE quotes SET contents = ?, address1 = ?, address2 = ?,
+    #             city = ?, email = ?, lname = ?, name = ?, phone = ?,
+    #             province = ?, zip = ?
+    #         WHERE id = ?',
+    #     $self->contents->$j,
+    #     map $self->$_, qw/address1  address2  city  email  lname  name
+    #         phone  province  zip  id/,
+    # );
 
     return $self;
 }
