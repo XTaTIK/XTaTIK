@@ -19,6 +19,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"
     ></script>
   <![endif]-->
+
 </head>
 <body>
 
@@ -102,6 +103,9 @@
 
   %= asset "bootstrap.js"
   %= asset "app.js"
+
+  %= include 'fragments/footer-extra-company'
+  %= include 'fragments/footer-extra-site'
 
   % if ( xtext 'google_analytics' ) {
     <script>
