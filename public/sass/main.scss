@@ -1,5 +1,5 @@
 @import "bootstrap/site-variables.scss";
-@import "bootstrap/company-variables.scss";
+//@import "bootstrap/company-variables.scss";
 @import "bootstrap/variables.scss";
 
 $primary1: #FF6600 !default;
@@ -116,6 +116,32 @@ footer {
 }
 
 #product_list {
+    h3 {
+        margin-bottom: 15px;
+
+        a {
+            display: block;
+        }
+    }
+
+    h4 {
+        margin: 0;
+
+        a {
+            display: block;
+            background: $well-bg;
+            border: 1px solid $well-border;
+            border-radius: $border-radius-base;
+            font-size: 130%;
+            padding: $padding-large-vertical $padding-large-horizontal;
+        }
+
+        a:hover {
+            text-decoration: none;
+            background: darken($well-bg, 10%);
+        }
+    }
+
     a[href^="/product/"] {
         display: block;
         text-align: center;
@@ -124,6 +150,11 @@ footer {
     .thumbnail img {
         display: inline-block;
         vertical-align: middle;
+    }
+
+    > li {
+        border-bottom: 1px solid $well-border;
+        padding: $padding-large-vertical 0 2*($padding-large-vertical);
     }
 }
 

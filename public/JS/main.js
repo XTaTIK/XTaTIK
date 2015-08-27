@@ -24,7 +24,7 @@ function setup_product_list() {
     thumb.sameHeight();
     thumb.css({'line-height': thumb.eq(0).outerHeight() + 'px'});
 
-    $('#product_list .well').sameHeight();
+    $('#product_list a[href^="/product/"]:not(.thumbnail)').sameHeight();
 }
 
 function setup_index_shoutout() {

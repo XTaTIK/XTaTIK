@@ -37,7 +37,8 @@ sub _find_product_pic {
     my $self = shift;
 
     $_[0] = 'nopic.png'
-        unless $self->app->static->file( catfile 'product-pics', $_[0] );
+        unless $self->app->static
+            ->file( catfile 'product-pics', $_[0]//'' );
 }
 
 sub product {

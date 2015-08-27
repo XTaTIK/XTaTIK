@@ -8,6 +8,7 @@ use Text::Markdown 'markdown';
 use List::AllUtils qw/uniq/;
 use List::UtilsBy qw/sort_by  extract_by/;
 use Scalar::Util qw/blessed/;
+use experimental 'postderef';
 
 has [qw/pg  pricing_region  custom_cat_sorting  site/];
 
@@ -263,7 +264,7 @@ sub get_category {
         contents    => \@top_no_cat,
         'is_subcat' => 1,
         no_cat => 1,
-    };
+    } if @top_no_cat;
 
     return ( \@return, $return_path, $return_name );
 }
