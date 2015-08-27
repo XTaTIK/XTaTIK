@@ -22,12 +22,13 @@
     <ul id="hot_products" class="clearfix">
       % for ( items_in 'hot_products' ) {
           <li class="col-md-3">
-            <div class="well well-sm">
-              <a href="/product/<%= $_->{url} %>"><img src="/content-pics/products/<%= $_->{image} %>" alt="" class="thumbnail img-responsive"></a>
-
-              <a href="/product/<%= $_->{url} %>">
+            <div class="well">
+              <a href="/product/<%= $_->{url} %>" class="h4">
                 <%= $_->{title} %>
               </a>
+
+              <a href="/product/<%= $_->{url} %>"
+                  class="thumbnail"><img src="/product-pics/<%= $_->{image} %>" alt=""></a>
             </div>
           </li>
       % }

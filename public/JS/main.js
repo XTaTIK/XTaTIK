@@ -12,19 +12,20 @@ jQuery(function ($) {
     fix_nav_padding_top();
     $( window ).resize(function() { fix_nav_padding_top(); });
 
-    setup_product_list();
+    setup_product_list_and_hot_products();
     setup_feedback_button();
     setup_index_shoutout();
 });
 
-function setup_product_list() {
-    if ( ! $('#product_list').length ) { return; }
+function setup_product_list_and_hot_products() {
+    var el = $('#product_list, #hot_products');
+    if ( ! el.length ) { return; }
 
-    var thumb = $('#product_list .thumbnail');
+    var thumb = el.find('.thumbnail');
     thumb.sameHeight();
     thumb.css({'line-height': thumb.eq(0).outerHeight() + 'px'});
 
-    $('#product_list a[href^="/product/"]:not(.thumbnail)').sameHeight();
+    el.find('a[href^="/product/"]:not(.thumbnail)').sameHeight();
 }
 
 function setup_index_shoutout() {
