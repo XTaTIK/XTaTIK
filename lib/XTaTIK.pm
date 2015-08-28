@@ -342,7 +342,179 @@ __END__
 
 =head1 NAME
 
-XTaTIK - Rapidly deployable, simple eCommerce website base
+XTaTIK - Rapidly deployable, multi-website eCommerce website base
+
+=head1 WARNING
+
+=for pod_spiffy start warning section
+
+This software is currently EXPERIMENTAL and the way it works might
+be changed. The first stable release is currently expected to appear
+before the end of 2015. Please consult
+L<milestones on GitHub|https://github.com/XTaTIK/XTaTIK/milestones>
+for what's to come I<(Note: milestone dates might be moved)>.
+
+=for pod_spiffy end warning section
+
+=head1 SYNOPSIS
+
+The following code in your C<XTaTIK.conf> is all you
+need to launch a new eCommerce website with the default theme.
+You'd then log in as the admin and tell the site which products from
+the master product database to display on it.
+
+    {
+        site => 'awesomewidgets',
+        text => {
+            market           => 'Awesome Widgets',
+            website_domain   => 'example.com',
+            google_analytics => 'UA-00000000-00',
+            paypal_custom    => 'AW: $promo_code',
+            order_number     => 'AWX%06d',
+            quote_number     => 'AWQ%06d',
+            market_tag       => 'The Most Awesome Widgets In The World!',
+        },
+        mojo_secrets => 'b4q34qgfdxw35t#$@!',
+    };
+
+=head1 DEMO
+
+You can view a demo website running on XTaTIK at L<http://demo.xtatik.org/>
+
+=head1 DESCRIPTION
+
+XTaTIK is a typical eCommerce website base that can be used to run
+a single website, but its true power shows when you want to run many
+separate websites that belong to one company and offer overlapping
+sets of products (for example, single company serving several markets).
+
+    XTaTIK Core
+    │
+    ├── Single database for products and customer data
+    │
+    └── Company Silo────── Single product images directory
+        │
+        ├── Site 1 Silo
+        ├── Site 2 Silo
+        ├── Site 3 Silo
+        └── Site 4 Silo
+
+I<"Silo" is just a term for a directory with a subset of website files.>
+
+The idea, depicted above, is that core eCommerce functionality, like
+"About us" pages, product search, purchasing a product or adding one
+to a quote, and check out pages are all handled by XTaTIK core.
+
+Company Silo offers any configuration that is to be shared among all the
+websites. This would be your company's branch addresses, maps,
+email addresses, etc. You can also override default XTaTIK's pages
+and even business logic. This is also where you keep all the product images.
+
+In Site Silos, you setup anything that you can't specify in your Company
+Silo. This would be market name and Google Analytics tracking code,
+among others. As with the Company Silo, in Site Silos you can override
+any config, files, and business logic provided by the Company Silo or
+the XTaTIK core.
+
+The end result is you don't duplicate anything that you don't need to.
+Each site is using the same master products database and master
+product pictures directory, so any changes done in one place are propagated
+to all of your sites. Same goes for any config you specify in the Company
+Silo.
+
+To learn how to install and use XTaTIK, please see L<XTaTIK::Docs>
+
+=head1 INSTALLATION AND USE
+
+To learn how to install and use XTaTIK, please see L<XTaTIK::Docs>
+
+=head1 FEATURE LIST
+
+I<Note: many of the features can be disabled>
+
+=over 4
+
+=item * Offering products for online purchases
+
+=item * Offering products for quote requests
+
+=item * Plugin-based checkout systems (currently only PayPal is implemented)
+
+=item * GeoIP based pricing
+
+=item * Blog
+
+=item * I<Home>, I<About Us>, I<Company History>, I<Contact Us>,
+    I<Terms and Conditions>, and I<Privacy Policy> pages
+
+=back
+
+=head1 VERSION SUPPORT
+
+XTaTIK is tested in and supports the current and previous major releases of
+Internet Explorer, Firefox, and Safari, as well as the current
+version of Google Chrome. There's unofficial support for IE8, IE9, and
+IE10, which will most likely end in 2016.
+
+XTaTIK supports the current and previous major releases of Perl and
+likely no attempt will be made to provide support for earlier versions.
+Please use L<Perlbrew|http://perlbrew.pl/> to obtain the latest
+version of Perl.
+
+=head1 TECHNOLOGIES USED
+
+XTaTIK relies on technologies listed below.
+Depending on how much customization
+you desire, you may need to be familiar with some of them:
+
+=over 4
+
+=item * L<Bootstrap|http://getbootstrap.com>
+
+=item * L<SASS|http://sass-lang.com/>
+
+=item * L<CSS3|http://www.w3.org/Style/CSS/current-work.en.html>
+
+=item * L<HTML5|http://www.w3.org/TR/html5/>
+
+=item * L<jQuery|https://jquery.com/>
+
+=item * L<PostgreSQL|http://www.postgresql.org/> (other databases
+    might be supported in the future)
+
+=item * L<Mojolicious> (also, see
+    L<www.mojolicio.us|http://www.mojolicio.us/>)
+
+=item * And of course, the lovely L<Perl 5|https://www.perl.org/>
+
+=back
+
+=head1 SEE ALSO
+
+L<www.XTaTIK.org>, L<Mojolicious>, L<Mojo::Pg>
+
+=for pod_spiffy hr
+
+=head1 REPOSITORY
+
+=for pod_spiffy start github section
+
+Fork this module on GitHub:
+L<https://github.com/XTaTIK/XTaTIK>
+
+=for pod_spiffy end github section
+
+=head1 BUGS
+
+=for pod_spiffy start bugs section
+
+To report bugs or request features, please use
+L<https://github.com/XTaTIK/XTaTIK/issues>
+
+If you can't access GitHub, you can email your request
+to C<bug-XTaTIK at rt.cpan.org>
+
+=for pod_spiffy end bugs section
 
 =head1 AUTHOR
 
@@ -350,13 +522,14 @@ XTaTIK - Rapidly deployable, simple eCommerce website base
 
 =for pod_spiffy author ZOFFIX
 
-=for text Zoffix Znet <zoffix at cpan.org>
+=for pod_spiffy author Cassi Bryant (https://github.com/cassi42)
 
 =for pod_spiffy end author section
 
 =head1 LICENSE
 
-You can use and distribute this module under the same terms as Perl itself.
+You can use and distribute this module under
+The Artistic License 2.0.
 See the C<LICENSE> file included in this distribution for complete
 details.
 

@@ -1,3 +1,2 @@
-mkdir 'search_index';
 sudo apt-get install postgresql postgresql-server-dev-9.4 libdb-dev;
 cpanm -v Mojolicious Mojo::Pg List::AllUtils List::UtilsBy JSON::Meth Data::Entropy::Algorithms Text::Markdown File::Slurp::Tiny Test::Mojo::Role::ElementCounter Mojolicious::Plugin::FormChecker Mojolicious::Plugin::Breadcrumbs Mojolicious::Plugin::AntiSpamMailTo Mojolicious::Plugin::Mail IO::Socket::SSL Search::Indexer Exporter::Easy Mojolicious::Plugin::Bootstrap3;
