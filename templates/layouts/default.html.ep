@@ -146,6 +146,12 @@
           by <a href="<%= xtext('main_web') %>"
             ><%= xtext 'company_name' %></a>
         </small>
+        % if ( config 'ip2location_free' and url_for('current') eq '/' ) {
+          <small id="ip2location">This site includes IP2Location
+            LITE data available from <a href="http://lite.ip2location.com">
+            http://lite.ip2location.com</a>
+          </small>
+        % }
         </p>
       </div>
     </div>

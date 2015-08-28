@@ -3,9 +3,7 @@ package Mojolicious::Plugin::IP2Location;
 # VERSION
 
 use Mojo::Base 'Mojolicious::Plugin';
-# TODO: use IP2Location reader from CPAN
-use lib 'ip2location/ip2location-perl-7.0.0/lib';
-use Geo::IP2Location;
+use Geo::IP2Location::Lite;
 
 my $IP_DB_LOCATION = 'ip2location/IP2LOCATION-LITE-DB3.BIN';
 
@@ -28,7 +26,9 @@ my %Province_Map = (
 sub register {
     my ($self, $app) = @_;
 
-    state $geo_ip = Geo::IP2Location->open( $IP_DB_LOCATION );
+    state $geo_ip = Geo::IP2Location::Lite->open(
+        $app->config('ip2location')
+    );
 
     $app->helper(
         geoip_region=> sub {
