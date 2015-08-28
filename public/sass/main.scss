@@ -12,6 +12,16 @@ $xtatik-footer-contacts-bg: $navbar-inverse-link-active-bg !default;
 $xtatik-footer-link-color:  $navbar-inverse-link-color !default;
 $xtatik-footer-bg:          $navbar-inverse-bg !default;
 
+$xtatik-feeback-button-bg:  $navbar-inverse-bg !default;
+$xtatik-feeback-button-link-color:
+                            $navbar-inverse-link-color !default;
+$xtatik-feeback-button-link-hover-color:
+                            $navbar-inverse-link-hover-color !default;
+$xtatik-feeback-button-link-active-color:
+                            $navbar-inverse-link-active-color !default;
+$xtatik-feeback-button-border-color:
+                            $navbar-inverse-toggle-border-color !default;
+
 html {
     overflow-y: scroll;
 }
@@ -280,8 +290,9 @@ footer {
     display: block;
     padding: 10px 10px 10px 15px;
     border-radius: 3px;
-    background: $navbar-inverse-bg;
-    color: $navbar-inverse-link-color;
+    background: $xtatik-feeback-button-bg;
+    color: $xtatik-feeback-button-link-color;
+    border-color: $xtatik-feeback-button-border-color;
 
     text-decoration: none!important;
     outline: 0;
@@ -298,12 +309,12 @@ footer {
 }
 
 #feedback_b:hover {
-    color: $navbar-inverse-link-hover-color;
+    color: $xtatik-feeback-button-link-hover-color;
 }
 
 #feedback_b:focus,
 #feedback_b:active {
-    color: $navbar-inverse-link-active-color;
+    color: $xtatik-feeback-button-link-active-color;
 }
 
 #index_shoutout {
