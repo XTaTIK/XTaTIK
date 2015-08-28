@@ -45,7 +45,7 @@ L<IP2Location.com|https://www.ip2location.com/>'s database
 
 You will need to create a B<free> account to download the
 B<free> database files.
-Download B<DB3.LITE> C<.bin> file (or just B<DB3>, if you're using
+Download IPv4 B<DB3.LITE> C<.bin> file (or just B<DB3>, if you're using
 a paid-for version) of the
 L<Lite database|http://lite.ip2location.com/databases> to some local
 directory; we'll refer to it shortly.
