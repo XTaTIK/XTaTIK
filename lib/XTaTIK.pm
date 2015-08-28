@@ -108,7 +108,7 @@ sub startup {
         (
             $ENV{XTATIK_COMPANY}
             ? (
-                map s{^\Q$ENV{XTATIK_COMPANY}\Epublic[\\/]}{}r,
+                map s{^\Q$ENV{XTATIK_COMPANY}\E[\\/]public[\\/]}{}r,
                     File::Find::Rule->name('*.js')
                     ->in( catfile($ENV{XTATIK_COMPANY}, 'public', 'JS') )
             ) : ()
