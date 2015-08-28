@@ -458,8 +458,8 @@ IE10, which will most likely end in 2016.
 
 XTaTIK supports the current and previous major releases of Perl and
 likely no attempt will be made to provide support for earlier versions.
-Please use L<Perlbrew|http://perlbrew.pl/> to obtain the latest
-version of Perl.
+You can use L<Perlbrew|http://perlbrew.pl/> to obtain the latest
+versions of Perl, if you're currently lacking one.
 
 =head1 TECHNOLOGIES USED
 

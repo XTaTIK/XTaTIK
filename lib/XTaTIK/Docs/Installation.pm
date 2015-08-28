@@ -18,8 +18,8 @@ L<pull request|https://github.com/XTaTIK/XTaTIK/pulls>.
 =head1 NOTE ON PERL VERSION
 
 XTaTIK supports the current and previous major releases of Perl.
-Please use L<Perlbrew|http://perlbrew.pl/> to obtain the latest
-versions of Perl.
+You can use L<Perlbrew|http://perlbrew.pl/> to obtain the latest
+versions of Perl, if you're currently lacking one.
 
 =head1 SOFTWARE NOT FOUND ON CPAN
 
@@ -52,14 +52,9 @@ directory; we'll refer to it shortly.
 
 =head1 XTaTIK CORE
 
-
-
-
 Simply install package L<XTaTIK> from CPAN. Using L<cpanm>, it's as
 simple as:
 
     cpanm XTaTIK
-
-
 
 =cut
