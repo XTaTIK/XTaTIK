@@ -54,6 +54,18 @@ sub site_products {
         $self->products->set_pricing( \@lines );
     }
 
+    my $products = $self->products->get_all( $self->config('site') );
+
+    # update search index
+    if ( $self->param('save') ) {
+        for ( @$products ) {
+            $self->product_search->delete( $_->{id} )->add(
+                $_->{id},
+                join ' ', @$_{qw/number  group_desc  title  category description  tip_description  quote_description/}
+            );
+        }
+    }
+
     $self->param(
         products => join "\n",
             map "$_->{number}\t$_->{price}",
@@ -101,14 +113,6 @@ sub master_products_database_post {
                     group_desc unit description  tip_description  quote_description recommended/,
     );
 
-    $self->product_search->add(
-        $id,
-        join ' ', grep length, $self->param('category') =~ s/\W/ /gr,
-            map $self->param( $_ ),
-            qw/number group_desc  title description
-                tip_description quote_description/
-    );
-
     $self->render( template => 'user/master_products_database');
 }
 
@@ -128,17 +132,6 @@ sub master_products_database_update {
             qw/number  image  title  category  group_master
                     group_desc unit description  tip_description  quote_description recommended  price/,
         );
-
-        # Update search index
-        $self->product_search->delete( $id );
-        $self->product_search->add(
-            $id,
-            join ' ', grep length,
-                ($self->param('category_' . $id)//'') =~ s/\W/ /gr,
-                map $self->param( $_ . '_' . $id ),
-                qw/number group_desc  title category description
-                    tip_description quote_description/
-        );
     }
 
     $self->flash( product_update_ok => 1 );
@@ -153,6 +146,8 @@ sub master_products_database_delete {
     return $self->render(text => 'Bad CSRF token!', status => 403)
         if $self->validation->csrf_protect->has_error('csrf_token');
 
+    # TODO: implement proper deletion
+    # ... https://github.com/XTaTIK/XTaTIK/issues/122
     $self->product_search->delete( $_ )
         for $self->products->delete( split ' ', $self->param('to_delete') );
 

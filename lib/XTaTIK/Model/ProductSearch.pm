@@ -8,8 +8,7 @@ use Mojo::DOM;
 use List::UtilsBy qw/nsort_by/;
 use experimental 'postderef';
 
-my $Search_Dir = 'search_index';
-
+has 'dir';
 sub add {
     my ( $self, $id, $keywords ) = @_;
 
@@ -23,7 +22,7 @@ sub add {
         }
     }
 
-    Search::Indexer->new( dir => $Search_Dir, writeMode => 1 )
+    Search::Indexer->new( dir => $self->dir, writeMode => 1 )
         ->add( $id, join ' ', @keywords );
 
     return 1;
@@ -32,16 +31,16 @@ sub add {
 sub delete {
     my ( $self, $id ) = @_;
 
-    Search::Indexer->new( dir => $Search_Dir, writeMode => 1 )
+    Search::Indexer->new( dir => $self->dir, writeMode => 1 )
         ->remove( $id );
 
-    return 1;
+    return $self;
 }
 
 sub search {
     my ( $self, $term ) = @_;
 
-    my $res = Search::Indexer->new( dir => $Search_Dir )->search( $term );
+    my $res = Search::Indexer->new( dir => $self->dir )->search( $term );
     return nsort_by { $res->{scores}->{$_} } keys $res->{scores}->%*;
 }
 

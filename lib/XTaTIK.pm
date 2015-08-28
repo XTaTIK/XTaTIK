@@ -13,7 +13,7 @@ use XTaTIK::Model::ProductSearch;
 use XTaTIK::Model::XVars;
 use File::Find::Rule;
 use File::Spec::Functions qw/catfile  curdir  catdir  rel2abs/;
-
+use Carp qw/croak/;
 use HTML::Entities;
 use Mojo::Pg;
 
@@ -45,6 +45,8 @@ sub startup {
 
     my $silo_path = $ENV{XTATIK_SITE_ROOT}
         // catfile 'silo', $self->config('site');
+
+    $self->config('_silo_path', $silo_path);
 
     unshift @{ $self->renderer->paths },
             catfile $silo_path, 'templates';
@@ -132,7 +134,7 @@ sub startup {
     $self->helper( cart           => \&_helper_cart           );
     $self->helper( cart_dollars   => \&_helper_cart_dollars   );
     $self->helper( cart_cents     => \&_helper_cart_cents     );
-    $self->helper( product_search => \&_helper_product_search );
+    $self->helper( product_search => $self->_gen_helper_product_search );
     $self->helper(
         blog => sub {
             state $blog = XTaTIK::Model::Blog->new(
@@ -249,9 +251,26 @@ sub _helper_users {
     );
 };
 
-sub _helper_product_search {
-    state $search = XTaTIK::Model::ProductSearch->new;
-};
+sub _gen_helper_product_search {
+    my $self = shift;
+
+    # Create search dir and touch index files, unless we already have them
+    my $dir = catdir $self->config('_silo_path'), 'search_index';
+    unless ( -d $dir ) {
+        mkdir $dir
+            or croak "Failed to create search_index directory $dir: $!";
+    }
+
+    for ( map catfile($dir, $_), qw/ixd.bdb  ixp.bdb  ixw.bdb/ ) {
+        next if -f and -r;
+        open my $fh, '>', $_
+            or croak "Failed to create search_index file $_: $!";
+    }
+
+    return sub {
+        state $search = XTaTIK::Model::ProductSearch->new( dir => $dir );
+    };
+}
 
 sub _helper_products {
     my $c = shift;
