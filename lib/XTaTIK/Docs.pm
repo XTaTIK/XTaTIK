@@ -1,4 +1,7 @@
 package XTaTIK::Docs;
+
+# VERSION
+
 1;
 __END__
 

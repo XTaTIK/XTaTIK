@@ -2,6 +2,9 @@ package XTaTIK::Utilities::Misc;
 
 use strict;
 use warnings;
+
+# VERSION
+
 use experimental 'autoderef';
 use Exporter::Easy  OK => [qw/merge_conf/];
 

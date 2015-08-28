@@ -1,5 +1,7 @@
 package XTaTIK::Utilities::ToadFarmer;
 
+# VERSION
+
 use Toadfarm -init;
 use XTaTIK::Utilities::Misc qw/merge_conf/;
 use File::Find::Rule;
