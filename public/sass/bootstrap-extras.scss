@@ -47,3 +47,11 @@
 .row-fat {
     margin-bottom: 20px;
 }
+
+.glyphicon-custom-separator {
+    top: -2px;
+}
+
+.glyphicon-custom-separator:before {
+    content: "|";
+}

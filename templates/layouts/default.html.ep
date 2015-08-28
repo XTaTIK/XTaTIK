@@ -71,32 +71,85 @@
     </div><!-- /.container -->
   </nav><!-- /.navbar -->
 
-  <div class="container">
-    <p id="cart" class="text-right
-        <%= ( $c->url_for('current') =~ m{^/cart}  )
-          || ( ! scalar( items_in cart->contents ) )
-          ? 'hidden_checkout' : '' %>
-      ">
-      <span title="Total doesn't include shipping charges or taxes"
-        ><%= items_in cart->contents %> ⇴ $<%= cart_dollars %><sup>.<%= cart_cents %></sup></span>
-      <a href="/cart/" class="btn btn-primary">Checkout</a>
-    </p>
+  <div id="bg">
+    <div class="container">
+      <p id="cart" class="text-right
+          <%= ( $c->url_for('current') =~ m{^/cart}  )
+            || ( ! scalar( items_in cart->contents ) )
+            ? 'hidden_checkout' : '' %>
+        ">
+        <span title="Total doesn't include shipping charges or taxes"
+          ><%= items_in cart->contents %> ⇴ $<%= cart_dollars %><sup>.<%= cart_cents %></sup></span>
+        <a href="/cart/" class="btn btn-primary">Checkout</a>
+      </p>
 
-    % if ( title ) {
-      <h2><%= title %></h2>
-    % }
+      % if ( title ) {
+        <h2><%= title %></h2>
+      % }
 
-    <%= content %>
-
-    <hr>
-
-    <footer class="text-center">
-      <small>Copyright © <%= (localtime)[5] + 1900 %>
-        by <a href="<%= xtext('main_web') %>"
-          ><%= xtext('company_name') %></a>
-      </small>
-    </footer>
+      <%= content %>
+    </div>
   </div>
+  <footer>
+    <div id="footer_social" class="container">
+        <div class="row">
+            <div class="col-md-12 text-center"
+              ><i>[social media buttons]</i></div>
+        </div>
+    </div>
+    <div id="footer_contacts">
+      <div class="container">
+        <div class="row">
+          % for my $loc ( items_in xtext('locations') ) {
+            <div class="col-lg-2 col-sm-4 col-xs-6">
+              <h4><%== $loc->{name} %></h4>
+              <address class="address">
+                <%== $loc->{address} %>
+                % if ( length $loc->{hours} ) {
+                  <br><span class="hours"><%= $loc->{hours} %></span>
+                % } if ( length $loc->{note} ) {
+                  <br><small><%= $loc->{note} %></small>
+                % }
+              </address>
+              <address class="phones">
+                % if ( length $loc->{phone} ) {
+                  <span>Phone:</span> <%= $loc->{phone} %><br>
+                % } if ( length $loc->{tfphone} ) {
+                  <span>Toll-free:</span> <%= $loc->{tfphone} %><br>
+                % } if ( length $loc->{fax} ) {
+                  <span>Fax:</span> <%= $loc->{fax} %><br>
+                % } if ( length $loc->{tffax} ) {
+                  <span>Toll-free fax:</span> <%= $loc->{tffax} %><br>
+                % } if ( length $loc->{email} ) {
+                  <span>Email:</span> <a
+                    href="<%== mailto_href $loc->{email} %>"
+                      ><%== mailto $loc->{email} %></a>
+                % }
+              </address>
+            </div>
+          % }
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h2><%= xtext 'market' %>—<%= xtext 'market_tag' %></h2>
+        </div>
+      </div>
+      <div class="terms text-center">
+        <a href="/terms-and-conditions">Terms and conditions</a>
+        <i class="glyphicon glyphicon-custom-separator"></i>
+        <a href="/privacy-policy">Privacy policy</a>
+        <i class="glyphicon glyphicon-custom-separator"></i>
+        <small id="copyright">Copyright © <%= (localtime)[5] + 1900 %>
+          by <a href="<%= xtext('main_web') %>"
+            ><%= xtext 'company_name' %></a>
+        </small>
+        </p>
+      </div>
+    </div>
+  </footer>
 
   <a href="/feedback" id="feedback_b"
     ><i class="glyphicon glyphicon-stats"></i> <span>Feedback</span></a>

@@ -3,9 +3,14 @@
 @import "bootstrap/variables";
 
 $primary1: #FF6600 !default;
-$light-on-dark-text: #fff;
-$lighter-border-color: #eee;
-$subdued-text: #999;
+$light-on-dark-text: #fff !default;
+$lighter-border-color: #eee !default;
+$subdued-text: #999 !default;
+
+$xtatik-footer-text-color:  $navbar-inverse-link-color !default;
+$xtatik-footer-contacts-bg: $navbar-inverse-link-active-bg !default;
+$xtatik-footer-link-color:  $navbar-inverse-link-color !default;
+$xtatik-footer-bg:          $navbar-inverse-bg !default;
 
 html {
     overflow-y: scroll;
@@ -25,6 +30,13 @@ html {
 
 body {
     padding-top: 70px;
+    background: $xtatik-footer-bg;
+}
+
+#bg {
+    padding: 19px 0 20px;
+    background: $body-bg;
+    min-height: 400px;
 }
 
 h1 {
@@ -54,6 +66,44 @@ h1 {
 
 footer {
     padding-bottom: 40px;
+
+    #footer_social {
+        padding: 20px 0;
+    }
+
+    div div * {
+        color: $xtatik-footer-text-color;
+        opacity: .95;
+    }
+
+    div div a {
+        color: $xtatik-footer-link-color!important;
+        opacity: .60;
+        transition: opacity 1s;
+    }
+    a:hover {
+        opacity: 1;
+        text-decoration: none;
+    }
+
+    #footer_contacts {
+        padding: 20px 0;
+        font-size: 90%;
+        background: $xtatik-footer-contacts-bg;
+    }
+
+    h2 {
+        font-style: italic;
+    }
+
+    .terms {
+        padding-top: 4px;
+        font-size: 85%;
+
+        i {
+            font-size: 80%;
+        }
+    }
 }
 
 .blog_nav {

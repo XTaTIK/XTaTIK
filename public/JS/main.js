@@ -115,7 +115,7 @@ function setup_index_shoutout() {
 
 function fix_nav_padding_top() {
     $('body').css('padding-top',
-        ($('.navbar-fixed-top').outerHeight() + 19) + 'px'
+        ($('.navbar-fixed-top').outerHeight()) + 'px'
     );
 }
 
