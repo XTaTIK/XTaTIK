@@ -489,6 +489,17 @@ you desire, you may need to be familiar with some of them:
 
 =back
 
+=head1 CONNECT WITH XTaTIK USERS
+
+=over 4
+
+=item * Like XTaTIK on Facebook: L<https://www.facebook.com/XTaTIKPerl>
+
+=item * Star and Watch XTaTIK GitHub repo:
+    L<https://github.com/XTaTIK/XTaTIK>
+
+=back
+
 =head1 SEE ALSO
 
 L<www.XTaTIK.org>, L<Mojolicious>, L<Mojo::Pg>
