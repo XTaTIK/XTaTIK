@@ -1,11 +1,9 @@
 % layout 'default';
-<% title stash('product')->{title}
-  . ( stash('product')->{group_desc}
-    ? ', ' . stash('product')->{group_desc}
-    : ''
-  );
-%>
+% title stash('product')->{title};
+<% if ( my $gd = stash('product')->{group_desc} )
+  { stash('extended_title', $gd ) } %>
 % stash active_page => 'products';
+
 
 <div class="row">
   <div class="col-md-4 col-md-push-8">

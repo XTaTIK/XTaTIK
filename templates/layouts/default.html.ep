@@ -84,7 +84,11 @@
       </p>
 
       % if ( title ) {
-        <h2><%= title %></h2>
+        <h2><%= title %>
+          % if ( my $et = stash('extended_title') ) {
+            <small><%= $et %></small>
+          % }
+        </h2>
       % }
 
       <%= content %>

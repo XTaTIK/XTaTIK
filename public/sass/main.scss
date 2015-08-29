@@ -61,6 +61,11 @@ h1 {
 #bg h2 {
     overflow: hidden;
     margin-top: 0;
+
+    small {
+        display: block;
+        padding: 10px 0;
+    }
 }
 
 .checkout_crumbs {
