@@ -460,7 +460,8 @@ Internet Explorer, Firefox, and Safari, as well as the current
 version of Google Chrome. There's unofficial support for IE8, IE9, and
 IE10, which will most likely end in 2016.
 
-XTaTIK supports the current and previous major releases of Perl and
+XTaTIK supports the current and previous major releases of Perl
+(not counting developer releases) and
 likely no attempt will be made to provide support for earlier versions.
 You can use L<Perlbrew|http://perlbrew.pl/> to obtain the latest
 versions of Perl, if you're currently lacking one.
