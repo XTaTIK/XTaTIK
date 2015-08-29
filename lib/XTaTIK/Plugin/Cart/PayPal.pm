@@ -6,7 +6,7 @@ use Mojo::Base -base;
 use utf8;
 
 sub __cur($) {
-    return sprintf '%.02f', shift;
+    return sprintf '%.02f', shift//'';
 }
 
 sub checkout {
