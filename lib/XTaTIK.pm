@@ -177,6 +177,10 @@ sub startup {
         $r->get('/product/(*url)')->to('root#product');
         $r->get('/products(*category)')
             ->to('root#products_category', { category => '' });
+        $r->get('/privacy-policy')
+                            ->to('root#privacy_policy');
+        $r->get('/terms-and-conditions')
+                            ->to('root#terms_and_conditions');
     }
 
     { # Cart routes
