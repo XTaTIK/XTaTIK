@@ -53,6 +53,27 @@
     ></div>
     </div>
 
+    % if ( my $options = stash('product')->{options} ) {
+      <div class="panel panel-default">
+        <div class="panel-heading">Product options</div>
+        <div class="panel-body">
+          <ul id="product_options_list">
+            % for ( items_in $options ) {
+              <li>
+                % if ( $_->{is_self} ) {
+                  <span class="btn btn-default disabled"
+                    ><%= $_->{desc} %></span>
+                % } else {
+                  <a href="<%= $_->{url} %>"
+                     class="btn btn-primary"><%= $_->{desc} %></a>
+                % }
+              </li>
+            % }
+          </ul>
+        </div>
+      </div>
+    % }
+
     <div class="panel panel-default">
       <div class="panel-body">
         <%== stash('product')->{description} %>

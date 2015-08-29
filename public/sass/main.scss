@@ -257,6 +257,20 @@ footer {
     z-index: 200;
 }
 
+#product_options_list {
+    padding: 0;
+    margin: 0;
+
+    li {
+        display: inline-block;
+    }
+
+    span {
+        cursor: default;
+    }
+}
+
+
 .hidden_checkout {
     visibility: hidden;
 }

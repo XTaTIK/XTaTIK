@@ -8,7 +8,7 @@ use Text::Markdown 'markdown';
 use List::AllUtils qw/uniq/;
 use List::UtilsBy qw/sort_by  extract_by/;
 use Scalar::Util qw/blessed/;
-use experimental 'postderef';
+use experimental qw/postderef/;
 
 has [qw/pg  pricing_region  custom_cat_sorting  site/];
 
@@ -64,7 +64,29 @@ sub get_by_url {
             $url,
         )->hash;
 
-    return $self->_process_products( $product );
+    return $self->_fill_grouped( $product )->_process_products( $product );
+}
+
+sub _fill_grouped {
+    my ( $self, $prod ) = @_;
+    return $self unless length $prod->{group_master};
+
+    my $group = $self->pg->db->query(
+            'SELECT number, url, group_desc
+                FROM products WHERE sites ~ ? AND group_master = ?',
+            '(^|,)' . quotemeta($self->site) . '(,|$)',
+            $prod->{group_master},
+        )->hashes;
+
+    for ( sort_by { $_->{group_desc} } @$group ) {
+        push $prod->{options}->@*, +{
+            url => $_->{url},
+            desc => $_->{group_desc},
+            is_self => $_->{number} eq $prod->{number},
+        };
+    }
+
+    return $self;
 }
 
 sub add {
@@ -151,7 +173,12 @@ sub get_category {
     my $cat_line = $category =~ s{/}{*::*}gr;
 
     my $data = $self->pg->db->query(
-        'SELECT * FROM products WHERE sites ~ ? AND category ~ ?',
+        q{SELECT * FROM products WHERE sites ~ ? AND category ~ ?
+            AND (
+                   group_master IS NULL
+                OR group_master = ''
+                OR group_master = number
+            )},
         '(^|,)' . quotemeta($self->site) . '(,|$)',
         '\[' . quotemeta($cat_line),
     )->hashes;
