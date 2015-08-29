@@ -1,5 +1,10 @@
 % layout 'default';
-% title stash('product')->{title};
+<% title stash('product')->{title}
+  . ( stash('product')->{group_desc}
+    ? ', ' . stash('product')->{group_desc}
+    : ''
+  );
+%>
 % stash active_page => 'products';
 
 <div class="row">
