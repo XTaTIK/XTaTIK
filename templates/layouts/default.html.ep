@@ -93,8 +93,12 @@
   <footer>
     <div id="footer_social" class="container">
         <div class="row">
-            <div class="col-md-12 text-center"
-              ><i>[social media buttons]</i></div>
+            <div class="col-md-12 text-center">
+              % for ( items_in xtext 'social' ) {
+                <a href="<%= $_->{url} %>"
+                  ><img src="<%= $_->{icon} %>" alt=""></a>
+              % }
+            </div>
         </div>
     </div>
     <div id="footer_contacts">

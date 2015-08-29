@@ -78,7 +78,11 @@ footer {
     padding-bottom: 40px;
 
     #footer_social {
-        padding: 20px 0;
+        padding: 10px 0;
+
+        a {
+            padding: 0 10px;
+        }
     }
 
     div div * {
