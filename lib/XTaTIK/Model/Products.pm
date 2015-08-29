@@ -360,7 +360,7 @@ sub _process_products {
     );
 
     for my $product ( blessed($data) ? @$data : $data ) {
-        $_ = markdown $_ for $product->{description};
+        $_ = markdown $_//'' for $product->{description};
 
         $product->{price}
         = $product->{ lc($self->pricing_region) . 'price' }
