@@ -58,6 +58,11 @@ h1 {
     }
 }
 
+#bg h2 {
+    overflow: hidden;
+    margin-top: 0;
+}
+
 .checkout_crumbs {
     vertical-align: middle;
     margin-bottom: 20px;
@@ -252,9 +257,10 @@ footer {
 }
 
 #cart {
-    margin-bottom: -6ex;
+    // margin-bottom: -6ex;
     position: relative;
     z-index: 200;
+    float: right;
 }
 
 #product_options_list {
@@ -336,6 +342,10 @@ footer {
 }
 
 #index_shoutout {
+    h2 {
+        overflow: visible;
+    }
+
     .thumbnail {
         border: 0;
     }
