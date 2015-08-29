@@ -350,6 +350,7 @@ sub set_pricing {
 
 sub _process_products {
     my ( $self, $data ) = @_;
+    return unless $data;
 
     my %units = (
         each    => 'eaches',
