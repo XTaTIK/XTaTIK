@@ -1,4 +1,4 @@
-package XTaTIK::Docs::Installation;
+package XTaTIK::Docs::01_Installation;
 
 # VERSION
 
@@ -9,7 +9,7 @@ __END__
 
 =head1 NAME
 
-XTaTIK::Docs - Index of documentation for XTaTIK eCommerce system
+XTaTIK::Docs::01_Installation - Installation instructions for XTaTIK
 
 =head1 NOTE ON OPERATING SYSTEM
 
@@ -26,7 +26,7 @@ versions of Perl, if you're currently lacking one.
 
 =head1 SOFTWARE NOT FOUND ON CPAN
 
-Some of the software required to run XTaTIK or compile one of the modules
+Some of the software required to run XTaTIK or to compile one of the modules
 it uses is not available on CPAN.
 
 =head2 PostgreSQL and Development C Libraries
@@ -43,15 +43,19 @@ package (run C<aptitude search postgresql-server>)>.
 =head2 GEOIP DATABASE
 
 Currently, XTaTIK only supports the Free version of
-L<IP2Location.com|https://www.ip2location.com/>'s database
-(paid-for version is untested, but will likely work too).
+L<IP2Location.com|https://www.ip2location.com/>'s database.
+Paid-for version will likely work just fine, but it has never been
+tested yet.
 
 You will need to create a B<free> account to download the
 B<free> database files.
 Download IPv4 B<DB3.LITE> C<.bin> file (or just B<DB3>, if you're using
 a paid-for version) of the
-L<Lite database|http://lite.ip2location.com/databases> to some local
-directory; we'll refer to it shortly.
+L<Lite database|http://lite.ip2location.com/databases>.
+
+Create a folder somewhere nice and safe. It will be your B<Company Silo>.
+A place to put global config and product pics for all your sites.
+Save the IP2Locations in that folder.
 
 =head1 XTaTIK CORE
 
@@ -59,5 +63,17 @@ Simply install package L<XTaTIK> from CPAN. Using L<cpanm>, it's as
 simple as:
 
     cpanm XTaTIK
+
+=head1 WHAT'S NEXT?
+
+Next, you should set up your I<Company Silo>. You already saved your
+IP2Location file into it.
+
+You don't really need a I<Company Silo>, if you're going to run just
+a single eCommerse site. If that is the case, simply assume all
+I<Company Silo> instructions refer to your I<Site Silo>—that is,
+a directory with all of our site's files.
+
+See L<XTaTIK::Docs::02_PreparingCompanySilo> next.
 
 =cut
