@@ -23,9 +23,8 @@ my $PG;
 sub startup {
     my $self = shift;
     $self->moniker('XTaTIK');
-    $self->plugin('Config');
-
     $self->home->parse(catdir(dirname(__FILE__), 'XTaTIK'));
+    $self->plugin('Config');
     $self->static->paths->[0] = $self->home->rel_dir('public');
     $self->renderer->paths->[0] = $self->home->rel_dir('templates');
 
@@ -431,8 +430,6 @@ product pictures directory, so any changes done in one place are propagated
 to all of your sites. Same goes for any config you specify in the Company
 Silo.
 
-To learn how to install and use XTaTIK, please see L<XTaTIK::Docs>
-
 =head1 INSTALLATION AND USE
 
 To learn how to install and use XTaTIK, please see L<XTaTIK::Docs>
@@ -451,7 +448,11 @@ I<Note: many of the features can be disabled>
 
 =item * GeoIP based pricing
 
+=item * Product search
+
 =item * Blog
+
+=item * Site feedback
 
 =item * I<Home>, I<About Us>, I<Company History>, I<Contact Us>,
     I<Terms and Conditions>, and I<Privacy Policy> pages
@@ -493,7 +494,7 @@ you desire, you may need to be familiar with some of them:
     might be supported in the future)
 
 =item * L<Mojolicious> (also, see
-    L<www.mojolicio.us|http://www.mojolicio.us/>)
+     L<www.mojolicio.us|http://www.mojolicio.us/>)
 
 =item * And of course, the lovely L<Perl 5|https://www.perl.org/>
 

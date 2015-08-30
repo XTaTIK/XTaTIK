@@ -42,30 +42,34 @@ into your `.bashrc` or similar file, for it to be always set.
 
 =head1 RUNNING XTaTIK IN DEVELOPMENT MODE
 
-# TODO: find out/develop how this would work properly
-
 To run the core XTaTIK system, without any Company or Site Silos, simply
-run:
+run I<(#TODO: currently this won't work and will beg for the GeoIP file)>:
 
-    XTaTIK_morbo
+    XTaTIK
 
 The development server will now serve on its default port.
 
 If you'd like to see what your Company Silo looks like, simply have
 C<XTATIK_COMPANY> variable set when you launch XTaTIK:
 
-    XTATIK_COMPANY="/var/www/xtatik-company-silo" XTaTIK_morbo
+    XTATIK_COMPANY="/var/www/xtatik-company-silo" XTaTIK daemon
 
 Lastly, to launch a site, specify both Company Silo (if you've used one)
 and Site Silo:
 
     XTATIK_SITE_ROOT="/var/www/MySite/silo" \
-    XTATIK_COMPANY="/var/www/xtatik-company-silo" XTaTIK_morbo
+    XTATIK_COMPANY="/var/www/xtatik-company-silo" XTaTIK daemon
 
 =head1 RUNNING XTaTIK IN PRODUCTION MODE
 
 XTaTIK is a L<Mojolicious> application and there are several ways
-to run it in production mode. Please consult # TODO: Add link
-and select a way you want to run XTaTIK as.
+to run it in production mode.
+
+At the moment, please consult
+L<https://metacpan.org/pod/Galileo#RUNNING-THE-APPLICATION>
+(use C<XTaTIK> instead of C<galileo>).
+
+Mojolicious's deployment guide may also be of use:
+L<http://mojolicio.us/perldoc/Mojolicious/Guides/Cookbook#DEPLOYMENT>
 
 =cut
