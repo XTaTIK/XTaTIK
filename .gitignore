@@ -24,11 +24,10 @@ test.pl
 XTaTIK.db
 ip2location
 out.html
-public/packed
+lib/XTaTIK/public/packed/
 XTaTIK-*
 morbo-custom
 tmp
-public/sass/.sass-cache
-public/CSS/.sass-cache/
+lib/XTaTIK/public/sass/.sass-cache
+lib/XTaTIK/public/CSS/.sass-cache/
 silo/*/public/packed
-

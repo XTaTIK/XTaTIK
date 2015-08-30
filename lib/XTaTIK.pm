@@ -12,6 +12,7 @@ use XTaTIK::Model::Blog;
 use XTaTIK::Model::ProductSearch;
 use XTaTIK::Model::XVars;
 use File::Find::Rule;
+use File::Basename 'dirname';
 use File::Spec::Functions qw/catfile  curdir  catdir  rel2abs/;
 use Carp qw/croak/;
 use HTML::Entities;
@@ -23,6 +24,10 @@ sub startup {
     my $self = shift;
     $self->moniker('XTaTIK');
     $self->plugin('Config');
+
+    $self->home->parse(catdir(dirname(__FILE__), 'XTaTIK'));
+    $self->static->paths->[0] = $self->home->rel_dir('public');
+    $self->renderer->paths->[0] = $self->home->rel_dir('templates');
 
     my @sass_path = split /:/, $ENV{SASS_PATH}//'';
 
