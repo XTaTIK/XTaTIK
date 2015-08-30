@@ -98,7 +98,10 @@ function setup_index_shoutout() {
                 var pt = ( end_height - tag.outerHeight() )/2
                     - $('#cart').outerHeight();
 
-                tag.css( 'padding-top', pt > 0 ? pt : 0 );
+                tag.css({
+                    'margin-top': 0,
+                    'padding-top': pt > 0 ? pt : 0
+                });
 
                 $('#index_shoutout').animate({opacity: 1}, 500, function(){
                     hot.animate({opacity: 1}, 300, function() {
