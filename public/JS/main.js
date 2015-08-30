@@ -95,9 +95,10 @@ function setup_index_shoutout() {
                 }
 
                 // Center market tag vertically
-                tag.css( 'padding-top',
-                    ( end_height - tag.outerHeight() )/2
-                );
+                var pt = ( end_height - tag.outerHeight() )/2
+                    - $('#cart').outerHeight();
+
+                tag.css( 'padding-top', pt > 0 ? pt : 0 );
 
                 $('#index_shoutout').animate({opacity: 1}, 500, function(){
                     hot.animate({opacity: 1}, 300, function() {
