@@ -9,13 +9,12 @@ use File::Spec::Functions qw/catfile/;
 sub index   {
     my $self = shift;
 
-    $self->stash(
-        hot_products => [
-            $self->products->get_by_number(
-                split /\n/, $self->xvar('hot_products')
-            )
-        ],
+    my @products = $self->products->get_by_number(
+        split /\n/, $self->xvar('hot_products')
     );
+
+    $self->_find_product_pic( $_->{image} ) for @products;
+    $self->stash( hot_products => \@products, );
 }
 
 sub products_category {
