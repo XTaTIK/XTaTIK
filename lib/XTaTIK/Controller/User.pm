@@ -107,7 +107,7 @@ sub master_products_database_post {
     }
 
     $self->stash( product_add_ok => 1 );
-    my $id = $self->products->add(
+    $self->products->add(
         map +( $_ => $self->param( $_ ) ),
             qw/number  image  title  category  group_master
                     group_desc unit description  tip_description  quote_description recommended/,

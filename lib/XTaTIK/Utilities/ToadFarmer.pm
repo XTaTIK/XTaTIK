@@ -1,5 +1,8 @@
 package XTaTIK::Utilities::ToadFarmer;
 
+use strict;
+use warnings;
+
 # VERSION
 
 use Toadfarm -init;

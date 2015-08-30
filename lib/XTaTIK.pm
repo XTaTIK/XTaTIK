@@ -242,7 +242,7 @@ sub _helper_xtext {
 }
 
 sub _helper_xvar {
-    my ( $c, $var, $value ) = @_;
+    my ( undef, $var, $value ) = @_;
     state $xvars = XTaTIK::Model::XVars->new(pg => $PG);
 
     if ( defined $value ) {
@@ -291,7 +291,7 @@ sub _helper_products {
 };
 
 sub _helper_quotes {
-    my $c = shift;
+    # my $c = shift;
 
     state $quotes = XTaTIK::Model::Quotes->new( pg => $PG );
     return $quotes;
@@ -346,7 +346,8 @@ __END__
 
 =encoding utf8
 
-=for stopwords eCommerce
+=for stopwords eCommerce Analytics GeoIP Perlbrew PostgreSQL deployable  jQuery
+
 
 =head1 NAME
 
@@ -513,7 +514,7 @@ you desire, you may need to be familiar with some of them:
 
 =head1 SEE ALSO
 
-L<www.XTaTIK.org>, L<Mojolicious>, L<Mojo::Pg>
+L<http://www.XTaTIK.org>, L<Mojolicious>, L<Mojo::Pg>
 
 =for pod_spiffy hr
 

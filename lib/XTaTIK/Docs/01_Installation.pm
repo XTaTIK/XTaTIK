@@ -1,11 +1,16 @@
 package XTaTIK::Docs::01_Installation;
 
+use strict;
+use warnings;
+
 # VERSION
 
 1;
 __END__
 
 =encoding utf8
+
+=for stopwords eCommerce GEOIP Perlbrew PostgreSQL
 
 =head1 NAME
 
@@ -35,7 +40,7 @@ You need to install PostgreSQL database, development files for it
 (needed by L<Mojo::Pg>), and development files for C<libdb>
 (needed by L<Search::Indexer>).
 
-I<Note: choose the apropriate version for the C<postgresql-server-dev-9.4>
+I<Note: choose the appropriate version for the C<postgresql-server-dev-9.4>
 package (run C<aptitude search postgresql-server>)>.
 
     sudo apt-get install libdb-dev postgresql postgresql-server-dev-9.4;
@@ -70,7 +75,7 @@ Next, you should set up your I<Company Silo>. You already saved your
 IP2Location file into it.
 
 You don't really need a I<Company Silo>, if you're going to run just
-a single eCommerse site. If that is the case, simply assume all
+a single eCommerce site. If that is the case, simply assume all
 I<Company Silo> instructions refer to your I<Site Silo>—that is,
 a directory with all of our site's files.
 

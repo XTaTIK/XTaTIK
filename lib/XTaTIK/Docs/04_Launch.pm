@@ -1,11 +1,16 @@
 package XTaTIK::Docs::04_Launch;
 
+use strict;
+use warnings;
+
 # VERSION
 
 1;
 __END__
 
 =encoding utf8
+
+=for stopwords  GeoIP Mojolicious
 
 =head1 NAME
 

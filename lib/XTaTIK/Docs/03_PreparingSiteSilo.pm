@@ -1,11 +1,16 @@
 package XTaTIK::Docs::03_PreparingSiteSilo;
 
+use strict;
+use warnings;
+
 # VERSION
 
 1;
 __END__
 
 =encoding utf8
+
+=for stopwords eCommerce
 
 =head1 NAME
 

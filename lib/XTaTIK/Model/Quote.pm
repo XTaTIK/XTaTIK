@@ -20,7 +20,7 @@ sub accessors {
 
 sub new_quote {
     my $self = shift;
-    my $id   = shift;
+    # my $id   = shift;
 
     # $self->pg->db->query(
     #     'INSERT INTO quotes (id, created_on) VALUES (?, ?)',

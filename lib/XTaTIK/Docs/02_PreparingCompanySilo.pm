@@ -1,11 +1,16 @@
 package XTaTIK::Docs::02_PreparingCompanySilo;
 
+use strict;
+use warnings;
+
 # VERSION
 
 1;
 __END__
 
 =encoding utf8
+
+=for stopwords eCommerce
 
 =head1 NAME
 
@@ -18,7 +23,7 @@ and you would like to share configuration and static files across all
 those sites.
 
 You don't really need a I<Company Silo>, if you're going to run just
-a single eCommerse site. If that is the case, simply assume all
+a single eCommerce site. If that is the case, simply assume all
 I<Company Silo> instructions refer to your I<Site Silo>—that is,
 a directory with all of our site's files.
 
