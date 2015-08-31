@@ -1,4 +1,8 @@
 Revision history for Perl extension XTaTIK.
 
-1.001001 2015-06-01
-    - First stable release
+0.001002 Not Released
+    - Mobile and IE8 fixes
+    - Layout adjustments
+
+0.001001 2015-08-30
+    - First DEMO release
