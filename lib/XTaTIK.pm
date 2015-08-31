@@ -545,7 +545,11 @@ to C<bug-XTaTIK at rt.cpan.org>
 
 =for pod_spiffy author ZOFFIX
 
-=for pod_spiffy author Cassi Bryant (https://github.com/cassi42)
+=over 4
+
+=item * Cassi Bryant (L<https://github.com/cassi42>)
+
+=back
 
 =for pod_spiffy end author section
 
