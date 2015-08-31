@@ -21,7 +21,7 @@
     <h3>Hot Products</h3>
     <ul id="hot_products" class="row">
       % for ( items_in 'hot_products' ) {
-          <li class="col-md-3">
+          <li class="col-md-3 col-xs-6">
             <div class="well">
               <a href="/product/<%= $_->{url} %>" class="h4">
                 <%= $_->{title} %>
