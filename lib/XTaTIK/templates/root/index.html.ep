@@ -10,6 +10,10 @@
     </span>
     <span class="col-sm-12 market_tag">
       <%= xtext 'market_tag' %>
+
+      % if ( xtext 'market_sub_tag' ) {
+        <small><%= xtext 'market_sub_tag' %></small>
+      % }
     </span>
   </h2>
 </div>

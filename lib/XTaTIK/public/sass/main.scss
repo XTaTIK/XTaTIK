@@ -354,6 +354,12 @@ footer {
 #index_shoutout {
     h2 {
         overflow: visible;
+
+        small {
+            font-size: 35%;
+            color: lighten($primary5, 5%);
+            letter-spacing: 0;
+        }
     }
 
     .thumbnail {
