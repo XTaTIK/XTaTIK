@@ -102,7 +102,7 @@
     </div>
     <div class="checkbox">
       <label><%= check_box toc => 1, id => 'c_toc'
-      %>*I have read and agree with <a target="_blank" href="/terms">Terms and Conditions</a> and <a target="_blank" href="/privacy-policy">Privacy Policy</a></label>
+      %>*I have read and agree with <a target="_blank" href="/terms-and-conditions">Terms and Conditions</a> and <a target="_blank" href="/privacy-policy">Privacy Policy</a></label>
     </div>
   </ul>
   % if ( items_in 'cart' ) {
