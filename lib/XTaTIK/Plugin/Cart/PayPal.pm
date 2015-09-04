@@ -2,7 +2,7 @@ package XTaTIK::Plugin::Cart::PayPal;
 
 # VERSION
 
-use Mojo::Base -base;
+use Mojo::Base 'XTaTIK::Plugin::Cart::Base';
 use utf8;
 
 sub __cur($) {
