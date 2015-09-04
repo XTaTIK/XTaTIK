@@ -47,7 +47,11 @@
                   <td><img src="/product-pics/<%=
                     $_->{image} %>" width="50" height="50" alt=""></td>
                   <td><a href="/product/<%= $_->{url} %>"
-                    ><%= $_->{title} %></a></td>
+                    ><%= $_->{title} %>
+                      % if ( length $_->{group_desc} ) {
+                        <small>(<%= $_->{group_desc} %>)</small>
+                      % }
+                    </a></td>
                   <td>$<%= $_->{price_dollars}
                     %><sup>.<%= $_->{price_cents} %></sup></td>
                   <td>
