@@ -61,7 +61,8 @@ sub site_products {
         for ( @$products ) {
             $self->product_search->delete( $_->{id} )->add(
                 $_->{id},
-                join ' ', @$_{qw/number  group_desc  title  category description  tip_description  quote_description/}
+                join ' ', grep defined,
+                @$_{qw/number  group_desc  title  category description  tip_description  quote_description/}
             );
         }
     }
