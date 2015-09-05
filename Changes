@@ -5,6 +5,7 @@ Revision history for Perl extension XTaTIK.
     - Layout adjustments
     - Fixed 404 on checkout page terms and conditions
     - Fixed distro packaging to include proper Issues/Repo URLs
+    - Fixed incorrect lookup of "fake" site/company sass bootstrap vars files
 
 0.001001 2015-08-30
     - First DEMO release
