@@ -3,6 +3,8 @@ Revision history for Perl extension XTaTIK.
 0.001002 Not Released
     - Mobile and IE8 fixes
     - Layout adjustments
+    - Fixed 404 on checkout page terms and conditions
+    - Fixed distro packaging to include proper Issues/Repo URLs
 
 0.001001 2015-08-30
     - First DEMO release
