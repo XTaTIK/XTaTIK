@@ -42,7 +42,8 @@ sub startup {
     }
 
     unshift @sass_path,
-            catdir rel2abs(curdir), qw/public  sass  fake-company/
+            catdir rel2abs(curdir),
+                qw/lib XTaTIK public  sass  fake-company/
         unless $ENV{XTATIK_COMPANY}
             and -r catfile $ENV{XTATIK_COMPANY},
                 qw/public  sass  bootstrap  company-variables.scss/;
@@ -62,7 +63,7 @@ sub startup {
         catfile $silo_path, 'public', 'sass';
 
     unshift @sass_path,
-            catdir rel2abs(curdir), qw/public  sass  fake-site/
+            catdir rel2abs(curdir), qw/lib XTaTIK public  sass  fake-site/
         unless -r catfile $silo_path,
                 qw/public  sass  bootstrap  site-variables.scss/;
 
