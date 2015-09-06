@@ -49,7 +49,7 @@ sub site_products {
 
             my $line = { num => $1, price => $2 };
             $line->{price} //= '00_0.00';
-            $line->{price} = join ',',
+            $line->{price} = join ',', map tr/$//dr,
                 map +(/_/ ? $_ : "00_$_"), split /,/, $line->{price};
 
             push @lines, $line;
