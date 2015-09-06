@@ -1,24 +1,28 @@
 Revision history for Perl extension XTaTIK.
 
 0.002001 2015-09-06
-    - Fixed issue where pricing was global and not per-site
+    - Fixed issue where pricing was global and not per-site (#133)
     - Allow setting per-region GeoIP pricing
-    - Made default favicon prettier
+    - Made default favicon prettier (#62)
     - Made all existing tests pass (must set RELEASE_TESTING env to run)
+        (#119)
     - Added .cat, .subcat, and .prod classes on category list page
     - nopic.png is now properly displayed on search results and checkout
-        page for products without pics
+        page for products without pics (#144)
     - Added XTATIK_BLOG_SRC env var
-    - Empty categories now result in 404s
+    - Empty categories now result in 404s (#143)
     - Checking out while setting all quantities to zero
         is no longer possible (#145)
+    - Fixed rendering bug on checkout progress bar (#136)
+    - White setting prices, you can now use an optional dollar sign (#134)
 
 0.001002 2015-09-04
     - Mobile and IE8 fixes
     - Layout adjustments
     - Fixed 404 on checkout page terms and conditions
-    - Fixed distro packaging to include proper Issues/Repo URLs
-    - Fixed incorrect lookup of "fake" site/company sass bootstrap vars files
+    - Added missing prereqs (#132)
+    - Fixed distro packaging to include proper Issues/Repo URLs (#131)
+    - Fixed incorrect lookup of "fake" site/company sass bootstrap vars files (#138)
 
 0.001001 2015-08-30
     - First DEMO release
