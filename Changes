@@ -10,6 +10,8 @@ Revision history for Perl extension XTaTIK.
         page for products without pics
     - Added XTATIK_BLOG_SRC env var
     - Empty categories now result in 404s
+    - Checking out while setting all quantities to zero
+        is no longer possible (#145)
 
 0.001002 2015-09-04
     - Mobile and IE8 fixes

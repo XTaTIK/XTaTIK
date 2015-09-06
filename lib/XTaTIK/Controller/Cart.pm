@@ -72,9 +72,10 @@ sub checkout {
         $self->param( $_ => $self->session($_) );
     }
 
-    $self->stash(
-        $self->cart->all_items_cart_quote_kv,
-    );
+    my %items = $self->cart->all_items_cart_quote_kv;
+    $items{cart}->@* or $items{quote}->@*
+        or return $self->redirect_to('/cart/');
+    $self->stash( %items );
 }
 
 sub checkout_review {
