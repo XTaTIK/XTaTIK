@@ -10,6 +10,8 @@ __END__
 
 =encoding utf8
 
+=for stopwords overriden nav shoutout
+
 =head1 NAME
 
 XTaTIK::Docs::Appendix::StaticFiles - Map of XTaTIK static files you can override

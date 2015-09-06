@@ -358,7 +358,7 @@ __END__
 
 =encoding utf8
 
-=for stopwords eCommerce Analytics GeoIP Perlbrew PostgreSQL deployable  jQuery
+=for stopwords eCommerce Analytics GeoIP Perlbrew PostgreSQL deployable  jQuery Cassi
 
 
 =head1 NAME
