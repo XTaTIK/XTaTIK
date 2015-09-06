@@ -3,12 +3,12 @@
 use lib 't';
 use Test::More;
 
-unless ( $ENV{RELEASE_TESTING} ) {
-    diag 'Set RELEASE_TESTING env var to true, to run the tests';
+unless ( $ENV{AUTHOR_TESTING} ) {
+    diag 'Set AUTHOR_TESTING env var to true, to run the tests';
     ok 1; done_testing; exit;
 }
 
-use Test::XTaTIK;
+eval 'use Test::XTaTIK';
 Test::XTaTIK->load_test_products( _get_test_products() );
 ok 1;
 done_testing();

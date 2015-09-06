@@ -2,8 +2,8 @@
 
 use Test::More;
 
-unless ( $ENV{RELEASE_TESTING} ) {
-    diag 'Set RELEASE_TESTING env var to true, to run the tests';
+unless ( $ENV{AUTHOR_TESTING} ) {
+    diag 'Set AUTHOR_TESTING env var to true, to run the tests';
     ok 1; done_testing; exit;
 }
 
@@ -11,7 +11,7 @@ use Test::Mojo::WithRoles 'ElementCounter';
 my $t = Test::Mojo::WithRoles->new('XTaTIK');
 
 use lib 't';
-use Test::XTaTIK;
+eval 'use Test::XTaTIK';
 use Mojo::DOM;
 
 {
