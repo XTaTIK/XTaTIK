@@ -3,7 +3,7 @@ package XTaTIK::Controller::Cart;
 # VERSION
 
 use Mojo::Base 'Mojolicious::Controller';
-
+use XTaTIK::Common qw/n_to_br  find_product_pic/;
 use experimental 'postderef';
 
 my @CHECKOUT_FORM_FIELDS = qw/
@@ -14,7 +14,11 @@ my @CHECKOUT_FORM_FIELDS = qw/
 sub index {
     my $self = shift;
 
-    $self->stash( $self->cart->all_items_cart_quote_kv );
+    my %items = $self->cart->all_items_cart_quote_kv;
+    for ( $items{cart}->@*, $items{quote}->@*) {
+        find_product_pic( $self, $_->{image} );
+    }
+    $self->stash( %items );
 };
 
 sub thank_you {
