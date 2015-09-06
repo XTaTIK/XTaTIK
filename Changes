@@ -6,6 +6,9 @@ Revision history for Perl extension XTaTIK.
     - Made default favicon prettier
     - Made all existing tests pass (must set RELEASE_TESTING env to run)
     - Added .cat, .subcat, and .prod classes on category list page
+    - nopic.png is now properly displayed on search results
+        for products without pics
+    - Added XTATIK_BLOG_SRC env var
 
 0.001002 2015-09-04
     - Mobile and IE8 fixes
