@@ -24,6 +24,8 @@ sub products_category {
     my ( $products, $return_path, $return_name )
     = $self->products->get_category( $self->stash('category') );
 
+    @$products or $self->reply->not_found;
+
     for ( @$products ) {
         $self->_find_product_pic( $_->{image} ) for $_->{contents}->@*;
     }

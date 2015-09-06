@@ -9,6 +9,7 @@ Revision history for Perl extension XTaTIK.
     - nopic.png is now properly displayed on search results
         for products without pics
     - Added XTATIK_BLOG_SRC env var
+    - Empty categories now result in 404s
 
 0.001002 2015-09-04
     - Mobile and IE8 fixes
