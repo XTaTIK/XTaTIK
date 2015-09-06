@@ -48,7 +48,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
         {
             number              => '001-TEST2',
@@ -62,7 +62,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '158.99',
+            price               => '{"default":{"00":158.99}}',
         },
     ];
 }

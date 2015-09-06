@@ -1,5 +1,9 @@
 Revision history for Perl extension XTaTIK.
 
+0.002001 Unreleased
+    - Fix issue where pricing was global and not per-site
+    - Allow setting per-region GeoIP pricing
+
 0.001002 2015-09-04
     - Mobile and IE8 fixes
     - Layout adjustments

@@ -9,6 +9,10 @@ use List::AllUtils qw/uniq/;
 use List::UtilsBy qw/sort_by  extract_by/;
 use Scalar::Util qw/blessed/;
 use experimental qw/postderef/;
+use JSON::Meth qw/$json/;
+
+use autobox;
+sub SCALAR::split_comma { [ split /\s*,\s*/, $_[0] ] }
 
 has [qw/pg  pricing_region  custom_cat_sorting  site/];
 
@@ -97,18 +101,19 @@ sub add {
     for ( keys %values ) { length $values{$_} or delete $values{$_} }
 
     $values{sites} //= 'default';
+    $values{price} //= { default => { '00' => '0.00' } }->$json;
 
     return $self->pg->db->query(
         'INSERT INTO products (number, image, title,
                 category, group_master, group_desc,
-                unit, description, sites, tip_description,
-                quote_description, recommended, price,
-                onprice, url)
-            VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?, ?,  ?, ?)
+                unit, description, tip_description,
+                quote_description, recommended, price, sites, url )
+            VALUES (?, ?, ?,  ?, ?, ?,  ?, ?, ?,  ?, ?, ?, ?,  ?)
                 RETURNING id',
         @values{qw/number  image  title  category  group_master
-                    group_desc unit description  sites  tip_description  quote_description recommended  price
-                        ONprice/},
+                    group_desc unit description  tip_description  quote_description recommended/},
+        $values{price},
+        $values{sites}->split_comma->$json,
         $url,
     )->hash->{id};
 }
@@ -366,10 +371,21 @@ sub set_pricing {
     my ( $self, $prods ) = @_;
     return unless $prods and @$prods;
 
+    my $db = $self->pg->db;
     for my $prod ( @$prods ) {
-        $self->pg->db->query(
+        my $prod_price = $db->query(
+            'SELECT price FROM products WHERE number = ?',
+            $prod->{num},
+        )->hash->{price}->$json;
+
+        for ( $prod->{price}->split_comma->@* ) {
+            my ( $region, $price ) = split /_/;
+            $prod_price->{ $self->site }{ $region } = $price;
+        }
+
+        $db->query(
             'UPDATE products SET price = ? WHERE number = ?',
-            $prod->{price} || '0.00',
+            $prod_price->$json,
             $prod->{num},
         );
     }
@@ -387,12 +403,16 @@ sub _process_products {
         pack    => 'packs',
     );
 
+    my $region = $self->pricing_region;
     for my $product ( blessed($data) ? @$data : $data ) {
         $_ = markdown $_//'' for $product->{description};
 
-        $product->{price}
-        = $product->{ lc($self->pricing_region) . 'price' }
-        // $product->{price} // 0;
+        $product->{price_raw} = $product->{price};
+
+        my $pr = $product->{price}->$json->{ $self->site };
+        $pr = $pr->{ $region } // $pr->{ '00' }
+            if ref $pr;
+        $product->{price} = $pr || '0.00';
 
         $product->{contact_for_pricing} = 1
             unless $product->{price} > 0;

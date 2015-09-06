@@ -64,7 +64,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
         {
             number              => '001-TEST2',
@@ -78,7 +78,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
         {
             number              => '001-TEST3',
@@ -92,7 +92,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
         {
             number              => '001-TEST4',
@@ -106,7 +106,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
         {
             number              => '001-TEST5',
@@ -120,7 +120,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
         {
             number              => '001-TEST6',
@@ -134,7 +134,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
         {
             number              => '001-TEST7',
@@ -148,7 +148,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
         {
             number              => '001-TEST8',
@@ -162,7 +162,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
         {
             number              => '001-TEST9',
@@ -176,7 +176,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
         {
             number              => '001-TEST10',
@@ -190,7 +190,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
         {
             number              => '001-TEST11',
@@ -204,7 +204,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
         {
             number              => '001-TEST12',
@@ -218,7 +218,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
     ];
 }

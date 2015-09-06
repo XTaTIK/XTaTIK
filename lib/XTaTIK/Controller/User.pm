@@ -4,6 +4,7 @@ package XTaTIK::Controller::User;
 
 use Mojo::Base 'Mojolicious::Controller';
 use experimental 'postderef';
+use JSON::Meth qw/$json/;
 
 sub login {
     my $self = shift;
@@ -45,7 +46,13 @@ sub site_products {
         my @lines;
         for ( split /\n/, $self->param('products') ) {
             /^\s*#?(\S+)(?:\s+(\S+))?/ or next;
-            push @lines, { num => $1, price => $2 };
+
+            my $line = { num => $1, price => $2 };
+            $line->{price} //= '00_0.00';
+            $line->{price} = join ',',
+                map +(/_/ ? $_ : "00_$_"), split /,/, $line->{price};
+
+            push @lines, $line;
         }
 
         $self->products
@@ -67,11 +74,18 @@ sub site_products {
         }
     }
 
-    $self->param(
-        products => join "\n",
-            map "$_->{number}\t$_->{price}",
-                $self->products->get_all( $self->config('site') )->@*
-    );
+    my @prods = $self->products->get_all( $self->config('site') )->@*;
+    my @list;
+    for ( @prods ) {
+        say $_->{price_raw};
+        my $pr = $_->{price_raw}->$json->{ $self->config('site') };
+        if ( ref $pr ) {
+            $pr = join ',', map "${_}_$pr->{$_}", sort keys %$pr;
+        }
+        $pr =~ s/\b00_// if $pr;
+        push @list, "$_->{number}\t" . ($pr // '0.00');
+    }
+    $self->param( products => join "\n", @list );
 }
 
 sub master_products_database {

@@ -203,7 +203,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '58.99',
+            price               => '{"default":{"00":58.99}}',
         },
         {
             number              => '001-TEST2',
@@ -217,7 +217,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '158.99',
+            price               => '{"default":{"00":158.99}}',
         },
         {
             number              => '001-TEST3',
@@ -231,7 +231,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '1558.99',
+            price               => '{"default":{"00":1558.99}}',
         },
         {
             number              => '001-TEST4',
@@ -245,7 +245,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '25458.99',
+            price               => '{"default":{"00":25458.99}}',
         },
         {
             number              => '001-TEST5',
@@ -259,7 +259,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '254.00',
+            price               => '{"default":{"00":254.00}}',
         },
         {
             number              => '001-TEST6',
@@ -288,7 +288,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '88.99',
+            price               => '{"default":{"00":88.99}}',
         },
         {
             number              => '001-TEST8',
@@ -304,7 +304,7 @@ sub _get_test_products {
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '48.99',
+            price               => '{"default":{"00":48.99}}',
         },
         # {
         #     number              => '',

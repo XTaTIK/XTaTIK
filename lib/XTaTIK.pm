@@ -284,11 +284,13 @@ sub _gen_helper_product_search {
 sub _helper_products {
     my $c = shift;
     state $products = XTaTIK::Model::Products->new(
-        pricing_region => $c->geoip_region,
         pg => $PG,
         custom_cat_sorting => $c->config('custom_cat_sorting'),
         site => $c->config('site'),
     );
+
+    $products->pricing_region( $c->geoip_region );
+    return $products;
 };
 
 sub _helper_quotes {
@@ -492,8 +494,7 @@ you desire, you may need to be familiar with some of them:
 
 =item * L<jQuery|https://jquery.com/>
 
-=item * L<PostgreSQL|http://www.postgresql.org/> (other databases
-    might be supported in the future)
+=item * L<PostgreSQL|http://www.postgresql.org/>
 
 =item * L<Mojolicious> (also, see
      L<www.mojolicio.us|http://www.mojolicio.us/>)

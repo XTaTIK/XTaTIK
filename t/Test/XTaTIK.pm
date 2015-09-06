@@ -39,11 +39,11 @@ sub load_test_products {
     $products_to_load
         or croak 'Must provide test products';
 
-    unlink qw{
-        search_index/ixd.bdb
-        search_index/ixp.bdb
-        search_index/ixw.bdb
-    };
+    # unlink qw{
+    #     search_index/ixd.bdb
+    #     search_index/ixp.bdb
+    #     search_index/ixw.bdb
+    # };
 
     for my $idx ( 0..$#$products_to_load ) {
         my $p = $products_to_load->[$idx];
@@ -101,7 +101,7 @@ sub load_test_products {
         'CREATE TABLE carts (
             id          SERIAL PRIMARY KEY,
             created_on  INT,
-            data        TEXT
+            data        JSON
         )'
     );
     $p->pg->db->query(
@@ -151,7 +151,6 @@ sub load_test_products {
             group_master  TEXT,
             group_desc    TEXT,
             price         TEXT,
-            onprice       TEXT,
             unit          TEXT,
             description   TEXT,
             sites         TEXT,
@@ -165,7 +164,7 @@ sub load_test_products {
     for ( @$products_to_load ) {
         my $id = $p->add( %$_ );
 
-        delete @$_{qw/price  onprice  unit  recommended  image
+        delete @$_{qw/price  unit  recommended  image
             group_master  url  id
         /};
         $_->{category} =~ s/\W/ /g;
