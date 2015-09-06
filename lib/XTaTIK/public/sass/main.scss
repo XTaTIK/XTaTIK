@@ -3,9 +3,11 @@
 @import "bootstrap/variables";
 
 $primary1: #FF6600 !default;
+$primary5: #000 !default;
 $light-on-dark-text: #fff !default;
 $lighter-border-color: #eee !default;
-$subdued-text: #999 !default;
+
+$xtatik-productnumber-text-color: #999 !default;
 
 $xtatik-footer-text-color:  $navbar-inverse-link-color !default;
 $xtatik-footer-contacts-bg: $navbar-inverse-link-active-bg !default;
@@ -187,7 +189,7 @@ footer {
 }
 
 .product_number {
-    color: $subdued-text;
+    color: $xtatik-productnumber-text-color;
 }
 
 #search_results,
