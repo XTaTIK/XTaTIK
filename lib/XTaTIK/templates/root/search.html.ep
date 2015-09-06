@@ -5,7 +5,7 @@
 % if ( items_in 'products' ) {
     <ul id="search_results" class="row">
         % for ( items_in 'products' ) {
-          <li class="col-md-4">
+          <li class="col-md-4 prod">
             <div class="well">
               <a href="/product/<%= $_->{url} %>" class="h4">
                 <%= $_->{title} %>

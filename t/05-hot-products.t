@@ -2,10 +2,10 @@
 
 use Test::More;
 
-diag '#TODO: fix the tests when GeoIP database issue is rectified';
-ok 1;
-done_testing;
-__END__
+unless ( $ENV{RELEASE_TESTING} ) {
+    diag 'Set RELEASE_TESTING env var to true, to run the tests';
+    ok 1; done_testing; exit;
+}
 
 use Test::Mojo::WithRoles 'ElementCounter';
 my $t = Test::Mojo::WithRoles->new('XTaTIK');

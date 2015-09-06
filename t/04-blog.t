@@ -2,24 +2,18 @@
 
 use Test::More;
 
-diag '#TODO: fix the tests when GeoIP database issue is rectified';
-ok 1;
-done_testing;
-__END__
+unless ( $ENV{RELEASE_TESTING} ) {
+    diag 'Set RELEASE_TESTING env var to true, to run the tests';
+    ok 1; done_testing; exit;
+}
+
+local $ENV{XTATIK_BLOG_SRC} = 't/blog_src';
 
 use Test::Mojo::WithRoles 'ElementCounter';
 my $t = Test::Mojo::WithRoles->new('XTaTIK');
 
 use lib 't';
 use Test::XTaTIK;
-use File::Path qw/remove_tree/;
-use File::Copy::Recursive qw/dirmove dircopy/;
-
--e 'blog_src'
-    or BAIL_OUT 'Did not find blog_src dir. Are we in the wrong location?';
-
-dirmove 'blog_src', 'backup_blog_src';
-dircopy 't/blog_src', 'blog_src';
 
 {
     $t->get_ok('/blog')->status_is(200)
@@ -96,9 +90,6 @@ dircopy 't/blog_src', 'blog_src';
                 . ' a[href="/blog/2015-05-12-Test-Post-2"]')
         ->text_is('.blog_nav ~ .blog_nav li a', 'Test Post 2')
 }
-
-remove_tree 'blog_src';
-dirmove 'backup_blog_src', 'blog_src';
 
 done_testing();
 

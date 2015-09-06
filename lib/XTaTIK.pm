@@ -69,6 +69,14 @@ sub startup {
 
     $ENV{SASS_PATH} = join ':', @sass_path;
 
+    $self->log->debug('*** XTaTIK LOADED: ***');
+    $self->log->debug('Site: ' . $self->config('site') );
+    $self->log->debug("XTATIK_COMPANY: $ENV{XTATIK_COMPANY}");
+    $self->log->debug("XTATIK_SITE_ROOT: $ENV{XTATIK_SITE_ROOT}");
+    $self->log->debug("Silo path: $silo_path");
+    $self->log->debug("SASS path: $ENV{SASS_PATH}");
+    $self->log->debug('**********************');
+
     $self->secrets([ $self->config('mojo_secrets') ]);
 
     $self->config( hypnotoad => {listen => ['http://*:3005'], proxy => 1} );
@@ -143,7 +151,8 @@ sub startup {
     $self->helper(
         blog => sub {
             state $blog = XTaTIK::Model::Blog->new(
-                blog_root => catfile $silo_path, 'blog_src'
+                blog_root => $ENV{XTATIK_BLOG_SRC}
+                    // catfile $silo_path, 'blog_src'
             );
         }
     );

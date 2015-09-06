@@ -1,8 +1,11 @@
 Revision history for Perl extension XTaTIK.
 
-0.002001 Unreleased
-    - Fix issue where pricing was global and not per-site
+0.002001 2015-09-06
+    - Fixed issue where pricing was global and not per-site
     - Allow setting per-region GeoIP pricing
+    - Made default favicon prettier
+    - Made all existing tests pass (must set RELEASE_TESTING env to run)
+    - Added .cat, .subcat, and .prod classes on category list page
 
 0.001002 2015-09-04
     - Mobile and IE8 fixes

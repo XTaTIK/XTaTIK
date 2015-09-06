@@ -113,7 +113,7 @@ sub add {
         @values{qw/number  image  title  category  group_master
                     group_desc unit description  tip_description  quote_description recommended/},
         $values{price},
-        $values{sites}->split_comma->$json,
+        $values{sites},
         $url,
     )->hash->{id};
 }

@@ -18,14 +18,15 @@
 
 <ul id="product_list">
 % for ( items_in 'products' ) {
-  <li>
+  <li class="cat">
     % unless ( $_->{no_cat} ) {
       <h3><a href="/products/<%= $_->{cat_url} %>"
         ><i class="glyphicon glyphicon-chevron-right"></i> <%= $_->{title} %></a></h3>
     % }
     <ul class="row">
       % for ( items_in $_->{contents} ) {
-        <li class="col-md-4 col-sm-6">
+        <li class="col-md-4 col-sm-6 <%= $_->{is_subsub_cat}
+                                        ? 'subcat' : 'prod' %>">
           % if ( $_->{is_subsub_cat} ) {
             <h4><a href="/products/<%= $_->{cat_url} %>"><i class="glyphicon glyphicon-chevron-right"></i>
               <%= $_->{title} %>

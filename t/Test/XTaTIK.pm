@@ -6,8 +6,7 @@ use File::Copy;
 use Mojo::Pg;
 use XTaTIK::Model::Products;
 
-my $secret = do 'secret.txt' or die "Failed to load secret.txt: $! $@";
-my $PG_URL = $ENV{XTATIK_PG_URL} || $secret->{pg_url};
+my $PG_URL = $ENV{XTATIK_PG_URL};
 my $DB_FILE_NAME = 'NOOP';
 my $BACKUP_DB_FILE_NAME = "backup_$DB_FILE_NAME";
 
@@ -39,36 +38,36 @@ sub load_test_products {
     $products_to_load
         or croak 'Must provide test products';
 
-    # unlink qw{
-    #     search_index/ixd.bdb
-    #     search_index/ixp.bdb
-    #     search_index/ixw.bdb
-    # };
-
     for my $idx ( 0..$#$products_to_load ) {
         my $p = $products_to_load->[$idx];
         $p = {
             number              => '001-TEST' . ($idx+1),
+            title               => 'Test Product ' . ($idx+1),
             image               => '',
             category            => '[]',
             group_master        => '',
             group_desc          => '',
             unit                => '',
-            description         => '',
+            description         => 'Test Desc ' . ($idx+1),
             tip_description     => '',
             quote_description   => '',
             recommended         => '',
-            price               => '',
+            price               => undef,
 
             %$p,
         },
 
-        $p->{title} //= 'Product ' . $p->{number};
+        $p->{price} //= '0.00';
+        $p->{price} = qq|{"default":{"00":$p->{price}}}|
+            unless $p->{price} =~ /^\s*\{/;
+
         $products_to_load->[$idx] = $p;
     }
 
     my $p = XTaTIK::Model::Products->new;
     save_db();
+    $PG_URL // die "\n\nMust set XTATIK_PG_URL env var to a PostgreSQL "
+                . "database URL if you plan on running tests\n\n\n";
     $p->pg( Mojo::Pg->new($PG_URL) );
 
     $p->pg->db->query(

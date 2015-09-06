@@ -2,10 +2,10 @@
 
 use Test::More;
 
-diag '#TODO: fix the tests when GeoIP database issue is rectified';
-ok 1;
-done_testing;
-__END__
+unless ( $ENV{RELEASE_TESTING} ) {
+    diag 'Set RELEASE_TESTING env var to true, to run the tests';
+    ok 1; done_testing; exit;
+}
 
 use Test::Mojo::WithRoles 'ElementCounter';
 my $t = Test::Mojo::WithRoles->new('XTaTIK');
@@ -18,7 +18,9 @@ Test::XTaTIK->load_test_products( _get_test_products() );
 
 {
     for my $idx ( 1..12 ) {
-        $t->get_ok("/product/Test-Product-$idx-001-TEST$idx");
+        $t->get_ok("/product/Test-Product-$idx-001-TEST$idx")
+            ->status_is(200);
+
         my $dom = Mojo::DOM->new( $t->tx->res->body );
         my ( $csrf ) = $dom->find('[name=csrf_token]')
             ->map(qw/attr value/)->each;
@@ -52,7 +54,7 @@ Test::XTaTIK->load_test_products( _get_test_products() );
         'packs of 42',
     );
 
-    for ( 0 .. $#units ) {
+    for ( 0 .. $#wanted_units ) {
         is $units[$_], $wanted_units[$_],
             "correct unit at index $_ ($wanted_units[$_])";
     }
