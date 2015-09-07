@@ -18,6 +18,7 @@ use Carp qw/croak/;
 use HTML::Entities;
 use Mojo::Pg;
 use experimental qw/postderef/;
+use lib;
 
 my $PG;
 
@@ -41,7 +42,9 @@ sub startup {
         unshift @sass_path,
             catdir $ENV{XTATIK_COMPANY}, 'public', 'sass';
 
-        eval 'use lib ' . catdir $ENV{XTATIK_COMPANY}, 'lib';
+        lib->import( catdir $ENV{XTATIK_COMPANY}, 'lib' );
+
+        blasdsdasdsa->import;
     }
 
     unshift @sass_path,
@@ -64,8 +67,7 @@ sub startup {
 
     unshift @sass_path,
         catdir $silo_path, 'public', 'sass';
-
-    eval 'use lib ' . catdir $silo_path, 'lib';
+    lib->import( catdir $silo_path, 'lib' );
 
     unshift @sass_path,
             catdir rel2abs(curdir), qw/lib XTaTIK public  sass  fake-site/
