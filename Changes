@@ -1,6 +1,6 @@
 Revision history for Perl extension XTaTIK.
 
-0.003001 Unreleased
+0.003001 2015-09-07
     [Breaking Changes]
         - Restructured cart plugin system
         - checkout_system config var now must be an arrayref
