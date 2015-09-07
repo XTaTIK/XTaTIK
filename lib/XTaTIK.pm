@@ -33,13 +33,13 @@ sub startup {
 
     if ( $ENV{XTATIK_COMPANY} ) {
         unshift @{ $self->renderer->paths },
-            catfile $ENV{XTATIK_COMPANY}, 'templates';
+            catdir $ENV{XTATIK_COMPANY}, 'templates';
 
         unshift @{ $self->static->paths },
-            catfile $ENV{XTATIK_COMPANY}, 'public';
+            catdir $ENV{XTATIK_COMPANY}, 'public';
 
         unshift @sass_path,
-            catfile $ENV{XTATIK_COMPANY}, 'public', 'sass';
+            catdir $ENV{XTATIK_COMPANY}, 'public', 'sass';
     }
 
     unshift @sass_path,
@@ -55,13 +55,13 @@ sub startup {
     $self->config('_silo_path', $silo_path);
 
     unshift @{ $self->renderer->paths },
-            catfile $silo_path, 'templates';
+            catdir $silo_path, 'templates';
 
     unshift @{ $self->static->paths },
-        catfile $silo_path, 'public';
+        catdir $silo_path, 'public';
 
     unshift @sass_path,
-        catfile $silo_path, 'public', 'sass';
+        catdir $silo_path, 'public', 'sass';
 
     unshift @sass_path,
             catdir rel2abs(curdir), qw/lib XTaTIK public  sass  fake-site/
