@@ -1,6 +1,9 @@
 Revision history for Perl extension XTaTIK.
 
-0.002002 Unreleased
+0.003001 Unreleased
+    [Breaking Changes]
+        - Restructured cart plugin system
+        - checkout_system config var now must be an arrayref
     [Bug fixes]
         - Fixed alignment on shoutout when thin logos are used
 

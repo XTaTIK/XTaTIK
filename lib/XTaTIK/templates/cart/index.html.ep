@@ -2,6 +2,7 @@
 % layout 'default';
 
 % if ( items_in 'cart' or items_in 'quote' ) {
+<!--
   % if ( items_in 'cart' ) {
     <ul class="checkout_crumbs text-center">
        <li class="col-md-15 label-primary">Review products</li>
@@ -17,7 +18,7 @@
        <li class="col-md-4 label-default">Receive confirmation</li>
     </ul>
   % }
-
+-->
   %= form_for '/cart/checkout' => (method => 'POST') => id => 'checkout_form' => begin
     %= csrf_field
 

@@ -140,7 +140,7 @@ sub submit {
     my $id = $self->id or die "MISSING CART ID on submit";
 
     my @quote_products = map +{ q => $_->{q}, n => $_->{n}, },
-        grep $_->{price} == 0, $self->contents->@*;
+        grep $_->{price}//0 == 0, $self->contents->@*;
     return unless @quote_products;
 
     $quote_products[$_]{o} = $_ for 0 .. $#quote_products;

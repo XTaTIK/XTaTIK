@@ -17,6 +17,7 @@ use File::Spec::Functions qw/catfile  curdir  catdir  rel2abs/;
 use Carp qw/croak/;
 use HTML::Entities;
 use Mojo::Pg;
+use experimental qw/postderef/;
 
 my $PG;
 
@@ -203,10 +204,18 @@ sub startup {
     { # Cart routes
         my $rc = $r->under('/cart');
         $rc->get( '/'               )->to('cart#index'          );
-        $rc->any( '/thank-you'      )->to('cart#thank_you'      );
         $rc->post('/add'            )->to('cart#add'            );
-        $rc->post('/checkout'       )->to('cart#checkout'       );
-        $rc->post('/checkout-review')->to('cart#checkout_review');
+
+        for my $plug ( $self->config('checkout_system')->@* ) {
+            my ( $name, $conf ) = ref $plug ? ( @$plug ) : ( $plug );
+
+            my $handler = "XTaTIK::Plugin::Cart::$name";
+            eval "require $handler"
+                or die "Failed to load cart handler $handler: $@";
+
+            my $h = $handler->new( $conf ? ( conf => $conf ) : () );
+            $h->_add_routes( $rc );
+        }
     }
 
     unless ( $self->config('no_blog') ) {

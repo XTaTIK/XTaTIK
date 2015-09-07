@@ -2,125 +2,270 @@ package XTaTIK::Plugin::Cart::PayPal;
 
 # VERSION
 
-use Mojo::Base 'XTaTIK::Plugin::Cart::Base';
+use Mojo::Base 'Mojolicious::Controller';
 use utf8;
+use experimental 'postderef';
 
-sub __cur($) {
-    return sprintf '%.02f', shift//'';
+my @CHECKOUT_FORM_FIELDS = qw/
+    address1  address2  city  do_save_address  email
+    lname  name  phone  promo_code  province  toc  zip
+/;
+
+my %TEMPLATES = qw{
+    thank_you          cart/Plugins/PayPal/thank_you
+    checkout           cart/Plugins/PayPal/checkout
+    checkout_review    cart/Plugins/PayPal/checkout_review
+    email_to_customer  cart/Plugins/PayPal/email/order-to-customer
+    email_to_company   cart/Plugins/PayPal/email/order-to-company
+};
+
+sub _add_routes {
+    my ( $self, $rc ) = @_;
+
+    my ( $ns, $c ) = qw/XTaTIK::Plugin::Cart  PayPal/;
+    $rc->any('/thank-you')
+        ->to( namespace => $ns, controller => $c, action => 'thank_you' );
+    $rc->post('/checkout')
+        ->to( namespace => $ns, controller => $c, action => 'checkout' );
+    $rc->post('/checkout-review')
+        ->to( namespace => $ns, controller => $c, action => 'checkout_review');
 }
 
-sub checkout {
-    my ( $self, $c ) = @_;
-
-    my $custom = $c->xtext('paypal_custom');
-    $custom =~ s/\$promo_code/$c->param('promo_code')/ge;
-
-    $c->stash(
-        $c->cart->all_items_cart_quote_kv,
-        custom        => $custom,
-        __costs($c),
-    );
-
-    return $c->render_to_string( inline => $self->_template_checkout );
-}
-
+## ROUTES
 sub thank_you {
     my ( $self, $c ) = @_;
 
-    return $c->redirect_to('/cart/')
-        unless @{$c->cart->all_items};
+    return $self->redirect_to('/cart/')
+        unless @{$self->cart->all_items};
 
-    my $order_num = sprintf $c->xtext('order_number'), $c->cart->id;
-    my $quote_num = sprintf $c->xtext('quote_number'), $c->cart->id;
+    my $order_num = sprintf $self->xtext('order_number'), $self->cart->id;
+    my $quote_num = sprintf $self->xtext('quote_number'), $self->cart->id;
 
-    my ( $cart, $quote ) = $c->cart->all_items_cart_quote;
-    $c->cart->submit(
-        map +( $_ => $c->session('customer_data')->{$_} ),
+    my ( $cart, $quote ) = $self->cart->all_items_cart_quote;
+    $self->cart->submit(
+        map +( $_ => $self->session('customer_data')->{$_} ),
             qw/address1  address2  city  email  lname  name  phone
                 province  zip/
     );
 
     my $cart_title  = @$cart  ? "Order #$order_num " : '';
     my $quote_title = @$quote ? "Quote #$quote_num " : '';
-    $c->stash(
+    $self->stash(
         cart          => $cart,
         quote         => $quote,
-        visitor_ip    => $c->tx->remote_address,
+        visitor_ip    => $self->tx->remote_address,
         order_number  => $order_num,
         quote_number  => $quote_num,
-        __costs($c),
+        $self->_costs,
         title => "Your $cart_title $quote_title on "
-                . $c->config('text')->{website_domain},
+                . $self->config('text')->{website_domain},
     );
 
     # Send order email to customer
     eval { # eval, since we don't know what address we're trying to send to
-        $c->mail(
-            test     => $c->config('mail')->{test},
-            to       => $c->session('customer_data')->{email},
-            from     => $c->config('mail')->{from}{order},
-            subject  => $c->stash('title'),
+        $self->mail(
+            test     => $self->config('mail')->{test},
+            to       => $self->session('customer_data')->{email},
+            from     => $self->config('mail')->{from}{order},
+            subject  => $self->stash('title'),
             type     => 'text/html',
-            data     => $c->render_to_string('email-templates/order-to-customer'),
+            data     => $self->render_to_string($TEMPLATES{email_to_customer}),
         );
     };
 
-    $c->stash(
+    $self->stash(
         title => "New $cart_title $quote_title on "
-                . $c->config('text')->{website_domain},
-        promo_code => $c->session('customer_data')->{promo_code} // 'N/A',
-        map +( "cust_$_" => $c->session('customer_data')->{$_} ),
+                . $self->config('text')->{website_domain},
+        promo_code => $self->session('customer_data')->{promo_code} // 'N/A',
+        map +( "cust_$_" => $self->session('customer_data')->{$_} ),
             qw/address1  address2  city  email  lname  name  phone
                 province  zip/
     );
 
     #Send order email to ourselves
-    $c->mail(
-        test    => $c->config('mail')->{test},
-        to      => $c->config('mail')->{to}{order},
-        from    => $c->config('mail')->{from}{order},
-        subject => $c->stash('title'),
+    $self->mail(
+        test    => $self->config('mail')->{test},
+        to      => $self->config('mail')->{to}{order},
+        from    => $self->config('mail')->{from}{order},
+        subject => $self->stash('title'),
         type    => 'text/html',
-        data    => $c->render_to_string('email-templates/order-to-company'),
+        data    => $self->render_to_string( $TEMPLATES{email_to_company} ),
     );
 
     # TODO: there's gotta be a nicer way of doing this...
     # ... maybe stuff it into ->submit()
-    $c->stash(__cart => undef);
-    $c->session(cart_id => undef);
-    $c->cart;
-    $c->cart_dollars('refresh');
-    $c->cart_cents('refresh');
+    $self->stash(__cart => undef);
+    $self->session(cart_id => undef);
+    $self->cart;
+    $self->cart_dollars('refresh');
+    $self->cart_cents('refresh');
 
-    return $c->render_to_string( inline => $self->_template_thank_you );
+    $self->stash( template => $TEMPLATES{thank_you} );
 }
 
-sub __costs {
-    my $c = shift;
+sub checkout {
+    my $self = shift;
+
+    my @ids = map /(\d+)/, grep /^id/, $self->req->params->names->@*;
+
+    for ( @ids ) {
+        $self->cart->alter_quantity(
+            $self->param('number_'   . $_),
+            $self->param('quantity_' . $_)
+        );
+    }
+    @ids and $self->cart->save;
+    $self->cart_dollars('refresh'); $self->cart_cents('refresh');
+
+    for ( @CHECKOUT_FORM_FIELDS ) {
+        next if length $self->param($_);
+
+        $self->param( $_ => $self->geoip_region )
+            if $_ eq 'province' and not length $self->session($_);
+
+        next unless length $self->session($_);
+        $self->param( $_ => $self->session($_) );
+    }
+
+    my %items = $self->cart->all_items_cart_quote_kv;
+    $items{cart}->@* or $items{quote}->@*
+        or return $self->redirect_to('/cart/');
+    $self->stash(
+        %items,
+        template => $TEMPLATES{checkout}
+    );
+}
+
+sub checkout_review {
+    my $self = shift;
+
+    $self->session(
+        customer_data => {
+            map +( $_ => $self->param($_) ), qw/
+                address1  address2  city  email
+                lname  name  phone  promo_code  province  zip
+            /
+        },
+    );
+
+    my ( $cart ) = $self->cart->all_items_cart_quote;
+    @$cart or $self->redirect_to('/cart/thank-you');
+
+    if ( $self->param('do_save_address') ) {
+        $self->session( $_ => $self->param($_) )
+        for @CHECKOUT_FORM_FIELDS;
+    }
+    else {
+        $self->session( $_ => undef )
+            for @CHECKOUT_FORM_FIELDS;
+    }
+
+    $self->form_checker(
+        rules => {
+            email    => {
+                max => 300,
+                email => 'Email',
+            },
+            name    => {
+                max => 300,
+                name => 'First name',
+            },
+            lname    => {
+                max => 300,
+                name => 'Last name',
+            },
+            address1 => {
+                max => 1000,
+                name => 'Address line 1',
+            },
+            address2 => {
+                max => 1000,
+                name => 'Address line 2',
+                optional => 1,
+            },
+            city    => {
+                max => 300,
+            },
+            do_save_address => {
+                optional => 1,
+                select => 1,
+            },
+            province=> {
+                valid_values => [
+                    qw/AB BC MB NB NL NT NS NU ON PE QC SK YT/
+                ],
+                valid_values_error => 'Please specify province',
+            },
+            zip => {
+                max => 20,
+                name => 'Postal code',
+            },
+            phone => {
+                name => 'Phone number',
+            },
+            toc => {
+                mandatory_error => 'You must accept Terms and Conditions',
+            },
+            promo_code => {
+                name => 'Promo code',
+                optional => 1,
+                max => 100,
+            },
+        },
+    );
+
+    unless ( $self->form_checker_ok ) {
+        $self->flash(
+            form_checker_error_wrapped => $self->form_checker_error_wrapped,
+        );
+        $self->stash( cart => $cart );
+        $self->render(template => $TEMPLATES{checkout});
+        return;
+    }
+
+    my $custom = $self->xtext('paypal_custom');
+    $custom =~ s/\$promo_code/$self->param('promo_code')/ge;
+
+    $self->stash(
+        $self->cart->all_items_cart_quote_kv,
+        custom        => $custom,
+        $self->_costs,
+        template => $TEMPLATES{checkout_review},
+    )
+}
+
+## AUXILIARY
+
+sub __cur($) {
+    return sprintf '%.02f', shift//0;
+}
+
+sub _costs {
+    my $self = shift;
 
     my ( $shipping, $gst, $hst, $pst, $total_d, $total_c);
-    my $xtext_tax = $c->xtext('PST')->{
-        $c->param('province')
-        // ($c->session('customer_data') || {})->{province}
+    my $xtext_tax = $self->xtext('PST')->{
+        $self->param('province')
+        // ($self->session('customer_data') || {})->{province}
     };
 
     # TODO: are we sure shipping charges get the full tax??
     if ( ref $xtext_tax ) {
         my $hst_rate = $$xtext_tax / 100;
-        $hst      = __cur $c->cart->total * $hst_rate;
-        $shipping = __cur $c->xtext('shipping');
+        $hst      = __cur $self->cart->total * $hst_rate;
+        $shipping = __cur $self->xtext('shipping');
         ( $total_d, $total_c ) = split /\./,
-            __cur +($c->cart->total + $shipping) * (1+$hst_rate);
+            __cur +($self->cart->total + $shipping) * (1+$hst_rate);
         $shipping *=  1 + $hst_rate;
     }
     else {
         my $pst_rate = $xtext_tax / 100;
-        my $gst_rate = $c->xtext('GST') / 100;
-        $gst = __cur $c->cart->total * $gst_rate;
-        $pst = __cur $c->cart->total * $pst_rate;
-        $shipping = __cur $c->xtext('shipping');
+        my $gst_rate = $self->xtext('GST') / 100;
+        $gst = __cur $self->cart->total * $gst_rate;
+        $pst = __cur $self->cart->total * $pst_rate;
+        $shipping = __cur $self->xtext('shipping');
         ( $total_d, $total_c ) = split /\./,
-            __cur +($c->cart->total + $shipping) * (1+$pst_rate+$gst_rate);
+            __cur +($self->cart->total + $shipping) * (1+$pst_rate+$gst_rate);
         $shipping *= 1 + $pst_rate + $gst_rate;
 
     }
@@ -135,137 +280,6 @@ sub __costs {
     );
 }
 
-sub _template_thank_you {
-    return <<'END_HTML';
-
-% if ( @{stash('cart')} ) {
-    <ul class="checkout_crumbs text-center">
-       <li class="col-md-15 label-success">Review products</li>
-       <li class="col-md-15 label-success">Enter contact information</li>
-       <li class="col-md-15 label-success">Review Pricing</li>
-       <li class="col-md-15 label-success">Pay for the order</li>
-       <li class="col-md-15 label-primary">Receive confirmation</li>
-    </ul>
-% } else {
-    <ul class="checkout_crumbs text-center">
-       <li class="col-md-4 label-success">Review products</li>
-       <li class="col-md-4 label-success">Enter contact information</li>
-       <li class="col-md-4 label-primary">Receive confirmation</li>
-    </ul>
-% }
-
-<div class="row">
-    % if ( items_in 'quote' ) {
-        <div class="col-md-<%= scalar(items_in 'cart') ? 6 : 12 %>">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><i class="glyphicon glyphicon-comment"></i> Your Quote Request</h3>
-                </div>
-                <div class="panel-body">
-                    <p>Thank you for your interest in our products.
-                        A sales representative will contact you
-                        within 2 business days.
-                    </p>
-
-                    <p>Your quote number is
-                        <strong><%= stash 'quote_number' %></strong>.
-                        Have this number handy if you contact us with
-                        any questions about your quote request.
-                    </p>
-                </div>
-            </div>
-        </div>
-    % }
-    % if ( items_in 'cart' ) {
-        <div class="col-md-<%= scalar(items_in 'quote') ? 6 : 12 %>">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><i class="glyphicon glyphicon-shopping-cart"></i> Your Purchase</h3>
-                </div>
-                <div class="panel-body">
-                    <p>Thank you for your purchase!
-                        Your order will be shipped on the <strong>next
-                        business day</strong> and will arrive within
-                        <strong>5–7 business days</strong>.
-                    </p>
-
-                    <p>Your order number is
-                        <strong><%= stash 'order_number' %></strong>.
-                        Have this number handy if you contact us with any
-                        questions about yourorder.
-                    </p>
-                </div>
-            </div>
-        </div>
-    % }
-</div>
-END_HTML
-}
-
-sub _template_checkout {
-    return <<'END_HTML';
-
-<dl class="dl-horizontal" id="checkout_totals">
-    <dt>Cost of products:</dt>
-        <dd>$<%= cart->total %></dd>
-
-    % if ( stash('hst')+0 ) {
-        <dt><abbr title="Harmonized Sales Tax">HST</abbr>:</dt>
-            <dd><strong>$<%= stash 'hst' %></strong></dd>
-    % }
-
-    % if ( stash('gst')+0 ) {
-        <dt><abbr title="Goods and Services Tax">GST</abbr>:</dt>
-            <dd><strong>$<%= stash 'gst' %></strong></dd>
-    % }
-
-    % if ( stash('pst')+0 ) {
-        <dt><abbr title="Provincial Sales Tax">PST</abbr>:</dt>
-            <dd><strong>$<%= stash 'pst' %></strong></dd>
-    % }
-
-    <dt>Shipping charge:</dt>
-        <dd>$<%= stash 'shipping' %>
-            <small>(includes applicable taxes)</small></dd>
-    <dt class="total">Total:</dt>
-        <dd class="total">$<%= stash 'total_dollars'
-            %><sup>.<%= stash 'total_cents' %></sup></dd>
-</dl>
-
-<form action="https://www.paypal.com/ca/cgi-bin/webscr" method="POST"
-    id="checkout_paynow_form">
-    %= hidden_field 'upload'            => 1
-    %= hidden_field 'cmd'               => '_cart'
-    %= hidden_field 'custom'            => stash 'custom'
-    %= hidden_field 'business'          => xtext('paypal')
-    %= hidden_field 'currency_code'     => xtext 'currency'
-    %= hidden_field 'cancel_return'     => url_for('/cart/')->to_abs
-    %= hidden_field 'return'           => url_for('/cart/thank-you')->to_abs
-    %= hidden_field 'tax_cart'          => (stash('pst')+stash('gst')+stash('hst'))
-    %= hidden_field 'handling_cart'     => stash 'shipping'
-    %= hidden_field 'address_override'  => 1
-    %= hidden_field 'country'           => 'CA'; # TODO: allow for others
-    %= hidden_field 'address1'          => param('address1')
-    %= hidden_field 'address2'          => param('address2')
-    %= hidden_field 'city'              => param('city')
-    %= hidden_field 'state'             => param('province')
-    %= hidden_field 'zip'               => param('zip')
-    %= hidden_field 'night_phone_a'     => 1; # TODO: sort phones out
-    %= hidden_field 'night_phone_b'     => param('phone')
-
-    % for ( 1 .. @{stash('cart')} ) {
-        % my $p = stash('cart')->[$_-1];
-        %= hidden_field 'item_name_'   . $_ => $p->{title}
-        %= hidden_field 'item_number_' . $_ => $p->{number}
-        %= hidden_field 'amount_'      . $_ => $p->{price}
-        %= hidden_field 'quantity_'    . $_ => $p->{quantity}
-    % }
-
-    %= submit_button 'Proceed to PayPal to complete this purchase', class => 'btn btn-lg btn-primary'
-</form>
-END_HTML
-}
-
 1;
 
 __END__
@@ -273,6 +287,5 @@ __END__
 
 =pod
 
-Override C<checkout> and C<thank_you> methods in your own cart plugin
 
 =cut

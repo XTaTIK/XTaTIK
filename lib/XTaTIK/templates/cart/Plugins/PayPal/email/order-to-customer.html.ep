@@ -40,9 +40,11 @@
 
 % if ( items_in 'cart' ) {
   % if ( items_in 'quote' and items_in 'cart' ) {
+    <hr>
     <h2>Your Purchase</h2>
   % }
-  <p>Thank you for your purchase! Your order will be shipped on
+  <p>Thank you for your purchase! If the products you ordered are in stock,
+    your order will be shipped on
     the <strong>next business day</strong> and will arrive within
       <strong>5–7 business days</strong>.</p>
 
@@ -54,30 +56,33 @@
 
   <h3>Order Summary</h3>
 
-  <dl>
-    <dt>Cost of products:</dt>
-      <dd>$<%= cart->total %></dd>
-    % if ( stash 'hst' ) {
-      <dt><abbr title="Harmonized Sales Tax">HST</abbr>:</dt>
-        <dd><strong>$<%= stash 'hst' %></strong></dd>
+  <div class="unsemantic-list">
+    <p><b>Cost of products:</b> $<%= cart->total %></p>
+
+    % if ( 0 + stash 'hst' ) {
+      <p><b><abbr title="Harmonized Sales Tax">HST</abbr></b>:
+          $<%= stash 'hst' %></p>
     % }
 
-    % if ( stash 'gst' ) {
-      <dt><abbr title="Goods and Services Tax">GST</abbr>:</dt>
-        <dd><strong>$<%= stash 'gst' %></strong></dd>
+    % if ( 0 + stash 'gst' ) {
+      <p><abbr title="Goods and Services Tax">GST</abbr></b>:
+          $<%= stash 'gst' %></p>
     % }
 
-    % if ( stash 'pst' ) {
-      <dt><abbr title="Provincial Sales Tax">PST</abbr>:</dt>
-        <dd><strong>$<%= stash 'pst' %></strong></dd>
+    % if ( 0 + stash 'pst' ) {
+      <p><b><abbr title="Provincial Sales Tax">PST</abbr></b>:
+        $<%= stash 'pst' %></p>
     % }
-    <dt>Shipping charge:</dt>
-      <dd>$<%= stash 'shipping' %>
-        <small>(includes applicable taxes)</small></dd>
-    <dt>Total:</dt>
-      <dd>$<%= stash 'total_dollars'
-        %><sup>.<%= stash 'total_cents' %></sup></dd>
-  </dl>
+
+    <p><b>Shipping charge:</b> $<%= stash 'shipping' %>
+        <small>(includes applicable taxes)</small></p>
+
+    <p style="font-size: 130%; color: blue">
+      <b>Total:</b>
+        <strong>$<%= stash 'total_dollars' %><sup>.<%= stash 'total_cents'
+          %></sup></strong>
+    </p>
+  </div>
 
   <h3>Products on Your Order</h3>
 
