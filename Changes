@@ -6,6 +6,8 @@ Revision history for Perl extension XTaTIK.
         - checkout_system config var now must be an arrayref
     [Bug fixes]
         - Fixed alignment on shoutout when thin logos are used
+        - Removed use of experimental autoderef to be
+            compatible with newest perls (#147)
 
 0.002001 2015-09-06
     [Breaking Changes]

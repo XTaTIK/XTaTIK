@@ -5,8 +5,8 @@ use warnings;
 
 # VERSION
 
-use experimental 'autoderef';
 use Exporter::Easy  OK => [qw/merge_conf/];
+use experimental 'postderef';
 
 sub merge_conf {
     my ( $main_conf, $site_conf ) = @_;
@@ -15,7 +15,7 @@ sub merge_conf {
     if ( $site_conf->{text} ) {
         $conf->{text}{$_} = exists $site_conf->{text}{$_}
             ? $site_conf->{text}{$_} : $main_conf->{text}{$_}
-                for keys $site_conf->{text}, keys $main_conf->{text};
+                for keys $site_conf->{text}->%*, keys $main_conf->{text}->%*;
     }
 
     return %$conf;

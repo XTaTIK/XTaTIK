@@ -8,7 +8,6 @@ use warnings;
 use Toadfarm -init;
 use XTaTIK::Utilities::Misc qw/merge_conf/;
 use File::Find::Rule;
-use experimental 'autoderef';
 
 sub farm {
     my @sites = grep length, map s'^silo/?''r,
