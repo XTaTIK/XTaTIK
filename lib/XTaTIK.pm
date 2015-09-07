@@ -566,9 +566,27 @@ to C<bug-XTaTIK at rt.cpan.org>
 
 =head1 LICENSE
 
+    Copyright © 2015, Zoffix Znet
+
 You can use and distribute this module under
 The Artistic License 2.0.
 See the C<LICENSE> file included in this distribution for complete
 details.
+
+B<Note:> for convenience of distribution, this module includes works
+created by other organizations. They retain their copyright and their
+original licenses:
+
+=head2 Bootstrap3
+
+    Copyright © 2011-2015, Twitter, Inc
+
+L<http://getbootstrap.com/>. Licensed under the L<MIT License|https://github.com/twbs/bootstrap/blob/master/LICENSE>
+
+=head2 jQuery
+
+    Copyright © 2005, 2015 jQuery Foundation, Inc.
+
+L<https://jquery.org>. Licensed under the L<MIT License|https://tldrlegal.com/license/mit-license>
 
 =cut
