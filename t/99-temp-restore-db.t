@@ -3,8 +3,8 @@
 use lib 't';
 use Test::More;
 
-unless ( $ENV{AUTHOR_TESTING} ) {
-    diag 'Set AUTHOR_TESTING env var to true, to run the tests';
+unless ( $ENV{XTATIK_TESTING} ) {
+    diag 'Set XTATIK_TESTING env var to true, to run the tests';
     ok 1; done_testing; exit;
 }
 

@@ -13,7 +13,7 @@ Revision history for Perl extension XTaTIK.
         - Fixed rendering bug on checkout progress bar (#136)
     [Miscellaneous]
         - Made default favicon prettier (#62)
-        - Made all existing tests pass (must set AUTHOR_TESTING env to run)
+        - Made all existing tests pass (must set XTATIK_TESTING env to run)
             (#119)
         - Added .cat, .subcat, and .prod classes on category list page
         - Added XTATIK_BLOG_SRC env var
