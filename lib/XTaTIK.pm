@@ -75,6 +75,9 @@ sub startup {
     $self->log->debug("XTATIK_SITE_ROOT: $ENV{XTATIK_SITE_ROOT}");
     $self->log->debug("Silo path: $silo_path");
     $self->log->debug("SASS path: $ENV{SASS_PATH}");
+    $self->log->debug("Database: "
+      . (($self->config('pg_url') =~ m{^(?:postgresql:///)?(\w+)}i)[0] //'')
+    );
     $self->log->debug('**********************');
 
     $self->secrets([ $self->config('mojo_secrets') ]);
