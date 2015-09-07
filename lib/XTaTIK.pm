@@ -40,6 +40,8 @@ sub startup {
 
         unshift @sass_path,
             catdir $ENV{XTATIK_COMPANY}, 'public', 'sass';
+
+        use lib catdir $ENV{XTATIK_COMPANY}, 'lib';
     }
 
     unshift @sass_path,
@@ -62,6 +64,8 @@ sub startup {
 
     unshift @sass_path,
         catdir $silo_path, 'public', 'sass';
+
+    use lib catdir $silo_path, 'lib';
 
     unshift @sass_path,
             catdir rel2abs(curdir), qw/lib XTaTIK public  sass  fake-site/
