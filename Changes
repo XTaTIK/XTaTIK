@@ -1,5 +1,9 @@
 Revision history for Perl extension XTaTIK.
 
+0.002002 Unreleased
+    [Bug fixes]
+        - Fixed alignment on shoutout when thin logos are used
+
 0.002001 2015-09-06
     [Breaking Changes]
         - Pricing is now per-site and not global (#133)
