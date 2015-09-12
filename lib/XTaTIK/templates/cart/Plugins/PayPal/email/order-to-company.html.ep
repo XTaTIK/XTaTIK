@@ -20,7 +20,6 @@
 % if ( items_in 'cart' ) {
   <h3>Order Summary</h3>
 
-
   <div class="unsemantic-list">
     <p><b>Promo code used:</b> <%= stash 'promo_code' %> </p>
     <p><b>Cost of products:</b> $<%= cart->total %></p>
@@ -69,7 +68,7 @@
         <td><%= $p->{number} %></td>
         <td><%= $p->{title} %></td>
         <td><%= $p->{quantity} %></td>
-        <td>$<%= $p->{price} %></td>
+        <td><%= $p->{price} == 0 ? 'FREE' : '$' . $p->{price} %></td>
         <td><%= $p->{unit} %></td>
       </tr>
     % }

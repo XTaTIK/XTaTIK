@@ -24,7 +24,7 @@
 
     <div class="row">
       % if ( items_in 'cart' ) {
-        <div class="col-md-<%= scalar(items_in 'quote') ? 6 : 12 %>">
+        <div class="cart col-md-<%= scalar(items_in 'quote') ? 6 : 12 %>">
           <div class="table-responsive panel panel-primary">
             <div class="panel-heading">
               <h3 class="panel-title"><i class="glyphicon glyphicon-shopping-cart"></i> Purchase</h3>
@@ -53,8 +53,14 @@
                         <small>(<%= $_->{group_desc} %>)</small>
                       % }
                     </a></td>
-                  <td>$<%= $_->{price_dollars}
-                    %><sup>.<%= $_->{price_cents} %></sup></td>
+                  <td>
+                    % if ( $_->{price} == 0 ) {
+                      FREE
+                    % } else {
+                      $<%= $_->{price_dollars}
+                      %><sup>.<%= $_->{price_cents} %></sup>
+                    % }
+                  </td>
                   <td>
                     <%= hidden_field 'id_' . $_->{id} => $_->{id} %>
                     <%= hidden_field 'number_' . $_->{id}
@@ -74,7 +80,7 @@
         </div>
       % }
       % if ( items_in 'quote' ) {
-        <div class="col-md-<%= scalar(items_in 'cart') ? 6 : 12 %>">
+        <div class="quote col-md-<%= scalar(items_in 'cart') ? 6 : 12 %>">
           <div class="table-responsive panel panel-primary">
             <div class="panel-heading">
               <h3 class="panel-title"><i class="glyphicon glyphicon-comment"></i> Quote Request</h3>

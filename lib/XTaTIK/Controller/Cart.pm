@@ -27,7 +27,7 @@ sub add {
     $self->stash(
         number    => $self->param('number'),
         quantity  => $self->param('quantity'),
-        is_quote  => $p->{price}//0 > 0 ? 0 : 1,
+        is_quote  => $p->{price}//-1 == -1 ? 1 : 0,
         return_to => $self->req->headers->referrer || '/products',
     );
 };

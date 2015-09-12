@@ -2,8 +2,9 @@ Revision history for Perl extension XTaTIK.
 
 0.004001 2015-09-12
     [Breaking Changes]
-        - XTaTIK SASS variables that did not have xtatik- prefix
-            have been renamed (#146)
+        - XTaTIK SASS variables without xtatik- prefix have been renamed (#146)
+        - 'Add to quote' feature is now enabled by setting price to -1 dollars.
+            Prices set to 0 now trigger "FREE" products instead (#149)
     [PayPal cart plugin]
         - Prevent accidental checkouts by following a URL from history (#152)
         - Fix formatting issues and markup errors on 'order' emails (#151)

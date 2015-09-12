@@ -56,7 +56,7 @@ sub all_items {
 sub all_items_cart_quote {
     my $self = shift;
     my ( @cart, @quote );
-    $_->{price} > 0 ? push @cart, $_ : push @quote, $_
+    $_->{price} == -1 ? push @quote, $_ : push @cart, $_
         for $self->all_items->@*;
 
     return \@cart, \@quote;
@@ -140,7 +140,7 @@ sub submit {
     my $id = $self->id or die "MISSING CART ID on submit";
 
     my @quote_products = map +{ q => $_->{q}, n => $_->{n}, },
-        grep $_->{price}//0 == 0, $self->contents->@*;
+        grep $_->{price}//-1 == -1, $self->contents->@*;
     return unless @quote_products;
 
     $quote_products[$_]{o} = $_ for 0 .. $#quote_products;
@@ -177,7 +177,7 @@ sub _recalculate_total {
 
     my $total = 0;
     $total += $_->{p} * $_->{q}
-        for @{ $self->contents };
+        for grep $_->{p} > 0, @{ $self->contents };
 
     $self->_is_modified( 1 );
 

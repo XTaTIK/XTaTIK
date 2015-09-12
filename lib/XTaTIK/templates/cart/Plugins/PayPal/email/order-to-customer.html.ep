@@ -103,7 +103,7 @@
         <td><%= $p->{number} %></td>
         <td><%= $p->{title} %></td>
         <td><%= $p->{quantity} %></td>
-        <td>$<%= $p->{price} %></td>
+        <td><%= $p->{price} == 0 ? 'FREE' : '$' . $p->{price} %></td>
         <td><%= $p->{unit} %></td>
       </tr>
     % }

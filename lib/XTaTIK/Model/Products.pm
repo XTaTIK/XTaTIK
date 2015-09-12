@@ -412,10 +412,13 @@ sub _process_products {
         my $pr = $product->{price}->$json->{ $self->site };
         $pr = $pr->{ $region } // $pr->{ '00' }
             if ref $pr;
-        $product->{price} = $pr || '0.00';
+        $product->{price} = $pr // -1;
 
         $product->{contact_for_pricing} = 1
-            unless $product->{price} > 0;
+            if $product->{price} == -1;
+
+        $product->{freebie} = 1
+            if $product->{price} == 0;
 
         $product->{price} = sprintf '%.2f', $product->{price};
         @$product{qw/price_dollars  price_cents/}

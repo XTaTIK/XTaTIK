@@ -22,13 +22,18 @@
       </div
       ><div class="col-md-5">
         % if ( stash('product')->{contact_for_pricing} ) {
-          <p class="alert alert-warning text-center" style="margin-bottom: 0"><small><i class="glyphicon glyphicon-info-sign"></i> Not
+          <p class="alert quote_only alert-warning text-center"
+            style="margin-bottom: 0"><small><i class="glyphicon glyphicon-info-sign"></i> Not
             available for purchase online. You can request a quote, during checkout.</small></p>
         % } else {
           <span class="price_large">
-            $<%= stash('product')->{price_dollars}
-              %><sup>.<%= stash('product')->{price_cents} %></sup>
-            <span class="sku">per <%= stash('product')->{unit} %></span>
+            % if ( stash('product')->{freebie} ) {
+              FREE
+            % } else {
+              $<%= stash('product')->{price_dollars}
+                %><sup>.<%= stash('product')->{price_cents} %></sup>
+              <span class="sku">per <%= stash('product')->{unit} %></span>
+            % }
           </span>
         % }
       </div
