@@ -24,8 +24,10 @@ in your Company and Site vars files.
 
 XTaTIK also defines some of its own SASS variables:
 
-    $primary1: #FF6600 !default;
-    $primary5: #000 !default;
+    $xtatik-primary1: #FF6600 !default;
+    $xtatik-primary2: #000 !default;
+    $xtatik-light-on-dark-text: #fff !default;
+    $xtatik-lighter-border-color: #eee !default;
 
     $xtatik-productnumber-text-color: #999 !default;
 
@@ -44,18 +46,31 @@ XTaTIK also defines some of its own SASS variables:
     $xtatik-feeback-button-border-color:
                                 $navbar-inverse-toggle-border-color !default;
 
-=head2 C<$primary1>
+=head2 C<$xtatik-primary1>
 
-    $primary1: #FF6600 !default;
+    $xtatik-primary1: #FF6600 !default;
 
 Specifies primary theme colour. Defaults to C<#FF6600>.
 
-=head2 C<$primary5>
+=head2 C<$xtatik-primary2>
 
-    $primary5: #000 !default;
+    $xtatik-primary2: #000 !default;
 
-Specifies secondary theme colour (primaries 2–4 are currently unused).
-Defaults to C<#000>.
+Specifies secondary theme colour. Defaults to C<#000>.
+
+=head2 C<$xtatik-light-on-dark-text>
+
+    $xtatik-light-on-dark-text: #fff !default;
+
+Specifies light-on-dark text colour. Defaults to C<#fff>.
+B<Note: this variable might be removed in future releases.>
+
+=head2 C<$xtatik-lighter-border-color>
+
+    $xtatik-lighter-border-color: #eee !default;
+
+Specifies light border colour. Defaults to C<#eee>.
+B<Note: this variable might be removed in future releases.>
 
 =head2 C<$xtatik-productnumber-text-color>
 

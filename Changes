@@ -1,11 +1,14 @@
 Revision history for Perl extension XTaTIK.
 
 0.004001 2015-09-12
+    [Breaking Changes]
+        - XTaTIK SASS variables that did not have xtatik- prefix
+            have been renamed (#146)
     [PayPal cart plugin]
         - Prevent accidental checkouts by following a URL from history (#152)
         - Fix formatting issues and markup errors on 'order' emails (#151)
     [Miscellaneous]
-        - Fix formatting on Site Feedback and Quicknote emails
+        - Fix formatting on Site Feedback and Quicknote emails (#150)
 
 0.003001 2015-09-07
     [Breaking Changes]
