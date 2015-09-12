@@ -8,6 +8,7 @@ Revision history for Perl extension XTaTIK.
     [PayPal cart plugin]
         - Prevent accidental checkouts by following a URL from history (#152)
         - Fix formatting issues and markup errors on 'order' emails (#151)
+        - Added 'free shipping for purchases above X-dollars' feature (#154)
     [Miscellaneous]
         - Fix formatting on Site Feedback and Quicknote emails (#150)
         - Added support for multiple product images, including auto-find (#105)

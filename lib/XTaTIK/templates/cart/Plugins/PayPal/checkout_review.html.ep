@@ -28,9 +28,15 @@
             <dd><strong>$<%= stash 'pst' %></strong></dd>
     % }
 
-    <dt>Shipping charge:</dt>
-        <dd>$<%= stash 'shipping' %>
-            <small>(includes applicable taxes)</small></dd>
+    <dt>Shipping:</dt>
+        <dd class="ship_chrg">
+          % if ( defined( xtext('shipping_free') ) &&  xtext('shipping_free') < cart->total ) {
+              FREE
+          % } else {
+            $<%= stash 'shipping' %>
+              <small>(includes applicable taxes)</small>
+          % }
+        </dd>
     <dt class="total">Total:</dt>
         <dd class="total">$<%= stash 'total_dollars'
             %><sup>.<%= stash 'total_cents' %></sup></dd>
@@ -48,7 +54,10 @@
     url_for('/cart/thank-you')->query({cart_id=> cart->id })->to_abs
   %>
   %= hidden_field 'tax_cart'        => (stash('pst')+stash('gst')+stash('hst'))
-  %= hidden_field 'handling_cart'     => stash 'shipping'
+  <%= hidden_field 'handling_cart'    =>
+    defined( xtext('shipping_free') ) &&  xtext('shipping_free') < cart->total
+      ? 0 : stash 'shipping'
+  %>
   %= hidden_field 'address_override'  => 1
   %= hidden_field 'country'           => 'CA'; # TODO: allow for others
   %= hidden_field 'address1'          => param('address1')

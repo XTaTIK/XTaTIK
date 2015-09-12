@@ -39,8 +39,13 @@
         $<%= stash 'pst' %></p>
     % }
 
-    <p><b>Shipping charge:</b> $<%= stash 'shipping' %>
-        <small>(includes applicable taxes)</small>
+    <p><b>Shipping:</b>
+      % if ( defined( xtext('shipping_free') ) &&  xtext('shipping_free') < cart->total ) {
+          FREE
+      % } else {
+        $<%= stash 'shipping' %>
+          <small>(includes applicable taxes)</small>
+      % }
     </p>
     <p style="font-size: 130%; color: blue">
       <b>Total:</b>
