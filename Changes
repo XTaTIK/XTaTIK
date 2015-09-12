@@ -2,8 +2,8 @@ Revision history for Perl extension XTaTIK.
 
 0.004001 2015-09-12
     [PayPal cart plugin]
-        - Prevent accidental checkouts by following a URL from history
-        - Fix formatting issues and markup errors on 'order' emails
+        - Prevent accidental checkouts by following a URL from history (#152)
+        - Fix formatting issues and markup errors on 'order' emails (#151)
 
 0.003001 2015-09-07
     [Breaking Changes]
