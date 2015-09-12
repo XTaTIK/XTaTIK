@@ -65,7 +65,7 @@
     % }
 
     % if ( 0 + stash 'gst' ) {
-      <p><abbr title="Goods and Services Tax">GST</abbr></b>:
+      <p><b><abbr title="Goods and Services Tax">GST</abbr></b>:
           $<%= stash 'gst' %></p>
     % }
 
@@ -103,7 +103,7 @@
         <td><%= $p->{number} %></td>
         <td><%= $p->{title} %></td>
         <td><%= $p->{quantity} %></td>
-        <td><%= $p->{price} %></td>
+        <td>$<%= $p->{price} %></td>
         <td><%= $p->{unit} %></td>
       </tr>
     % }

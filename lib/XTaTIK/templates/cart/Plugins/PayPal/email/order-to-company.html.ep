@@ -31,7 +31,7 @@
     % }
 
     % if ( 0 + stash 'gst' ) {
-      <p><abbr title="Goods and Services Tax">GST</abbr></b>:
+      <p><b><abbr title="Goods and Services Tax">GST</abbr></b>:
           $<%= stash 'gst' %></p>
     % }
 
@@ -41,7 +41,7 @@
     % }
 
     <p><b>Shipping charge:</b> $<%= stash 'shipping' %>
-        <small>(includes applicable taxes)</small></p>
+        <small>(includes applicable taxes)</small>
     </p>
     <p style="font-size: 130%; color: blue">
       <b>Total:</b>
@@ -69,7 +69,7 @@
         <td><%= $p->{number} %></td>
         <td><%= $p->{title} %></td>
         <td><%= $p->{quantity} %></td>
-        <td><%= $p->{price} %></td>
+        <td>$<%= $p->{price} %></td>
         <td><%= $p->{unit} %></td>
       </tr>
     % }
