@@ -67,6 +67,7 @@ sub startup {
 
     unshift @sass_path,
         catdir $silo_path, 'public', 'sass';
+
     lib->import( catdir $silo_path, 'lib' );
 
     unshift @sass_path,

@@ -1,5 +1,10 @@
 Revision history for Perl extension XTaTIK.
 
+0.004001 2015-09-12
+    [PayPal cart plugin]
+        - Prevent accidental checkouts by following a URL from history
+
+
 0.003001 2015-09-07
     [Breaking Changes]
         - Restructured cart plugin system

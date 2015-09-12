@@ -44,7 +44,9 @@
   %= hidden_field 'business'          => xtext('paypal')
   %= hidden_field 'currency_code'     => xtext 'currency'
   %= hidden_field 'cancel_return'     => url_for('/cart/')->to_abs
-  %= hidden_field 'return'            => url_for('/cart/thank-you')->to_abs
+  <%= hidden_field 'return'           =>
+    url_for('/cart/thank-you')->query({cart_id=> cart->id })->to_abs
+  %>
   %= hidden_field 'tax_cart'        => (stash('pst')+stash('gst')+stash('hst'))
   %= hidden_field 'handling_cart'     => stash 'shipping'
   %= hidden_field 'address_override'  => 1

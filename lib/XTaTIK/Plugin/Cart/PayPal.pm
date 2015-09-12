@@ -36,7 +36,8 @@ sub thank_you {
     my ( $self, $c ) = @_;
 
     return $self->redirect_to('/cart/')
-        unless @{$self->cart->all_items};
+        unless @{$self->cart->all_items}
+            and $self->param('cart_id') eq $self->cart->id;
 
     my $order_num = sprintf $self->xtext('order_number'), $self->cart->id;
     my $quote_num = sprintf $self->xtext('quote_number'), $self->cart->id;
