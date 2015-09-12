@@ -19,7 +19,7 @@
             ><label for="email">Email <small>(specify only if you'd be
             OK with us contacting you on this matter, if
               necessary)</small>:</label>
-            <%= text_field 'email', class => 'form-control' %></li>
+            <%= email_field 'email', class => 'form-control' %></li>
           <li class="form-group"><label for="feedback"
               class="textarea_label">*Feedback:</label
             ><%= text_area 'feedback', cols => 40, rows => 5,

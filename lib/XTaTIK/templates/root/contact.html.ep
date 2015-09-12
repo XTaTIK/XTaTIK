@@ -19,7 +19,7 @@
         </li>
         <li class="form-group">
           <label for="email">*Email:</label
-          ><%= text_field 'email', class => 'form-control' %>
+          ><%= email_field 'email', class => 'form-control' %>
         </li>
         <li class="form-group">
           <label for="province">*Province:</label
