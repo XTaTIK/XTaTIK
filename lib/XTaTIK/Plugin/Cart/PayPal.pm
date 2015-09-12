@@ -33,7 +33,7 @@ sub _add_routes {
 
 ## ROUTES
 sub thank_you {
-    my ( $self, $c ) = @_;
+    my $self = shift;
 
     return $self->redirect_to('/cart/')
         unless @{$self->cart->all_items}
