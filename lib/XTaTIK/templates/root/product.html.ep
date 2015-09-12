@@ -7,9 +7,11 @@
 
 <div class="row">
   <div class="col-md-4 col-md-push-8">
-    <div class="well thumbnail">
-      <img src="/product-pics/<%= stash('product')->{image} %>" alt="" class="img-responsive">
-    </div>
+    % for ( split /\?/, stash('product')->{image} ) {
+      <div class="well thumbnail prod_pic">
+        <img src="/product-pics/<%= $_ %>" alt="" class="img-responsive">
+      </div>
+    % }
   </div>
 
   <div class="col-md-8 col-md-pull-4">

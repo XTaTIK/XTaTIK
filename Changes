@@ -10,6 +10,7 @@ Revision history for Perl extension XTaTIK.
         - Fix formatting issues and markup errors on 'order' emails (#151)
     [Miscellaneous]
         - Fix formatting on Site Feedback and Quicknote emails (#150)
+        - Added support for multiple product images, including auto-find (#105)
 
 0.003001 2015-09-07
     [Breaking Changes]

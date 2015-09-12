@@ -3,7 +3,7 @@ package XTaTIK::Controller::Root;
 # VERSION
 
 use Mojo::Base 'Mojolicious::Controller';
-use XTaTIK::Common qw/n_to_br  find_product_pic/;
+use XTaTIK::Common qw/n_to_br  set_product_pic/;
 use experimental 'postderef';
 
 sub index   {
@@ -13,7 +13,7 @@ sub index   {
         split /\n/, $self->xvar('hot_products')
     );
 
-    find_product_pic( $self, $_->{image} ) for @products;
+    set_product_pic( $self, @$_{qw/image number/} ) for @products;
     $self->stash( hot_products => \@products, );
 }
 
@@ -26,7 +26,7 @@ sub products_category {
     @$products or $self->reply->not_found;
 
     for ( @$products ) {
-        find_product_pic( $self, $_->{image} ) for $_->{contents}->@*;
+        set_product_pic( $self, @$_{qw/image number/} ) for $_->{contents}->@*;
     }
 
     $self->stash(
@@ -41,7 +41,7 @@ sub product {
     my ( $product ) = $self->products->get_by_url( $self->stash('url') );
     $product or $self->reply->not_found;
 
-    find_product_pic( $self, $product->{image} );
+    set_product_pic( $self, @$product{qw/image number/} );
 
     $self->stash( product => $product );
 };

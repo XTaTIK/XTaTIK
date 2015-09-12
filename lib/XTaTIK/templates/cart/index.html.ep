@@ -45,8 +45,8 @@
             <tbody>
               % for ( items_in 'cart' ) {
                 <tr>
-                  <td><img src="/product-pics/<%=
-                    $_->{image} %>" width="50" height="50" alt=""></td>
+                  <td><span><img src="/product-pics/<%=
+                    $_->{image} %>" alt=""></span></td>
                   <td><a href="/product/<%= $_->{url} %>"
                     ><%= $_->{title} %>
                       % if ( length $_->{group_desc} ) {
@@ -101,7 +101,7 @@
                 % for ( items_in 'quote' ) {
                   <tr>
                     <td><img src="/product-pics/<%=
-                    $_->{image} %>" width="50" height="50" alt=""></td>
+                    $_->{image} %>" alt=""></td>
                     <td><a href="/product/<%= $_->{url} %>"
                       ><%= $_->{title} %></a></td>
                     <td>

@@ -269,7 +269,6 @@ footer {
 }
 
 #cart {
-    // margin-bottom: -6ex;
     position: relative;
     z-index: 200;
     float: right;
@@ -294,8 +293,23 @@ footer {
     visibility: hidden;
 }
 
-#checkout_form td {
-    vertical-align: middle;
+#checkout_form {
+    td {
+        vertical-align: middle;
+    }
+
+    span {
+        display: block;
+        min-height: 50px;
+        line-height: 50px;
+        text-align: center;
+    }
+
+    img {
+        max-height: 50px;
+        max-width: 50px;
+        vertical-align: middle;
+    }
 }
 
 #checkout_totals .total {

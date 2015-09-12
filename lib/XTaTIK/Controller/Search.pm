@@ -3,7 +3,7 @@ package XTaTIK::Controller::Search;
 # VERSION
 
 use Mojo::Base 'Mojolicious::Controller';
-use XTaTIK::Common qw/n_to_br  find_product_pic/;
+use XTaTIK::Common qw/n_to_br  set_product_pic/;
 
 sub search {
     my $self = shift;
@@ -12,7 +12,7 @@ sub search {
         $self->product_search->search( $self->param('term') )
     );
 
-    find_product_pic( $self, $_->{image} ) for @prods;
+    set_product_pic( $self, @$_{qw/image number/} ) for @prods;
 
     $self->stash(
         template => 'root/search',

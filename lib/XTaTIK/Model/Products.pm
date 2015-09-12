@@ -431,8 +431,6 @@ sub _process_products {
         my ( $unit_noun ) = $product->{unit} =~ /(\w+)/;
         $product->{unit_multi} = $product->{unit}
         =~ s/\Q$unit_noun\E/$units{ $unit_noun }/gr;
-
-        $product->{image} //= "$product->{number}.jpg" =~ tr{/}{_}r;
     }
 
     return $data;
