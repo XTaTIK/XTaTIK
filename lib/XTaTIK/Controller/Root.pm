@@ -26,7 +26,8 @@ sub products_category {
     @$products or $self->reply->not_found;
 
     for ( @$products ) {
-        set_product_pic( $self, @$_{qw/image number/} ) for $_->{contents}->@*;
+        set_product_pic( $self, @$_{qw/image number/} ) for
+            grep exists $_->{number}, $_->{contents}->@*;
     }
 
     $self->stash(

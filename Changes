@@ -10,6 +10,7 @@ Revision history for Perl extension XTaTIK.
         - Added "after-shoutout" template fragment
     [Bug fixes]
         - Remove a product from Sites Products now actually removes it
+        - Removed uninitialized warnings during cat page viewing
 
 0.004001 2015-09-12
     [Breaking Changes]
