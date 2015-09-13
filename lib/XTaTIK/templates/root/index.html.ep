@@ -24,6 +24,8 @@
   </h2>
 </div>
 
+%= include 'fragments/index-after-shoutout-site'
+
 % if ( items_in 'hot_products' ) {
   <div class="hot_products_container">
     <hr>
