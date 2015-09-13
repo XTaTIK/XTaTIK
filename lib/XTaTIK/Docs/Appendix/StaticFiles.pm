@@ -38,6 +38,7 @@ files, however.
     │   └── nopic.png
     ├── content-pics
     │   ├── nav-logo.png # Does not exist by default!!
+    │   ├── shoutout-art.png # Does not exist by default!!
     │   └── index-logo.png
     └── sass
         ├── bootstrap-extras.scss
@@ -57,6 +58,9 @@ files, however.
 
 =item * C<index-logo.png>—the large logo displayed on the home page
     during shoutout animation
+
+=item * C<shoutout-art.jpg>—if present, will be used during the first portion
+    of shoutout animation, instead of C<index-logo.png>
 
 =item * I<sass files>—these files are used to provide XTaTIK
     core styles. Generally, you'd use additional Company/Site SASS files

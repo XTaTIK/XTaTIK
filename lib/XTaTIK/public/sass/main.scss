@@ -398,8 +398,19 @@ footer {
         outline: 0;
     }
 
-    img {
+    .shout_logo {
         max-height: 544px;
+    }
+
+    .art_hidden {
+        position: absolute;
+        left: -99999px;
+    }
+
+    .shout_art {
+        border: 1px solid $xtatik-lighter-border-color;
+        border-radius: 4px;
+        margin-top: -50px;
     }
 }
 

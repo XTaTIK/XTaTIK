@@ -3,12 +3,18 @@
 
 <div id="index_shoutout">
   <h2 class="row">
-    <span class="col-sm-12">
+    <span class="col-xs-12">
       <a href="/products" class="thumbnail">
-        <img src="/content-pics/index-logo.png" alt="<%= xtext 'market' %>">
+        % my $has_art = app->static->file('/content-pics/shoutout-art.jpg');
+        % if ( $has_art ) {
+          <img src="/content-pics/shoutout-art.jpg" alt=""
+            class="shout_art block-center">
+        % }
+        <img src="/content-pics/index-logo.png" alt="<%= xtext 'market' %>"
+          class="shout_logo <%= $has_art ? 'art_hidden' : '' %>">
       </a>
     </span>
-    <span class="col-sm-12 market_tag">
+    <span class="col-xs-12 market_tag">
       <%= xtext 'market_tag' %>
 
       % if ( xtext 'market_sub_tag' ) {
