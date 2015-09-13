@@ -336,15 +336,26 @@ sub unset_site {
     my ( $self, $site, $products ) = @_;
     return unless length $site;
 
-    $self->pg->db->query(
-        q{UPDATE products SET sites = regexp_replace(sites, ?, '', 'g')}
-            . ( $products and scalar(@$products)
-            ? ' WHERE number = ANY (?)'
-            : ''
-        ),
-        '(^|,)' . quotemeta($site) . '(,|$)',
-        $products ? $products : (),
-    );
+    my $prods = $self->pg->db->query(
+        'SELECT sites, price, number FROM products'
+        . ( scalar(@{$products||[]}) ? ' WHERE number = ANY (?)' : '' ),
+
+        scalar(@{$products||[]}) ? $products : (),
+    )->hashes;
+
+    for ( @$prods ) {
+        $_->{sites} =~ s/(^|,)\Q$site\E(,|$)//g;
+
+        # Remove site's pricing
+        my $p = $_->{price}->$json;
+        delete $p->{ $site };
+        $_->{price} = $p->$json;
+
+        $self->pg->db->query(
+            q{UPDATE products SET sites = ?, price = ? WHERE number = ?},
+            @$_{qw/sites  price  number/}
+        );
+    }
 }
 
 sub set_site {

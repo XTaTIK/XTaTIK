@@ -8,6 +8,8 @@ Revision history for Perl extension XTaTIK.
         - Made footer addresses look good for 1–6 locations (#129)
         - Made it possible to specify shoutout art for the animation
         - Added "after-shoutout" template fragment
+    [Bug fixes]
+        - Remove a product from Sites Products now actually removes it
 
 0.004001 2015-09-12
     [Breaking Changes]

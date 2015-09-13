@@ -43,6 +43,9 @@ sub site_products {
     my $self = shift;
 
     if ( $self->param('save') ) {
+        my %to_remove = map +( $_->{number} => $_->{id} ),
+            $self->products->get_all( $self->config('site') )->@*;
+
         my @lines;
         for ( split /\n/, $self->param('products') ) {
             /^\s*#?(\S+)(?:\s+(\S+))?/ or next;
@@ -53,7 +56,15 @@ sub site_products {
                 map +(/_/ ? $_ : "00_$_"), split /,/, $line->{price};
 
             push @lines, $line;
+            delete $to_remove{ $line->{num} };
         }
+
+        # Dump removed products from the site and its search index
+        $self->products->unset_site(
+            $self->config('site'), [keys %to_remove]
+        ) if keys %to_remove;
+
+        $self->product_search->delete( $_ ) for values %to_remove;
 
         $self->products
         ->set_site( $self->config('site'), [ map $_->{num}, @lines ], );
@@ -77,7 +88,6 @@ sub site_products {
     my @prods = $self->products->get_all( $self->config('site') )->@*;
     my @list;
     for ( @prods ) {
-        say $_->{price_raw};
         my $pr = $_->{price_raw}->$json->{ $self->config('site') };
         if ( ref $pr ) {
             $pr = join ',', map "${_}_$pr->{$_}", sort keys %$pr;
