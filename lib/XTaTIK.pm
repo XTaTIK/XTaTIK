@@ -90,7 +90,8 @@ sub startup {
 
     $self->secrets([ $self->config('mojo_secrets') ]);
 
-    $self->config( hypnotoad => {listen => ['http://*:3005'], proxy => 1} );
+    $self->config( hypnotoad => {listen => ['http://*:3005'], proxy => 1} )
+        unless $self->config('hypnotoad');
 
     $self->plugin('AntiSpamMailTo');
     $self->plugin('FormChecker' => error_class => 'foo');

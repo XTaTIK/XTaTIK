@@ -13,6 +13,7 @@ Revision history for Perl extension XTaTIK.
         - Removed uninitialized warnings during cat page viewing
         - When auto-finding pictures, disallowed path chars in
             product numbers now get substituted to underscores
+        - 'hypnotoad' config var is now respected in silos
 
 0.004001 2015-09-12
     [Breaking Changes]
