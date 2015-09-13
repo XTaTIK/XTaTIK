@@ -21,6 +21,10 @@
   <h3>Order Summary</h3>
 
   <div class="unsemantic-list">
+    % for ( items_in xtext 'paypal_custom_fields' ) {
+      % next unless $_->{email};
+      <p><b><%= $_->{email} %>:</b> <%= stash 'cust_' . $_->{email} %></p>
+    % }
     <p><b>Promo code used:</b> <%= stash 'promo_code' %> </p>
     <p><b>Cost of products:</b> $<%= cart->total %></p>
 

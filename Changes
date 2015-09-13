@@ -1,10 +1,13 @@
 Revision history for Perl extension XTaTIK.
 
 0.005001 2015-09-13
+    [PayPal cart plugin]
+        - Added option to specify custom fields
+        - Added option to include arbitrary param()s in PayPal's custom field
     [Miscellaneous]
         - Made footer addresses look good for 1–6 locations (#129)
         - Made it possible to specify shoutout art for the animation
-        - Added 'after-shoutout' template fragment
+        - Added "after-shoutout" template fragment
 
 0.004001 2015-09-12
     [Breaking Changes]

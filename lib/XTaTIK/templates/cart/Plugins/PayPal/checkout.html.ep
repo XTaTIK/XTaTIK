@@ -96,6 +96,11 @@
       ><%= text_field 'promo_code' => id => 'c_promo_code',
         class => 'form-control' %>
     </div>
+    % for ( items_in xtext 'paypal_custom_fields' ) {
+      <div class="form-group paypal_custom_field">
+        %= include inline => $_->{markup}
+      </div>
+    % }
     <div class="checkbox">
       <label><%= check_box do_save_address => 1, id => 'c_do_save_address'
       %>remember my information on this computer for 1 week <small>(you can uncheck this later to forget)</small></label>

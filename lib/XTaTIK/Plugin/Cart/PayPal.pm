@@ -80,7 +80,8 @@ sub thank_you {
         promo_code => $self->session('customer_data')->{promo_code} // 'N/A',
         map +( "cust_$_" => $self->session('customer_data')->{$_} ),
             qw/address1  address2  city  email  lname  name  phone
-                province  zip/
+                province  zip/, map +( $_->{email} ? $_->{email} : () ),
+                            @{ $self->xtext('paypal_custom_fields') || [] },
     );
 
     #Send order email to ourselves
@@ -140,12 +141,16 @@ sub checkout {
 sub checkout_review {
     my $self = shift;
 
+    $_->{callback} and $_->{callback}->( $self )
+        for @{ $self->xtext('paypal_custom_fields') || [] };
+
     $self->session(
         customer_data => {
             map +( $_ => $self->param($_) ), qw/
                 address1  address2  city  email
                 lname  name  phone  promo_code  province  zip
-            /
+            /, map +( $_->{email} ? $_->{email} : () ),
+                @{ $self->xtext('paypal_custom_fields') || [] },
         },
     );
 
@@ -226,6 +231,7 @@ sub checkout_review {
 
     my $custom = $self->xtext('paypal_custom');
     $custom =~ s/\$promo_code/$self->param('promo_code')/ge;
+    $custom =~ s/\$(\S+)/$self->param($1)/ge;
 
     $self->stash(
         $self->cart->all_items_cart_quote_kv,
