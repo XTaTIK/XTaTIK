@@ -15,6 +15,7 @@ Revision history for Perl extension XTaTIK.
             product numbers now get substituted to underscores
         - 'hypnotoad' config var is now respected in silos
         - Fix default map not displaying for unidentified locations
+        - Fix zero-shipping-charge when free shipping mode is not used
 
 0.004001 2015-09-12
     [Breaking Changes]

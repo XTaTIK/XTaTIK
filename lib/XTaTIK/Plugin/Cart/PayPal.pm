@@ -259,9 +259,9 @@ sub _costs {
     if ( ref $xtext_tax ) {
         my $hst_rate = $$xtext_tax / 100;
         $hst      = __cur $self->cart->total * $hst_rate;
-        $shipping = __cur  defined( $self->xtext('shipping_free') )
+        $shipping = __cur( defined( $self->xtext('shipping_free') )
             && $self->xtext('shipping_free') < $self->cart->total
-            ? 0 : $self->xtext('shipping');
+            ? 0 : $self->xtext('shipping') );
 
         ( $total_d, $total_c ) = split /\./,
             __cur +($self->cart->total + $shipping) * (1+$hst_rate);
@@ -272,9 +272,9 @@ sub _costs {
         my $gst_rate = $self->xtext('GST') / 100;
         $gst = __cur $self->cart->total * $gst_rate;
         $pst = __cur $self->cart->total * $pst_rate;
-        $shipping = __cur  defined( $self->xtext('shipping_free') )
+        $shipping = __cur(  defined( $self->xtext('shipping_free') )
             && $self->xtext('shipping_free') < $self->cart->total
-            ? 0 : $self->xtext('shipping');
+            ? 0 : $self->xtext('shipping') );
 
         ( $total_d, $total_c ) = split /\./,
             __cur +($self->cart->total + $shipping) * (1+$pst_rate+$gst_rate);
