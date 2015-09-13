@@ -1,5 +1,9 @@
 Revision history for Perl extension XTaTIK.
 
+0.004002 2015-09-13
+    [Miscellaneous]
+        - Made footer addresses look good for 1–6 locations (#129)
+
 0.004001 2015-09-12
     [Breaking Changes]
         - XTaTIK SASS variables without xtatik- prefix have been renamed (#146)

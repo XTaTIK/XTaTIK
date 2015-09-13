@@ -109,34 +109,7 @@
     <div id="footer_contacts">
       <div class="container">
         <div class="row">
-          % for my $loc ( items_in xtext('locations') ) {
-            <div class="col-lg-2 col-sm-4 col-xs-6">
-              <h4><%== $loc->{name} %></h4>
-              <address class="address">
-                <%== $loc->{address} %>
-                % if ( length $loc->{hours} ) {
-                  <br><span class="hours"><%= $loc->{hours} %></span>
-                % } if ( length $loc->{note} ) {
-                  <br><small><%= $loc->{note} %></small>
-                % }
-              </address>
-              <address class="phones">
-                % if ( length $loc->{phone} ) {
-                  <span>Phone:</span> <%= $loc->{phone} %><br>
-                % } if ( length $loc->{tfphone} ) {
-                  <span>Toll-free:</span> <%= $loc->{tfphone} %><br>
-                % } if ( length $loc->{fax} ) {
-                  <span>Fax:</span> <%= $loc->{fax} %><br>
-                % } if ( length $loc->{tffax} ) {
-                  <span>Toll-free fax:</span> <%= $loc->{tffax} %><br>
-                % } if ( length $loc->{email} ) {
-                  <span>Email:</span> <a
-                    href="<%== mailto_href $loc->{email} %>"
-                      ><%== mailto $loc->{email} %></a>
-                % }
-              </address>
-            </div>
-          % }
+          %= include 'fragments/footer-locations'
         </div>
       </div>
     </div>
