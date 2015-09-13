@@ -35,6 +35,7 @@ sub set_product_pic {
     }
 
     # No pic set; auto-find them using product number
+    $num =~ s{[\\/:*?"<>|]}{_}g; # sub disallowed path chars to underscores
     my @pics;
     for ( $c->app->static->paths->@* ) {
         push @pics, map +(splitpath $_)[-1], grep -r,

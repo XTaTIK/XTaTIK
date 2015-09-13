@@ -11,6 +11,8 @@ Revision history for Perl extension XTaTIK.
     [Bug fixes]
         - Remove a product from Sites Products now actually removes it
         - Removed uninitialized warnings during cat page viewing
+        - When auto-finding pictures, sub any disallowed
+            path chars to underscores
 
 0.004001 2015-09-12
     [Breaking Changes]
