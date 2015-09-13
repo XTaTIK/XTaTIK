@@ -52,7 +52,7 @@
     % }
   </div>
   <div class="col-md-6">
-    <%== xtext('maps')->{ $c->geoip_region } %>
+    <%== xtext('maps')->{ $c->geoip_region } // xtext('maps')->{'00'} %>
   </div>
 </div>
 <hr>
