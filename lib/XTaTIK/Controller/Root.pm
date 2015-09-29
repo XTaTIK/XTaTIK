@@ -30,10 +30,18 @@ sub products_category {
             grep exists $_->{number}, $_->{contents}->@*;
     }
 
+    my $title = $self->stash('category') =~ s{^\s*/\s*}{}r;
+    $title = $self->xtext('products_nav_name') unless length $title;
+    $title = join '/', (split m{\s*/\s*}, $title )[-2,-1]
+        if $title =~ tr{/}{} > 1;
+
+    $title =~ s{/}{ / }g;
+
     $self->stash(
         products    => $products,
         return_path => $return_path,
         return_name => $return_name,
+        page_title  => $title,
     );
 }
 

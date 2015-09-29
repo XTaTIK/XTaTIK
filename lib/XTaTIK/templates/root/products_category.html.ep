@@ -1,5 +1,5 @@
 % layout 'default';
-% title xtext 'products_nav_name';
+% title stash 'page_title';
 % stash active_page => 'products';
 
 % if ( defined(stash 'return_path') ) {
