@@ -18,9 +18,6 @@ my $t = Test::Mojo::WithRoles->new('XTaTIK');
 use lib 't';
 eval 'use Test::XTaTIK';
 
-# Set free shipping above $50
-$t->app->config('text')->{shipping_free} = 50;
-
 Test::XTaTIK->load_test_products( _get_test_products() );
 
 {
