@@ -4,6 +4,7 @@ Revision history for Perl extension XTaTIK.
     [Miscellaneous]
         - Add category titles to page titles when browsing categories (#163)
         - Add group_desc into page titles on product pages (#162)
+        - Perl 5.20 is now in prereqs (#164)
 
 0.005001 2015-09-13
     [PayPal cart plugin]

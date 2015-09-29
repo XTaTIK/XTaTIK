@@ -3,6 +3,7 @@
 # VERSION
 
 use Mojolicious::Lite;
+use 5.020;
 use experimental qw/postderef/;
 use FindBin;
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
