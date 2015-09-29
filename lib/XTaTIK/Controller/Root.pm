@@ -37,11 +37,15 @@ sub products_category {
 
     $title =~ s{/}{ / }g;
 
+    my $meta_desc = join ', ', reverse $self->xtext('market'),
+        split m{\s*/\s*}, $title;
+
     $self->stash(
         products    => $products,
         return_path => $return_path,
         return_name => $return_name,
         page_title  => $title,
+        meta_desc   => $meta_desc,
     );
 }
 
@@ -52,7 +56,17 @@ sub product {
 
     set_product_pic( $self, @$product{qw/image number/} );
 
-    $self->stash( product => $product );
+    my $desc = Mojo::DOM->new( $product->{description} )->all_text;
+    $desc = "$product->{group_desc}; $desc"
+        if length $product->{group_desc};
+
+    $desc = substr($desc, 0, 152) . '...'
+        if length $desc > 155;
+
+    $self->stash(
+        product   => $product,
+        meta_desc => $desc,
+    );
 };
 
 sub contact_post {

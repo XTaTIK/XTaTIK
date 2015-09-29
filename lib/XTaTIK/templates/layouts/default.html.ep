@@ -11,6 +11,10 @@
       geoip_region() eq '00' ? '' : ', ' . geoip_region()
     %></title>
 
+  <meta name="description" content="<%=
+    stash('meta_desc') // join ' / ', grep length, title(), xtext('market')
+  %>">
+
   <link rel="shortcut icon" href="/favicon.ico">
 
   %= asset "bootstrap.css";
