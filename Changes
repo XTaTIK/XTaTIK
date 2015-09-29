@@ -1,6 +1,6 @@
 Revision history for Perl extension XTaTIK.
 
-0.006001 Unreleased
+0.005002 2015-09-29
     [Miscellaneous]
         - Add category titles to page titles when browsing categories (#163)
         - Add group_desc into page titles on product pages (#162)
