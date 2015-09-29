@@ -1,7 +1,9 @@
 % layout 'default';
 % title stash('product')->{title};
-<% if ( my $gd = stash('product')->{group_desc} )
-  { stash('extended_title', $gd ) } %>
+<% if ( my $gd = stash('product')->{group_desc} ) {
+  stash('extended_title', $gd );
+  title stash('product')->{title} . ', ' . $gd;
+} %>
 % stash active_page => 'products';
 
 

@@ -56,11 +56,17 @@ Test::XTaTIK->load_test_products( _get_test_products() );
         ->text_is(   h2    => 'Test SubSubCat 2 / Test SubSubSubCat 2'      )
         ;
 
-    # for ( 1 .. 7 ) {
-    #     $t->get_ok("/product/Test-Product-$_-001-TEST$_")->status_is(200)
-    #         ->text_like( title => qr{^Test Product $_ /} )
-    #         ->text_is(   h2    => "Test Product $_"      );
-    # }
+    for ( 1 .. 6 ) {
+        $t->get_ok("/product/Test-Product-$_-001-TEST$_")->status_is(200)
+            ->text_like( title => qr{^Test Product $_ /} )
+            ->text_is(   h2    => "Test Product $_"      );
+    }
+
+    # This product should have group desc in titles
+    $t->get_ok("/product/Test-Product-7-001-TEST7")->status_is(200)
+            ->text_like( title => qr{^Test Product 7, Just some group desc /} )
+            ->text_is(   h2    => 'Test Product 7, Just some group desc'      )
+            ->text_is('h2 small' => 'Just some group desc'      );
 }
 
 Test::XTaTIK->restore_db;
@@ -79,6 +85,8 @@ sub _get_test_products {
                                     . '*::*Test SubSubCat 2]', },
         { category => '[Test Cat 1*::*Test SubCat 2'
                                     . '*::*Test SubSubCat 2'
-                                    . '*::*Test SubSubSubCat 2]', },
+                                    . '*::*Test SubSubSubCat 2]',
+          group_desc => 'Just some group desc',
+        },
     ];
 }
