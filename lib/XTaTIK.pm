@@ -43,8 +43,6 @@ sub startup {
             catdir $ENV{XTATIK_COMPANY}, 'public', 'sass';
 
         lib->import( catdir $ENV{XTATIK_COMPANY}, 'lib' );
-
-        blasdsdasdsa->import;
     }
 
     unshift @sass_path,
